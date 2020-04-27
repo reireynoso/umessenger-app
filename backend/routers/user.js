@@ -3,7 +3,24 @@ const router = new express.Router()
 const cors = require('cors')
 const auth = require('../middleware/auth')
 const User = require('../models/user')
+const Conversation = require('../models/conversation')
 
+router.get('/test', async(req,res) => {
+    try{
+        const user = await User.findOne({name: "sample"})
+        const convos = await Conversation.find({users: {
+            $all: [
+                {
+                    $elemMatch: {_id: user._id}
+                }
+            ]
+        }})
+        const allConvo = await Conversation.find({})
+        res.send({user, convos, allConvo})
+    }catch(e){
+
+    }
+})
 
 router.post('/users/signup', async(req,res) => {
     console.log(req.body)

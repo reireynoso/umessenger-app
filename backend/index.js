@@ -2,6 +2,7 @@ const express = require('express')
 const cors = require('cors')
 require('dotenv').config()
 require('./db/mongoose')
+const data = require("./db/seed")
 
 const userRouter = require('./routers/user')
 
@@ -15,5 +16,6 @@ app.use(cors())
 app.use(userRouter)
 
 app.listen(port, () => {
+    // data()
     console.log('Server is up on ' + port)
 })
