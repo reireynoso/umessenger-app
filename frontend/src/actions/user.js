@@ -3,8 +3,8 @@ export const setUser = (userObj) => ({
     payload: userObj
 })
 
-export const fetchAutoLogin = (token) => {
-    fetch(`localhost:4000/users/auto_login`, {
+export const fetchAutoLogin = (token) => dispatch => {
+    fetch(`http://localhost:4000/users/auto_login`, {
         headers: {
             "Authorization": `Bearer ${token}`
         }
@@ -14,6 +14,25 @@ export const fetchAutoLogin = (token) => {
         if(userData.errors){
             return userData.errors
         }
-        dispatch(setUser(user))
+        dispatch(setUser(userData))
     })
 }
+
+export const fetchUser = (route, userInfo) => dispatch => {
+    console.log(userInfo)
+    fetch(`http://localhost:4000/users/${route}`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+        },
+        body: JSON.stringify(userInfo)
+    })
+    .then(res => res.json())
+    .then(userData => {
+        if(userData.errors){
+            return userData.errors
+        }
+        dispatch(setUser(userData))
+    })
+} 
