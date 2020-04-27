@@ -43,6 +43,11 @@ const data = async() => {
             messages: [messages[1], messages[0]]
         }
     ])
+
+    // users[0].conversations = [conversations[1], conversations[0]]
+    // await users[0].save()
+    // users[1].conversations = [conversations[1]]
+    // await users[1].save()
     console.log('seed')
 }
 

@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
+// const Conversation = require('./conversation')
 
 const userSchema = mongoose.Schema({
     name: {
@@ -24,10 +25,31 @@ const userSchema = mongoose.Schema({
     password: {
         type: String,
         trim: true
-    }
+    },
 }, {
-    timestamps:true
+    timestamps: true,
+    // toObject: {
+    //     virtuals: true
+    // },
+    // toJSON: {
+    //     virtuals: true
+    // }
 })
+
+// userSchema.set('toJSON', { virtuals: true })
+
+// userSchema.virtual("convos").get(function(){
+    // const convos = await Conversation.find({users: {
+    //     $all: [
+    //         {
+    //             $elemMatch: {_id: this._id}
+    //         }
+    //     ]
+    // }})
+    // console.log(convos)
+//     return 'hello'
+// })
+
 
 // When Mongoose document is passed to res.send(), it's converted to JSON. 
 // This method is customizing/overriding it it to return the necessary fields

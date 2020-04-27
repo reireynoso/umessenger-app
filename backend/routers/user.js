@@ -15,8 +15,7 @@ router.get('/test', async(req,res) => {
                 }
             ]
         }})
-        const allConvo = await Conversation.find({})
-        res.send({user, convos, allConvo})
+        res.send({user, convos})
     }catch(e){
 
     }
