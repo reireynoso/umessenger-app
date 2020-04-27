@@ -29,11 +29,7 @@ router.post('/users/login', cors(), async(req,res) => {
 })
 
 router.get('/users/auto_login', auth, async(req,res) => {
-    try{
-        res.send(req.user)
-    }catch(e){
-        res.status(404).send()
-    }
+    res.send(req.user)
 })
 
 module.exports = router
