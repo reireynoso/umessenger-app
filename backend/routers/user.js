@@ -5,7 +5,7 @@ const auth = require('../middleware/auth')
 const User = require('../models/user')
 const Conversation = require('../models/conversation')
 
-router.get('/test', async(req,res) => {
+router.get('/test', async(req,res,next) => {
     try{
         const user = await User.findOne({name: "Test"})
        
@@ -19,11 +19,11 @@ router.get('/test', async(req,res) => {
 
         res.send({user, convos})
     }catch(e){
-        console.log(e)
+        next(e)
     }
 })
 
-router.post('/users/signup', async(req,res) => {
+router.post('/users/signup', async(req,res,next) => {
     // console.log(req.body)
     const user = new User(req.body)
     try{
@@ -31,8 +31,9 @@ router.post('/users/signup', async(req,res) => {
         const token = await user.generateAuthToken()
         res.status(201).send({user,token})
     }catch(e){
-        console.log(e)
-        res.status(400).send({errors: e})
+        // console.log(e)
+        next(e)
+        // res.status(400).send({errors: e})
     }
 })
 
@@ -42,7 +43,7 @@ router.post('/users/login', cors(), async(req,res) => {
         const token = await user.generateAuthToken()
         res.send({user, token})
     }catch(e){
-        res.status(400).send({errors: ['Unable to login']})
+        res.status(400).send({error: 'Unable to login'})
     }
 })
 

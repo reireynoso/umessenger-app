@@ -84,17 +84,6 @@ userSchema.pre('save', async function(next){
     next()
 })
 
-// userSchema.post('save', function(error, doc, next) {
-//     // console.log('hey', error)
-//     if(error.name === "MongoError" && error.code === 11000){
-//         const field = Object.keys(error.keyValue)
-//         // console.log(Object.keys(error.keyValue)[0])
-//         next(new Error(`${field} already exists.`))
-//     }else{
-//         next()
-//     }
-// });
-
 const User = mongoose.model('User', userSchema)
 
 module.exports = User
