@@ -7,7 +7,8 @@ const Conversation = require('../models/conversation')
 
 router.get('/test', async(req,res) => {
     try{
-        const user = await User.findOne({name: "sample"})
+        const user = await User.findOne({name: "Test"})
+       
         const convos = await Conversation.find({users: {
             $all: [
                 {
@@ -15,14 +16,15 @@ router.get('/test', async(req,res) => {
                 }
             ]
         }})
+
         res.send({user, convos})
     }catch(e){
-
+        console.log(e)
     }
 })
 
 router.post('/users/signup', async(req,res) => {
-    console.log(req.body)
+    // console.log(req.body)
     const user = new User(req.body)
     try{
         await user.save()
@@ -30,7 +32,7 @@ router.post('/users/signup', async(req,res) => {
         res.status(201).send({user,token})
     }catch(e){
         console.log(e)
-        res.status(400).send(e)
+        res.status(400).send({errors: e})
     }
 })
 

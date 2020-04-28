@@ -19,8 +19,8 @@ export const fetchAutoLogin = (token) => dispatch => {
 }
 
 export const fetchUser = (route, userInfo) => dispatch => {
-    console.log(userInfo)
-    fetch(`http://localhost:4000/users/${route}`, {
+    // console.log(userInfo)
+    return fetch(`http://localhost:4000/users/${route}`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -34,5 +34,6 @@ export const fetchUser = (route, userInfo) => dispatch => {
             return userData.errors
         }
         dispatch(setUser(userData))
+        // return userData
     })
 } 

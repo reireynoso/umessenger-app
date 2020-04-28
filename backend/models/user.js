@@ -29,26 +29,13 @@ const userSchema = mongoose.Schema({
 }, {
     timestamps: true,
     // toObject: {
-    //     virtuals: true
+        // virtuals: true
+    //     getters:true
     // },
     // toJSON: {
     //     virtuals: true
     // }
 })
-
-// userSchema.set('toJSON', { virtuals: true })
-
-// userSchema.virtual("convos").get(function(){
-    // const convos = await Conversation.find({users: {
-    //     $all: [
-    //         {
-    //             $elemMatch: {_id: this._id}
-    //         }
-    //     ]
-    // }})
-    // console.log(convos)
-//     return 'hello'
-// })
 
 
 // When Mongoose document is passed to res.send(), it's converted to JSON. 
@@ -57,6 +44,7 @@ userSchema.methods.toJSON = function(){
     const user = this 
     const userObject = user.toObject()
 
+    delete userObject._id
     delete userObject.password
 
     return userObject
@@ -95,6 +83,17 @@ userSchema.pre('save', async function(next){
 
     next()
 })
+
+// userSchema.post('save', function(error, doc, next) {
+//     // console.log('hey', error)
+//     if(error.name === "MongoError" && error.code === 11000){
+//         const field = Object.keys(error.keyValue)
+//         // console.log(Object.keys(error.keyValue)[0])
+//         next(new Error(`${field} already exists.`))
+//     }else{
+//         next()
+//     }
+// });
 
 const User = mongoose.model('User', userSchema)
 

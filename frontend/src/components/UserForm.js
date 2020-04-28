@@ -31,9 +31,10 @@ const UserForm = ({location}) => {
         }
     }
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async(e) => {
         e.preventDefault()
-        dispatch(fetchUser(route, whichDataToSend()))
+        const res = await dispatch(fetchUser(route, whichDataToSend()))
+        console.log(res)
     }
     return(
         <div>
