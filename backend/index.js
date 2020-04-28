@@ -1,6 +1,6 @@
 const express = require('express')
 const cors = require('cors')
-const errorHandling = require('./middleware/errorHandling')
+// const errorHandling = require('./middleware/errorHandling')
 require('dotenv').config()
 require('./db/mongoose')
 const data = require("./db/seed")
@@ -17,7 +17,7 @@ app.use(cors())
 
 app.use(userRouter)
 
-app.use(errorHandling)
+// app.use(errorHandling)
 
 app.listen(port, () => {
     // data()

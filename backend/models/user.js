@@ -1,29 +1,44 @@
 const mongoose = require('mongoose')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
+const validator = require('validator')
+
 // const Conversation = require('./conversation')
 
 const userSchema = mongoose.Schema({
     name: {
         type: String,
-        required: true,
+        required: [true, 'Name is required'],
         trim: true
     },
     email: {
         type: String,
-        required: true,
+        required: [true, 'Email is required'],
         unique:true,
         trim: true,
-        lowercase:true
+        lowercase:true,
+        validate(value){
+            if(!validator.isEmail(value)){
+                throw new Error('Email is not formatted')
+            }
+        }
     },
     phone: {
         type: Number,
-        required: true,
+        required: [true, 'Phone is required'],
         unique: true,
-        trim: true
+        trim: true,
+        validate(value){
+            // console.log(validator.isMobilePhone('98072'))
+            // console.log(validator.isMobilePhone(value.toString()))
+            if(!validator.isMobilePhone(value.toString())){
+                throw new Error('Phone is not valid format')
+            }
+        }
     },
     password: {
         type: String,
+        required: [true, 'Password is required'],
         trim: true
     },
 }, {
@@ -83,6 +98,27 @@ userSchema.pre('save', async function(next){
 
     next()
 })
+
+userSchema.post('save', function(error, doc, next) {
+    // console.log('hey', error)
+    const errors = [];
+    if(error.name === "MongoError" && error.code === 11000){
+        const fieldArray = Object.keys(error.keyValue)
+        errors.push(fieldArray[0].charAt(0).toUpperCase() + fieldArray[0].slice(1) + " already exists.")
+    }
+    else if(error.name === "ValidationError"){
+        const fieldArray = Object.keys(error.errors)
+        for(let i = 0; i<fieldArray.length; i++){
+           errors.push(error.errors[fieldArray[i]].message)
+        }
+    }
+    else{
+        // res.status(500).send({error: "There was an error."})
+        // next()
+        errors.push('There is an error.')
+    }
+    next(errors)
+});
 
 const User = mongoose.model('User', userSchema)
 

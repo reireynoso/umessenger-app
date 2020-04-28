@@ -23,7 +23,7 @@ router.get('/test', async(req,res,next) => {
     }
 })
 
-router.post('/users/signup', async(req,res,next) => {
+router.post('/users/signup', async(req,res) => {
     // console.log(req.body)
     const user = new User(req.body)
     try{
@@ -32,8 +32,8 @@ router.post('/users/signup', async(req,res,next) => {
         res.status(201).send({user,token})
     }catch(e){
         // console.log(e)
-        next(e)
-        // res.status(400).send({errors: e})
+        // next(e)
+        res.status(500).send({errors: e})
     }
 })
 
@@ -43,7 +43,7 @@ router.post('/users/login', cors(), async(req,res) => {
         const token = await user.generateAuthToken()
         res.send({user, token})
     }catch(e){
-        res.status(400).send({error: 'Unable to login'})
+        res.status(400).send({errors: ['Unable to login']})
     }
 })
 

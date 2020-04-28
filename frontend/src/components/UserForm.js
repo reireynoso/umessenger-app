@@ -45,7 +45,7 @@ const UserForm = ({location}) => {
                 }
                 <input type="text" placeholder="Email" onChange={(e) => setEmail(e.target.value)}/>
                 {
-                    route === "signup" &&  <input type="phone" placeholder="Phone phone" onChange={(e) => setPhone(e.target.value)}/>
+                    route === "signup" &&  <input type="tel" placeholder="Phone phone" onChange={(e) => setPhone(e.target.value)}/>
                 }
                 <input type="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)}/>
                 <input type="submit"/>
