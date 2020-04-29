@@ -16,33 +16,32 @@ const UserForm = ({location}) => {
     }
 
     const handleSetPhone = (e) => {
-        // e.persist()
-        // console.log(e.target.value)
-        const fix = e.target.value
-        if(fix.match(/^[0-9]*$/) && fix.length < 12){
-            // console.log(fix)
-            setPhone(fix)
+        //format() add dashes to the the input field.
+        //unformattedPhone will remove those dashes and join the number strings together
+        //Necessary since regex will reject the dashes since it's only expecting numbers
+        const unformattedPhone = e.target.value.split("-").join("")
+        if(unformattedPhone.match(/^[0-9]*$/) && unformattedPhone.length < 11){
+            setPhone(unformattedPhone)
         }
         else{
             console.log('waat')
         }
-        // console.log(e.target.value.match(/^[0-9]*$/))
-        // setPhone()
-        
     }
-    // const format = (phoneArg) => {
-    //     // console.log(phoneArg)
-    //     let phoneFormat = phoneArg.split("")
-    //     let newArr = []
-    //     for(let i = 0; i<phoneFormat.length;i++){
-    //         newArr = [...newArr, phoneFormat[i]]
-    //         if(i === 2 || i === 4){
-    //             newArr = [...newArr, "-"]
-    //         }
-    //     }
-    //     // return phone.split("").join("-")
-    //     return newArr.join("")
-    // }
+
+    //format() is responsible for taking the value of phone and adding dashes for formatting
+    const format = () => {
+        //creating a new array that will include the dashes
+        let formattedNumber = []
+        for(let i = 0; i<phone.length;i++){
+            formattedNumber = [...formattedNumber, phone[i]]
+            //for the 3 number, add a dash after ONLY if a 4th number exists, likewise with 6th and 7th number
+            if((i === 2 && phone[i+1]) || (i === 5 && phone[i+1])){
+                formattedNumber = [...formattedNumber, "-"]
+            }
+        }
+        //combine the array and dashes together
+        return formattedNumber.join("")
+    }
 
     const whichDataToSend = () => {
         if(route === 'signup'){
@@ -74,7 +73,7 @@ const UserForm = ({location}) => {
                 }
                 <input type="text" placeholder="Email" onChange={(e) => setEmail(e.target.value)}/>
                 {
-                    route === "signup" &&  <input type="text" value={phone} placeholder="Phone" onChange={handleSetPhone}/>
+                    route === "signup" &&  <input type="text" value={format()} placeholder="Phone" onChange={handleSetPhone}/>
                    
                 }
                 <input type="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)}/>
