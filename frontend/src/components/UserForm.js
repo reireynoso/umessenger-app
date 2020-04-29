@@ -15,6 +15,35 @@ const UserForm = ({location}) => {
         return route === "signup" ? "Sign Up" : "Login"
     }
 
+    const handleSetPhone = (e) => {
+        // e.persist()
+        // console.log(e.target.value)
+        const fix = e.target.value
+        if(fix.match(/^[0-9]*$/) && fix.length < 12){
+            // console.log(fix)
+            setPhone(fix)
+        }
+        else{
+            console.log('waat')
+        }
+        // console.log(e.target.value.match(/^[0-9]*$/))
+        // setPhone()
+        
+    }
+    // const format = (phoneArg) => {
+    //     // console.log(phoneArg)
+    //     let phoneFormat = phoneArg.split("")
+    //     let newArr = []
+    //     for(let i = 0; i<phoneFormat.length;i++){
+    //         newArr = [...newArr, phoneFormat[i]]
+    //         if(i === 2 || i === 4){
+    //             newArr = [...newArr, "-"]
+    //         }
+    //     }
+    //     // return phone.split("").join("-")
+    //     return newArr.join("")
+    // }
+
     const whichDataToSend = () => {
         if(route === 'signup'){
             return {
@@ -45,7 +74,8 @@ const UserForm = ({location}) => {
                 }
                 <input type="text" placeholder="Email" onChange={(e) => setEmail(e.target.value)}/>
                 {
-                    route === "signup" &&  <input type="tel" placeholder="Phone phone" onChange={(e) => setPhone(e.target.value)}/>
+                    route === "signup" &&  <input type="text" value={phone} placeholder="Phone" onChange={handleSetPhone}/>
+                   
                 }
                 <input type="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)}/>
                 <input type="submit"/>

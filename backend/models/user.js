@@ -100,7 +100,7 @@ userSchema.pre('save', async function(next){
 })
 
 userSchema.post('save', function(error, doc, next) {
-    // console.log('hey', error)
+    //handles errors when attempting to save a user instance upon creation
     const errors = [];
     if(error.name === "MongoError" && error.code === 11000){
         const fieldArray = Object.keys(error.keyValue)
