@@ -1,9 +1,11 @@
 import React, {useState} from 'react'
 import {useSelector,useDispatch} from 'react-redux'
+import {Redirect} from 'react-router-dom'
 import {fetchUser} from '../actions/user'
 
-const UserForm = ({location}) => {
+const UserForm = ({location, history}) => {
     const dispatch = useDispatch()
+    const user = useSelector(state => state.user)
     const route = location.pathname.split("").splice(1).join("")
 
     const [name, setName] = useState("")
@@ -68,24 +70,33 @@ const UserForm = ({location}) => {
 
     const handleSubmit = async(e) => {
         e.preventDefault()
-        // const res = await dispatch(fetchUser(route, whichDataToSend()))
-        // console.log(res)
+        const res = await dispatch(fetchUser(route, whichDataToSend()))
+        if(res && res.errors){
+            console.log(res.errors)
+        }
     }
     return(
         <div>
-            <h1>{checkRoute()}</h1>
-            <form onSubmit={handleSubmit}>
-                {
-                    route === "signup" && <input type="text" placeholder="Name" onChange={(e) => setName(e.target.value)}/>
-                }
-                <input type="text" placeholder="Email" onChange={(e) => setEmail(e.target.value)}/>
-                {
-                    route === "signup" &&  <input type="text" value={format()} placeholder="Phone" onChange={handleSetPhone}/>
-                   
-                }
-                <input type="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)}/>
-                <input type="submit"/>
-            </form>
+            {
+                !user.loggedIn ? <React.Fragment>
+                <h1>{checkRoute()}</h1>
+                <form onSubmit={handleSubmit}>
+                    {
+                        route === "signup" && <input type="text" placeholder="Name" onChange={(e) => setName(e.target.value)}/>
+                    }
+                    <input type="text" placeholder="Email" onChange={(e) => setEmail(e.target.value)}/>
+                    {
+                        route === "signup" &&  <input type="text" value={format()} placeholder="Phone" onChange={handleSetPhone}/>
+                    
+                    }
+                    <input type="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)}/>
+                    <input type="submit"/>
+                </form>
+                </React.Fragment>
+                :
+                <Redirect to="/dashboard"/>
+            }
+            
         </div>
     )
 }

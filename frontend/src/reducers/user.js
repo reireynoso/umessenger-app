@@ -1,9 +1,11 @@
-const user = (state = {}, {type,payload}) => {
+const user = (state = {
+    loggedIn: false
+}, {type,payload}) => {
     switch(type){
         case "SET_USER":
             return {
-                ...state,
-                user: payload
+                loggedIn: true,
+                ...payload
             }
         default: return state
     }

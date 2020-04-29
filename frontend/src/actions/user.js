@@ -31,9 +31,10 @@ export const fetchUser = (route, userInfo) => dispatch => {
     .then(res => res.json())
     .then(userData => {
         if(userData.errors){
-            return userData.errors
+            return userData
         }
+        localStorage.setItem("token", userData.token)
         dispatch(setUser(userData))
-        // return userData
+        // return "loggedIn"
     })
 } 
