@@ -19,12 +19,13 @@ const UserForm = ({location}) => {
         //format() add dashes to the the input field.
         //unformattedPhone will remove those dashes and join the number strings together
         //Necessary since regex will reject the dashes since it's only expecting numbers
-        const unformattedPhone = e.target.value.split("-").join("")
+        //The only needed to store in state is the actual number strings.
+        // const unformattedPhone = e.target.value.split("-").join("")
+        // console.log(phone)
+        //use .replace with regex to replace ()or- with ''
+        const unformattedPhone = e.target.value.replace(/[-)()]/g,'')
         if(unformattedPhone.match(/^[0-9]*$/) && unformattedPhone.length < 11){
             setPhone(unformattedPhone)
-        }
-        else{
-            console.log('waat')
         }
     }
 
@@ -33,7 +34,13 @@ const UserForm = ({location}) => {
         //creating a new array that will include the dashes
         let formattedNumber = []
         for(let i = 0; i<phone.length;i++){
+            if(phone.length > 3){
+                formattedNumber[0] = "("
+            }
             formattedNumber = [...formattedNumber, phone[i]]
+            if((i === 2 && phone[i+1])){
+                formattedNumber = [...formattedNumber, ")"]
+            }
             //for the 3 number, add a dash after ONLY if a 4th number exists, likewise with 6th and 7th number
             if((i === 2 && phone[i+1]) || (i === 5 && phone[i+1])){
                 formattedNumber = [...formattedNumber, "-"]
@@ -61,8 +68,8 @@ const UserForm = ({location}) => {
 
     const handleSubmit = async(e) => {
         e.preventDefault()
-        const res = await dispatch(fetchUser(route, whichDataToSend()))
-        console.log(res)
+        // const res = await dispatch(fetchUser(route, whichDataToSend()))
+        // console.log(res)
     }
     return(
         <div>
