@@ -13,6 +13,8 @@ const UserForm = ({location, history}) => {
     const [email, setEmail] = useState("")
     const [phone, setPhone] = useState("")
 
+    const [errors,setErrors] = useState([])
+
     const checkRoute = () => {
         return route === "signup" ? "Sign Up" : "Login"
     }
@@ -73,10 +75,20 @@ const UserForm = ({location, history}) => {
         const res = await dispatch(fetchUser(route, whichDataToSend()))
         if(res && res.errors){
             console.log(res.errors)
+            setErrors(res.errors)
+        }else{
+            setEmail("")
+            setName("")
+            setPassword("")
+            setPhone("")
+            setErrors([])
         }
     }
     return(
         <div>
+            <ul>
+                {errors.length > 0 && errors.map((error,index) => <li style={{color:"red"}} key={index+error}>{error}</li>)}
+            </ul>
             {
                 !user.loggedIn ? <React.Fragment>
                 <h1>{checkRoute()}</h1>
