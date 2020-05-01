@@ -8,7 +8,7 @@ const Conversation = require('../models/conversation')
 router.get("/conversations", async(req,res) => {
     try{
         // const user = await User.findOne({name: "Test"})
-        const user = ["sample@test.com", "test@test.com" ]
+        const user = ["test@test.com", "sample@test.com" ]
         // const convos = await Conversation.find({users: {
         //     $all: [
         //         {
@@ -17,15 +17,41 @@ router.get("/conversations", async(req,res) => {
         //     ]
         // }})
 
-        const convos = await Conversation.find(
-          
+        // const convos = await Conversation.find({
+        //     $and: [
+        //         {
+        //             "users.email": {
+        //                 $in: user.map(u => u)
+        //             }
+        //         },
+
+        //     ]
+        // })
+
+        //multiple queries
+        //goal is to iterate through the array of users in Conversation,
+        //first, the email in the array of users must be included in the list passed
+        //second, the size of array of users must also be equal to the size of the list
+        //this simulates close to exact match of convo
+
+        const convos = await Conversation.find({
+            //$and [] indicates multiple queries defined inside
+            $and: [
                 {
+                    //We can choose a specific attr iterating in the array
                     "users.email": {
-                        $in: user.map(u => u)
+                        //selec all the email that exist in the list
+                        $all: user
+                    }
+                },
+                {
+                    "users": {
+                        //the size also has to match
+                        $size: user.length
                     }
                 }
-            
-        )
+            ]
+        })
 
         res.send({convos})
     }catch(e){
