@@ -6,6 +6,7 @@ require('./db/mongoose')
 const data = require("./db/seed")
 
 const userRouter = require('./routers/user')
+const convoRouter = require('./routers/conversation')
 
 const app = express()
 
@@ -16,6 +17,7 @@ app.use(express.json())
 app.use(cors())
 
 app.use(userRouter)
+app.use(convoRouter)
 
 // app.use(errorHandling)
 
