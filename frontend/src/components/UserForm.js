@@ -76,13 +76,14 @@ const UserForm = ({location, history}) => {
         if(res && res.errors){
             console.log(res.errors)
             setErrors(res.errors)
-        }else{
-            setEmail("")
-            setName("")
-            setPassword("")
-            setPhone("")
-            setErrors([])
         }
+        // else{
+        //     setEmail("")
+        //     setName("")
+        //     setPassword("")
+        //     setPhone("")
+        //     setErrors([])
+        // }
     }
     return(
         <div>

@@ -2,6 +2,8 @@ const User = require('../models/user')
 const Message = require('../models/message')
 const Conversation = require('../models/conversation')
 
+const bcrypt = require('bcryptjs')
+
 const data = async() => {
     Message.collection.deleteMany({})
     User.collection.deleteMany({})
@@ -11,15 +13,21 @@ const data = async() => {
         {
             name: "Test",
             email: "test@test.com",
-            phone: 999,
-            password: "test"
+            phone: 9999999999,
+            password: await bcrypt.hash("test", 8)
         },
         {
             name: "sample",
             email: "sample@test.com",
-            phone: 555,
-            password: "sample"
+            phone: 5555555555,
+            password: await bcrypt.hash("sample", 8)
         },
+        {
+            name: "hello",
+            email: "hello@test.com",
+            phone: 7777777777,
+            password: await bcrypt.hash("hello", 8)
+        }
     ])
 
     const messages = await Message.insertMany([
@@ -30,7 +38,15 @@ const data = async() => {
         {
             user: users[1],
             content: "hey!"
-        }
+        },
+        {
+            user: users[2],
+            content: "heyoooo!"
+        },
+        {
+            user: users[1],
+            content: "sajndlasndals!"
+        },
     ])
 
     const conversations = await Conversation.insertMany([
@@ -40,6 +56,10 @@ const data = async() => {
         },
         {
             users: [users[0]],
+            messages: [messages[1], messages[0]]
+        },
+        {
+            users: [users[2], users[1]],
             messages: [messages[1], messages[0]]
         }
     ])

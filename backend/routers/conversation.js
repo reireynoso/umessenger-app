@@ -8,7 +8,7 @@ const Conversation = require('../models/conversation')
 router.get("/conversations", async(req,res) => {
     try{
         // const user = await User.findOne({name: "Test"})
-        const user = ["test@test.com", "sample@test.com" ]
+        const user = ["hello@test.com","test@test.com"]
         // const convos = await Conversation.find({users: {
         //     $all: [
         //         {
