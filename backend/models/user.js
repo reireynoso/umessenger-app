@@ -76,16 +76,30 @@ userSchema.statics.findByCredentials = async(email, password) => {
     const user = await User.findOne({email})
     // console.log(user)
     if(!user){
-        throw new Error({errors: ['Unable to login']})
+        throw new Error()
     }
 
     const isMatch = await bcrypt.compare(password, user.password)
     // console.log(isMatch)
     if(!isMatch){
-        throw new Error({errors: ['Unable to login']})
+        throw new Error()
     }
 
     return user
+}
+
+userSchema.statics.checkIfEmailsAreValid = async(emailList) => {
+    const users = await User.find({
+        email: {
+            $in: emailList
+        }
+    })
+
+    if(users.length !== emailList.length){
+        throw new Error()
+    }
+
+    return users
 }
 
 //hashes plain text pw before saving
