@@ -4,12 +4,12 @@ import {useSelector} from 'react-redux'
 export default () => {
     const user = useSelector(state => state.user)
     // focus on one convo user with number
-    console.log(user.email)
+    console.log(user)
     const [recipient, setRecipient] = useState("")
     const [message, setMessage] = useState("")
     const [emails, setEmails] = useState([])
 
-    console.log(emails)
+    // console.log(emails)
 
     const handleKeyPress = (e) => {
         //email regex referenced from https://www.w3resource.com/javascript/form/email-validation.php

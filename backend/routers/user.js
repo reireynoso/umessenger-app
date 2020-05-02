@@ -42,16 +42,17 @@ router.post('/users/signup', async(req,res) => {
 router.post('/users/login', cors(), async(req,res) => {
     try{
         const user = await User.findByCredentials(req.body.email, req.body.password)
-        // console.log(user)
+        const userWithConversations = await Conversation.findUserConversations(user)
         const token = await user.generateAuthToken()
-        res.send({user, token})
+        res.send({userWithConversations, token})
     }catch(e){
         res.status(400).send({errors: ['Unable to login']})
     }
 })
 
 router.get('/users/auto_login', auth, async(req,res) => {
-    res.send(req.user)
+    const userWithConversations = await Conversation.findUserConversations(req.user)
+    res.send(userWithConversations)
 })
 
 module.exports = router
