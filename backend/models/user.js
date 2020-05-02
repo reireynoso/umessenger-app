@@ -3,7 +3,7 @@ const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const validator = require('validator')
 
-// const Conversation = require('./conversation')
+const Conversation = require('./conversation')
 
 const userSchema = mongoose.Schema({
     name: {
@@ -58,12 +58,29 @@ const userSchema = mongoose.Schema({
 userSchema.methods.toJSON = function(){
     const user = this 
     const userObject = user.toObject()
+    userObject.conversations = []
 
     delete userObject._id
     delete userObject.password
+    delete userObject.createdAt
+    delete userObject.updatedAt
 
     return userObject
 }
+
+// userSchema.methods.findUserConversations = async function(){
+//     const user = this
+//     const userObject = user.toJSON()
+//     const convos = await Conversation.find({users: {
+//         $all: [
+//             {
+//                 $elemMatch: {_id: user._id}
+//             }
+//         ]
+//     }})
+//     userObject.convos = convos
+//     return userObject
+// }
 
 userSchema.methods.generateAuthToken = async function(){
     const user = this

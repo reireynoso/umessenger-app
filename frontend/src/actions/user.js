@@ -34,7 +34,7 @@ export const fetchUser = (route, userInfo) => dispatch => {
             return userData
         }
         localStorage.setItem("token", userData.token)
-        dispatch(setUser(userData))
+        dispatch(setUser(userData.user))
         // return "loggedIn"
     })
 } 

@@ -9,15 +9,17 @@ router.get('/test', async(req,res,next) => {
     try{
         const user = await User.findOne({name: "Test"})
        
-        const convos = await Conversation.find({users: {
-            $all: [
-                {
-                    $elemMatch: {_id: user._id}
-                }
-            ]
-        }})
+        // const convos = await Conversation.find({users: {
+        //     $all: [
+        //         {
+        //             $elemMatch: {_id: user._id}
+        //         }
+        //     ]
+        // }})
 
-        res.send({user, convos})
+        const yo = await Conversation.findUserConversations(user)
+        // const yo = await user.findUserConversations()
+        res.send({yo})
     }catch(e){
         next(e)
     }

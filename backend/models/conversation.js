@@ -29,6 +29,19 @@ conversationSchema.methods.toJSON = function(){
     return conversationObject
 }
 
+conversationSchema.statics.findUserConversations = async(user) => {
+    const userObject = user.toJSON()
+    const conversations = await Conversation.find({users: {
+        $all: [
+            {
+                $elemMatch: {_id: user._id}
+            }
+        ]
+    }})
+    userObject.conversations = conversations
+    return userObject
+}
+
 conversationSchema.statics.findAssociatedConversation = async(emails) => {
     //multiple queries
     //goal is to iterate through the array of users in Conversation,
