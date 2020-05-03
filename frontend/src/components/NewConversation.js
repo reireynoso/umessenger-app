@@ -21,6 +21,11 @@ export default () => {
         }
     }
 
+    const removeEmail = (removeEmail) => {
+        const removedEmail = emails.filter(email => email !== removeEmail)
+        setEmails(removedEmail)
+    }
+
     const handleOnSubmit = (e) => {
         e.preventDefault()
         if(emails.length > 0){
@@ -38,7 +43,11 @@ export default () => {
                     emails.length === 0 ?
                     <p>No recipients added</p>
                     :
-                    emails.map(email => <p key={email}>{email}</p>)
+                    emails.map(email => <div key={email}>
+                        <p>{email}</p>
+                        <button onClick={() => removeEmail(email)}>X</button>
+                    </div>
+                    )
                 }
             </div>
             <form onSubmit={handleOnSubmit}>

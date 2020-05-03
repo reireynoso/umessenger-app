@@ -33,6 +33,7 @@ export const fetchUser = (route, userInfo) => dispatch => {
         if(userData.errors){
             return userData
         }
+        // console.log(userData.user)
         localStorage.setItem("token", userData.token)
         dispatch(setUser(userData.user))
         // return "loggedIn"

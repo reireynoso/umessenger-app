@@ -1,7 +1,7 @@
 const user = (state = {
     loggedIn: false
 }, {type,payload}) => {
-    switch(type){
+    switch(type){    
         case "SET_USER":
             return {
                 loggedIn: true,
