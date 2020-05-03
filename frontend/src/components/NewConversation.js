@@ -1,12 +1,16 @@
 import React, {useState} from 'react'
-import {useSelector} from 'react-redux'
+import {useSelector, useDispatch} from 'react-redux'
+import {sendMessageToConversation} from '../actions/conversation'
 
 export default () => {
+    const dispatch = useDispatch()
     const user = useSelector(state => state.user)
+    const conversations = useSelector(state => state.conversation)
     // focus on one convo user with number
     console.log(user)
+    console.log(conversations)
     const [recipient, setRecipient] = useState("")
-    const [message, setMessage] = useState("")
+    const [content, setContent] = useState("")
     const [emails, setEmails] = useState([])
 
     // console.log(emails)
@@ -27,12 +31,17 @@ export default () => {
     }
 
     const handleOnSubmit = (e) => {
-        e.preventDefault()
-        if(emails.length > 0){
+        // e.preventDefault()
+        if(e.key=== "Enter" && emails.length > 0){
             //make a fetch request to the backend to create new convo
+           const res = dispatch(sendMessageToConversation(emails,content))
+            if(res && res.errors){
+                console.log(res.errors)
+                // setErrors(res.errors)
+            }
         }
         else{
-            //please enters recipients
+            //please enters recipients error
         }
     }
     return (
@@ -50,11 +59,10 @@ export default () => {
                     )
                 }
             </div>
-            <form onSubmit={handleOnSubmit}>
+            <div>
                 <input type="email" value={recipient} onKeyPress={handleKeyPress} onChange={(e) => setRecipient(e.target.value)} placeholder="email"/>
-                <textarea type="message" value={message} onChange={(e) => setMessage(e.target.value)} placeholder="message"/>
-                <input type="submit"/>
-            </form>
+                <input type="text" value={content} onKeyPress={handleOnSubmit} onChange={(e) => setContent(e.target.value)} placeholder="content"/>
+            </div>    
         </div>
     )
 }

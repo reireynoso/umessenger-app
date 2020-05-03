@@ -6,10 +6,13 @@ const User = require('../models/user')
 const Conversation = require('../models/conversation')
 const Message = require('../models/message')
 
-router.get("/conversations", async(req,res) => {
+router.post("/conversations", auth, async(req,res) => {
     try{
         // const user = await User.findOne({name: "Test"})
-        const recipients = ["hello@test.com", "test@test.com"]
+        // console.log(req.body.emails)
+        //make sure to include the user in the list
+        const recipients = [...req.body.emails, req.user.email]
+        const content = req.body.content
         //query for users in database whose names are included in list
         //$in email is included in the given list
         const users = await User.checkIfEmailsAreValid(recipients) 
@@ -27,7 +30,8 @@ router.get("/conversations", async(req,res) => {
         //         }
         //     ]
         // }})
-        const sampleUser = await User.findOne({name: "Test"})
+        // const sampleUser = await User.findOne({name: "Test"})
+        const user = req.user
 
         // const convos = await Conversation.find({
         //     $and: [
@@ -39,7 +43,8 @@ router.get("/conversations", async(req,res) => {
 
         //     ]
         // })
-        const newMessage = await new Message({user: sampleUser, content: "testgin"})
+        const newMessage = await new Message({user, content})
+        await newMessage.save()
 
         //multiple queries
         //goal is to iterate through the array of users in Conversation,
@@ -47,7 +52,7 @@ router.get("/conversations", async(req,res) => {
         //second, the size of array of users must also be equal to the size of the list
         //this simulates close to exact match of convo
         const existingConversation = await Conversation.findAssociatedConversation(recipients)
-        console.log(existingConversation)
+        // console.log(existingConversation)
         if(!existingConversation){
             //if no existingConversation exist, create a convo and push message in array message, with users
             // console.log(existingConversation)
@@ -58,7 +63,7 @@ router.get("/conversations", async(req,res) => {
         }
         else{
             //push message into existing convos message array
-            console.log("hey")
+            // console.log("hey")
             existingConversation.messages.push(newMessage)
             await existingConversation.save()
             console.log(existingConversation.messages)

@@ -43,7 +43,7 @@ router.post('/users/login', cors(), async(req,res) => {
     try{
         const user = await User.findByCredentials(req.body.email, req.body.password)
         const userWithConversations = await Conversation.findUserConversations(user)
-        console.log(userWithConversations)
+        // console.log(userWithConversations)
         const token = await user.generateAuthToken()
         res.send({user: userWithConversations, token})
     }catch(e){
