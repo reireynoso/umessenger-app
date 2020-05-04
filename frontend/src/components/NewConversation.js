@@ -1,4 +1,5 @@
 import React, {useState} from 'react'
+import Recipient from './Recipient'
 import {useSelector, useDispatch} from 'react-redux'
 import {sendMessageToConversation} from '../actions/conversation'
 
@@ -9,26 +10,12 @@ export default () => {
     // focus on one convo user with number
     console.log(user)
     console.log(conversations)
-    const [recipient, setRecipient] = useState("")
+    
     const [content, setContent] = useState("")
     const [emails, setEmails] = useState([])
 
     // console.log(emails)
 
-    const handleKeyPress = (e) => {
-        //email regex referenced from https://www.w3resource.com/javascript/form/email-validation.php
-        //check if recipient is in the email format before adding it to the array of emails
-        if(e.key === "Enter" && /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(recipient) && !emails.includes(recipient) && (recipient !== user.email)){
-            // console.log((recipient !== user.email))
-            setEmails(prevEmails => [...prevEmails, recipient])
-            setRecipient("")
-        }
-    }
-
-    const removeEmail = (removeEmail) => {
-        const removedEmail = emails.filter(email => email !== removeEmail)
-        setEmails(removedEmail)
-    }
 
     const handleOnSubmit = (e) => {
         // e.preventDefault()
@@ -47,20 +34,10 @@ export default () => {
     return (
         <div>
             <div>
-            <h3>Recipients</h3>
-                {
-                    emails.length === 0 ?
-                    <p>No recipients added</p>
-                    :
-                    emails.map(email => <div key={email}>
-                        <p>{email}</p>
-                        <button onClick={() => removeEmail(email)}>X</button>
-                    </div>
-                    )
-                }
+                <Recipient user={user} emails={emails} setEmails={setEmails}/>
             </div>
             <div>
-                <input type="email" value={recipient} onKeyPress={handleKeyPress} onChange={(e) => setRecipient(e.target.value)} placeholder="email"/>
+               
                 <input type="text" value={content} onKeyPress={handleOnSubmit} onChange={(e) => setContent(e.target.value)} placeholder="content"/>
             </div>    
         </div>
