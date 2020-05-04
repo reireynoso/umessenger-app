@@ -1,9 +1,10 @@
 import React, {useState} from 'react'
-import {useSelector} from 'react-redux'
+// import {useSelector} from 'react-redux'
 
-export default ({user, emails, setEmails}) => {
+export default ({user, emails, setEmails, selectedConversation}) => {
     const [recipient, setRecipient] = useState("")
     // const [emails, setEmails] = useState([])
+    // console.log(emails)
     const handleKeyPress = (e) => {
         //email regex referenced from https://www.w3resource.com/javascript/form/email-validation.php
         //check if recipient is in the email format before adding it to the array of emails
@@ -19,6 +20,10 @@ export default ({user, emails, setEmails}) => {
         setEmails(removedEmail)
     }
 
+    //check whether a conversation is selected.
+    //if not selected, able to remove and add recipients
+    const noSelectedConversation = () => !selectedConversation.users
+    
     return (
         <div>
              <h3>Recipients</h3>
@@ -28,11 +33,15 @@ export default ({user, emails, setEmails}) => {
                 :
                 emails.map(email => <div key={email}>
                     <p>{email}</p>
-                    <button onClick={() => removeEmail(email)}>X</button>
+                    {
+                        noSelectedConversation() && <button onClick={() => removeEmail(email)}>X</button>
+                    }
                 </div>
                 )
             }
-             <input type="email" value={recipient} onKeyPress={handleKeyPress} onChange={(e) => setRecipient(e.target.value)} placeholder="email"/>
+            {
+                noSelectedConversation() && <input type="email" value={recipient} onKeyPress={handleKeyPress} onChange={(e) => setRecipient(e.target.value)} placeholder="email"/>
+            }
         </div>
     )
 }

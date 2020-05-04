@@ -3,6 +3,18 @@ export const setConversations = (conversations) => ({
     payload: conversations
 })
 
+export const selectedConversation = (conversation) => {
+    // console.log(conversation)
+    return {
+        type: "SELECTED_CONVERSATION",
+        payload: conversation
+    }
+}
+
+export const removeSelectedConversation = () => ({
+    type: "REMOVE_SELECTED_CONVERSATION"
+})
+
 export const sendMessageToConversation = (emails,content) => dispatch => {
     const token = localStorage.getItem("token")
     return fetch(`http://localhost:4000/conversations`, {

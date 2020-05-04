@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import Recipient from './Recipient'
 import {useSelector, useDispatch} from 'react-redux'
 import {sendMessageToConversation} from '../actions/conversation'
@@ -6,16 +6,25 @@ import {sendMessageToConversation} from '../actions/conversation'
 export default () => {
     const dispatch = useDispatch()
     const user = useSelector(state => state.user)
-    const conversations = useSelector(state => state.conversation)
+    const selectedConversation = useSelector(state => state.conversation.selectedConversation)
     // focus on one convo user with number
-    console.log(user)
-    console.log(conversations)
+    // console.log(user)
+    // console.log(selectedConversation)
     
     const [content, setContent] = useState("")
     const [emails, setEmails] = useState([])
 
-    // console.log(emails)
-
+    useEffect(() => {
+        console.log(selectedConversation)
+        if(selectedConversation.users){
+            const onlyEmails = selectedConversation.users.map(user => user.email)
+            setEmails(onlyEmails)
+        }
+        else{
+            setEmails([])
+        }
+        
+    }, [selectedConversation])
 
     const handleOnSubmit = (e) => {
         // e.preventDefault()
@@ -34,10 +43,14 @@ export default () => {
     return (
         <div>
             <div>
-                <Recipient user={user} emails={emails} setEmails={setEmails}/>
+                <Recipient 
+                    user={user} 
+                    emails={emails} 
+                    setEmails={setEmails}
+                    selectedConversation={selectedConversation}
+                />
             </div>
             <div>
-               
                 <input type="text" value={content} onKeyPress={handleOnSubmit} onChange={(e) => setContent(e.target.value)} placeholder="content"/>
             </div>    
         </div>

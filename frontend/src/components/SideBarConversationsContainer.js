@@ -3,7 +3,7 @@ import {useSelector} from 'react-redux'
 import SegmentConversation from './SegmentConversation'
 
 export default () => {
-    const conversations = useSelector(state => state.conversation)
+    const conversations = useSelector(state => state.conversation.conversations)
     return (
         <div>
             <h2>Converations</h2>
