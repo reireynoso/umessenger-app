@@ -10,6 +10,7 @@ const conversationSchema = mongoose.Schema({
         default: []
     }
 }, {
+    timestamps: true
     // toObject: {
     //     getters:true
     // },
@@ -38,7 +39,10 @@ conversationSchema.statics.findUserConversations = async(user) => {
             }
         ]
     }})
+    .sort({'updatedAt': -1})
+    //sorts by updated with recent being on top
     userObject.conversations = conversations
+    
     return userObject
 }
 

@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react'
 import Recipient from './Recipient'
+import MessagesContainer from './MessagesContainer'
 import {useSelector, useDispatch} from 'react-redux'
 import {sendMessageToConversation} from '../actions/conversation'
 
@@ -51,6 +52,9 @@ export default () => {
                     setEmails={setEmails}
                     selectedConversation={selectedConversation}
                 />
+            </div>
+            <div>
+                <MessagesContainer/>
             </div>
             <div>
                 <input type="text" value={content} onKeyPress={handleOnSubmit} onChange={(e) => setContent(e.target.value)} placeholder="content"/>
