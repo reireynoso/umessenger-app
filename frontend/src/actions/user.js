@@ -1,4 +1,5 @@
 import {setConversations} from './conversation'
+import {removeLoggedInUserFromConversation} from '../selectors/conversation'
 
 export const setUser = (userObj) => ({
     type: "SET_USER",
@@ -19,7 +20,8 @@ export const fetchAutoLogin = (token) => dispatch => {
         const {conversations, ...user} = userData
         // console.log(conversations)
         dispatch(setUser(user))
-        dispatch(setConversations(conversations))
+        dispatch(setConversations(removeLoggedInUserFromConversation(conversations,user)))
+        // console.log(removeLoggedInUserFromConversation(conversations,user))
     })
 }
 
@@ -38,11 +40,11 @@ export const fetchUser = (route, userInfo) => dispatch => {
         if(userData.errors){
             return userData
         }
-        // console.log(userData.user)
         localStorage.setItem("token", userData.token)
         const {conversations, ...user} = userData.user
         dispatch(setUser(user))
-        dispatch(setConversations(conversations))
+        dispatch(setConversations(removeLoggedInUserFromConversation(conversations,user)))
+        // dispatch(setConversations(conversations))
         // return "loggedIn"
     })
 } 

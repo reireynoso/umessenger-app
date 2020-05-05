@@ -19,8 +19,8 @@ export default () => {
         if(selectedConversation.users){
             const onlyEmails = selectedConversation.users.map(user => user.email)
             //avoids including current user in the list of emails. CONSIDER refactoring
-            const onlyEmailsWithoutCurrentUser = onlyEmails.filter(email => email !== user.email)
-            setEmails(onlyEmailsWithoutCurrentUser)
+            // const onlyEmailsWithoutCurrentUser = onlyEmails.filter(email => email !== user.email)
+            setEmails(onlyEmails)
         }
         else{
             setEmails([])
@@ -32,7 +32,7 @@ export default () => {
         // e.preventDefault()
         if(e.key=== "Enter" && emails.length > 0){
             //make a fetch request to the backend to create new convo
-           const res = dispatch(sendMessageToConversation(emails,content))
+           const res = dispatch(sendMessageToConversation(emails,content,user))
             if(res && res.errors){
                 console.log(res.errors)
                 // setErrors(res.errors)

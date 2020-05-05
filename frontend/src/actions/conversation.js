@@ -1,3 +1,5 @@
+import {removeLoggedInUserFromConversation} from '../selectors/conversation'
+
 export const setConversations = (conversations) => ({
     type: "SET_CONVERSATIONS",
     payload: conversations
@@ -20,7 +22,7 @@ export const removeSelectedConversation = () => ({
     type: "REMOVE_SELECTED_CONVERSATION"
 })
 
-export const sendMessageToConversation = (emails,content) => dispatch => {
+export const sendMessageToConversation = (emails,content,user) => dispatch => {
     const token = localStorage.getItem("token")
     return fetch(`http://localhost:4000/conversations`, {
         method: "POST",
@@ -35,5 +37,8 @@ export const sendMessageToConversation = (emails,content) => dispatch => {
         })
     })
     .then(res => res.json())
-    .then(data => dispatch(addOrUpdateConversation(data.conversation)))
+    .then(data => {
+        // console.log(removeLoggedInUserFromConversation(data.conversation,user))
+        dispatch(addOrUpdateConversation(removeLoggedInUserFromConversation(data.conversation,user)))
+    })
 }
