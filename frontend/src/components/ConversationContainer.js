@@ -18,7 +18,9 @@ export default () => {
         console.log(selectedConversation)
         if(selectedConversation.users){
             const onlyEmails = selectedConversation.users.map(user => user.email)
-            setEmails(onlyEmails)
+            //avoids including current user in the list of emails. CONSIDER refactoring
+            const onlyEmailsWithoutCurrentUser = onlyEmails.filter(email => email !== user.email)
+            setEmails(onlyEmailsWithoutCurrentUser)
         }
         else{
             setEmails([])

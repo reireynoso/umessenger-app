@@ -12,6 +12,7 @@ router.post("/conversations", auth, async(req,res) => {
         // console.log(req.body.emails)
         //make sure to include the user in the list
         const recipients = [...req.body.emails, req.user.email]
+        console.log(recipients)
         const content = req.body.content
         //query for users in database whose names are included in list
         //$in email is included in the given list
@@ -66,7 +67,7 @@ router.post("/conversations", auth, async(req,res) => {
             // console.log("hey")
             existingConversation.messages.push(newMessage)
             await existingConversation.save()
-            console.log(existingConversation.messages)
+            // console.log(existingConversation.messages)
 
             res.send({conversation: existingConversation})
         }

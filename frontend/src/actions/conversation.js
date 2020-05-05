@@ -3,6 +3,11 @@ export const setConversations = (conversations) => ({
     payload: conversations
 })
 
+export const addOrUpdateConversation = (conversation) => ({
+    type: "ADD_OR_UPDATE_CONVERSATION",
+    payload: conversation
+})
+
 export const selectedConversation = (conversation) => {
     // console.log(conversation)
     return {
@@ -30,5 +35,5 @@ export const sendMessageToConversation = (emails,content) => dispatch => {
         })
     })
     .then(res => res.json())
-    .then(console.log)
+    .then(data => dispatch(addOrUpdateConversation(data.conversation)))
 }
