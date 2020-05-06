@@ -1,12 +1,15 @@
 const conversation = (state = {
     conversations: [],
-    selectedConversation: {}
+    selectedConversation: {},
+    emails: []
 }, {type,payload}) => {
+    // const onlyEmails = selectedConversation.users.map(user => user.email)
     switch(type){    
         case "SET_CONVERSATIONS":
             return {
                 selectedConversation: payload[0],
-                conversations: payload
+                conversations: payload,
+                emails: payload[0].users.map(user => user.email)
             }
         case "ADD_OR_UPDATE_CONVERSATION":
             //remove the old conversation if it exists,
@@ -14,17 +17,32 @@ const conversation = (state = {
             const removeOld = state.conversations.filter(conversation => conversation._id!==payload._id)
             return {
                 conversations: [payload, ...removeOld],
-                selectedConversation: payload
+                selectedConversation: payload,
+                emails: payload.users.map(user => user.email)
             }
         case "SELECTED_CONVERSATION":
             return {
                 ...state,
-                selectedConversation: payload
+                selectedConversation: payload,
+                emails: payload.users.map(user => user.email)
             }
         case "REMOVE_SELECTED_CONVERSATION":
+            // debugger
             return {
                 ...state,
-                selectedConversation: {}
+                selectedConversation: {},
+                //check if there's a previous selected convo, if not, keep the emails to avoid retyping
+                emails: !!state.selectedConversation.users ? [] : [...state.emails],
+            }
+        case "ADD_EMAIL":
+            return {
+                ...state,
+                emails: [...state.emails,payload]
+            }
+        case "REMOVE_EMAIL":
+            return {
+                ...state,
+                emails: state.emails.filter(email => email!== payload)
             }
         default: return state
     }

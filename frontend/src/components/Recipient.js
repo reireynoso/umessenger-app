@@ -1,23 +1,24 @@
 import React, {useState} from 'react'
-// import {useSelector} from 'react-redux'
+import {useSelector, useDispatch} from 'react-redux'
+import {addEmail,removeEmail} from '../actions/conversation'
 
-export default ({user, emails, setEmails, selectedConversation}) => {
+export default () => {
+    const dispatch = useDispatch()
+    const selectedConversation = useSelector(state => state.conversation.selectedConversation)
+    const user = useSelector(state => state.user)
+    const emails = useSelector(state => state.conversation.emails)
+    
     const [recipient, setRecipient] = useState("")
-    // const [emails, setEmails] = useState([])
-    // console.log(emails)
+    
     const handleKeyPress = (e) => {
         //email regex referenced from https://www.w3resource.com/javascript/form/email-validation.php
         //check if recipient is in the email format before adding it to the array of emails
         if(e.key === "Enter" && /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(recipient) && !emails.includes(recipient) && (recipient !== user.email)){
             // console.log((recipient !== user.email))
-            setEmails(prevEmails => [...prevEmails, recipient])
+            // setEmails(prevEmails => [...prevEmails, recipient])
+            dispatch(addEmail(recipient))
             setRecipient("")
         }
-    }
-
-    const removeEmail = (removeEmail) => {
-        const removedEmail = emails.filter(email => email !== removeEmail)
-        setEmails(removedEmail)
     }
 
     //check whether a conversation is selected.
@@ -32,7 +33,7 @@ export default ({user, emails, setEmails, selectedConversation}) => {
                     emails.map(email => <div key={email}>
                         <span>{email}</span>
                         {
-                            noSelectedConversation() && <button onClick={() => removeEmail(email)}>X</button>
+                            noSelectedConversation() && <button onClick={() => dispatch(removeEmail(email))}>X</button>
                         }
                     </div>
                     )

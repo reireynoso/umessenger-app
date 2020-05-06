@@ -1,5 +1,16 @@
 import {removeLoggedInUserFromConversation} from '../selectors/conversation'
 
+export const addEmail = (email) => ({
+    type: "ADD_EMAIL",
+    payload: email
+})
+
+export const removeEmail = (email) => ({
+    type: "REMOVE_EMAIL",
+    payload: email
+})
+
+
 export const setConversations = (conversations) => ({
     type: "SET_CONVERSATIONS",
     payload: conversations
@@ -23,6 +34,7 @@ export const removeSelectedConversation = () => ({
 })
 
 export const sendMessageToConversation = (emails,content,user) => dispatch => {
+    // debugger
     const token = localStorage.getItem("token")
     return fetch(`http://localhost:4000/conversations`, {
         method: "POST",
@@ -38,6 +50,11 @@ export const sendMessageToConversation = (emails,content,user) => dispatch => {
     })
     .then(res => res.json())
     .then(data => {
+        // debugger
+        if(data.errors){
+            // console.log(data.errors)
+            return data.errors
+        }
         // console.log(removeLoggedInUserFromConversation(data.conversation,user))
         dispatch(addOrUpdateConversation(removeLoggedInUserFromConversation(data.conversation,user)))
     })
