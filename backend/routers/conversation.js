@@ -60,7 +60,7 @@ router.post("/conversations", auth, async(req,res) => {
             const newConversation = await new Conversation({users, messages:[newMessage]})
             await newConversation.save()
             // newConversation.users.push()
-            res.send(newConversation)
+            res.send({conversation: newConversation})
         }
         else{
             //push message into existing convos message array

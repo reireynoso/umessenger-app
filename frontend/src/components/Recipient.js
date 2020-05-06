@@ -27,21 +27,20 @@ export default ({user, emails, setEmails, selectedConversation}) => {
     return (
         <div>
              <h3>Recipients</h3>
-            {
-                emails.length === 0 ?
-                <p>No recipients added</p>
-                :
-                emails.map(email => <div key={email}>
-                    <p>{email}</p>
-                    {
-                        noSelectedConversation() && <button onClick={() => removeEmail(email)}>X</button>
-                    }
-                </div>
-                )
-            }
-            {
-                noSelectedConversation() && <input type="email" value={recipient} onKeyPress={handleKeyPress} onChange={(e) => setRecipient(e.target.value)} placeholder="email"/>
-            }
+             <div style={{display: "flex"}}>
+                {
+                    emails.map(email => <div key={email}>
+                        <span>{email}</span>
+                        {
+                            noSelectedConversation() && <button onClick={() => removeEmail(email)}>X</button>
+                        }
+                    </div>
+                    )
+                }
+                {
+                    noSelectedConversation() && <input type="email" value={recipient} onKeyPress={handleKeyPress} onChange={(e) => setRecipient(e.target.value)} placeholder="email"/>
+                }
+             </div>
         </div>
     )
 }
