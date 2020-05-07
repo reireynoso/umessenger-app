@@ -4,6 +4,7 @@ import Message from './Message'
 
 export default () => {
     const selectedConversation = useSelector(state => state.conversation.selectedConversation)
+    
     return (
         <div>
             <h1>Messages</h1>
