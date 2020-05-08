@@ -8,11 +8,13 @@ const Message = require('../models/message')
 
 router.post("/conversations", auth, async(req,res) => {
     try{
+        // req.app.io.emit('test',{key: "value"})
+        req.app.io.to("5eb2de1eced8c5223da8d398").emit('typing', {"key":"value"})
         // const user = await User.findOne({name: "Test"})
         // console.log(req.body.emails)
         //make sure to include the user in the list
         const recipients = [...req.body.emails, req.user.email]
-        console.log(recipients)
+        // console.log(recipients)
         const content = req.body.content
         //query for users in database whose names are included in list
         //$in email is included in the given list

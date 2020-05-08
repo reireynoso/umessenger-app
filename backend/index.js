@@ -27,14 +27,22 @@ const io = socketio(server)
 io.on('connection', (socket) => {
     console.log('New Connection')
 
-    socket.on('viewConversation', () => {
-        console.log('viewingConvo')
+    socket.on('typing', (input) => {
+        io.sockets.emit('typing', input)
+    })
+
+    socket.on('subscribeToConversation', (conversation) => {
+        // io.sockets.emit('typing', input)
+        // console.log(conversation._id)
+        socket.join(conversation._id)
     })
 
     socket.on('disconnect', () => {
         console.log('someone had left')
     })
 })
+
+app.io = io
 
 server.listen(port, () => {
     // data()

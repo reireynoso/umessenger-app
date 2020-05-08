@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState,useEffect} from 'react'
 import {useSelector, useDispatch} from 'react-redux'
 import {sendMessageToConversation} from '../actions/conversation'
 
@@ -8,6 +8,15 @@ export default () => {
     const emails = useSelector(state => state.conversation.emails)
     
     const [content, setContent] = useState("")
+
+    const socket = useSelector(state => state.socket)
+    
+    const handleOnChange = (e) => {
+        if(socket.on){
+            socket.emit('typing', e.target.value)
+        }
+        setContent(e.target.value)
+    }
     
     const handleOnSubmit = async(e) => {     
         if(e.key=== "Enter" && emails.length > 0){
@@ -23,7 +32,7 @@ export default () => {
     }
     return(
         <div>
-            <input type="text" value={content} onKeyPress={handleOnSubmit} onChange={(e) => setContent(e.target.value)} placeholder="content"/>
+            <input type="text" value={content} onKeyPress={handleOnSubmit} onChange={handleOnChange} placeholder="content"/>
         </div>    
     )
 }
