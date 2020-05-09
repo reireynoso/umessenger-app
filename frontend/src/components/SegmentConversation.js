@@ -4,28 +4,43 @@ import {useDispatch, useSelector} from 'react-redux'
 import {selectedConversation} from '../actions/conversation'
 
 export default ({conversation, conversation: {messages, users}}) => {
-    // const loggedInUser = useSelector(state => state.user)
+    const selectConversation = useSelector(state => state.conversation.selectedConversation)
     const [typing, setTyping] = useState("")
     const socket = useSelector(state => state.socket)
-
+    
+    // applies to all conversaton instances
     useEffect(() => {
+        // console.log('select')
+        // console.log(selectConversation)
         if(socket.io){
             // console.log(users)
             socket.emit('subscribeToConversation', conversation)
+        }
+        return () => {
+            // if(socket.on){
+            //     socket.emit('disconnect')
+            //     socket.off()
+            // }
+            console.log('something')
+        }
+    }, [])
+
+    useEffect(() => {
+        if(socket.io){
             socket.on('typing', ({selectedConversation,content}) => {
-                // console.log(input)
+                console.log(content)
                 // console.log(conversation._id)
                 //pass is an arg from server that includes the user name and conversation obj for comparison
-                if(selectedConversation._id === conversation._id){
+                // if(selectedConversation._id === conversation._id){
                     // console.log('matcg')
                     // console.log(conversation._id)
                     // console.log(selectedConversation._id)
                     //possible bugs: multiple user typing. One stops but might overwrite the other user still typing
                     setTyping(content)
-                }
+                // }
             })
         }
-    })
+    }, [selectConversation])
 
     //does not account if the conversation includes only the logged in user
     // const usersRefactored = () => {

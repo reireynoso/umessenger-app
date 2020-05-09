@@ -9,7 +9,7 @@ import {setSocket} from '../actions/socket'
 
 export default () => {
     const dispatch = useDispatch()
-    const socket = useSelector(state => state.socket)
+    // const socket = useSelector(state => state.socket)
     const ENDPOINT = 'localhost:4000'
     useEffect(() => {
         const establishSocket = io(ENDPOINT)
@@ -24,7 +24,7 @@ export default () => {
         <div>
             <h1>Main Component</h1>
             <button onClick={() => dispatch(removeSelectedConversation())}>New</button>
-            <SideBarConversationsContainer socket={socket}/>
+            <SideBarConversationsContainer/>
             <ConversationContainer/>
         </div>
     )
