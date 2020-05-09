@@ -6,14 +6,25 @@ export default () => {
     const dispatch = useDispatch()
     const user = useSelector(state => state.user)
     const emails = useSelector(state => state.conversation.emails)
+    const selectedConversation = useSelector(state => state.conversation.selectedConversation)
     
     const [content, setContent] = useState("")
 
     const socket = useSelector(state => state.socket)
+
+    useEffect(() => {
+        //clean up. When user switches convo, this will unmount and send current convo to backend to alert other sockets
+        return () => {
+            if(socket.on && selectedConversation){
+                socket.emit('typing', {selectedConversation,user,content:""})
+                setContent("")
+            }
+        }
+    },[selectedConversation])
     
     const handleOnChange = (e) => {
-        if(socket.on){
-            socket.emit('typing', e.target.value)
+        if(socket.on && selectedConversation){
+            socket.emit('typing', {selectedConversation,user,content:e.target.value})
         }
         setContent(e.target.value)
     }

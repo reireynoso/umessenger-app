@@ -27,14 +27,16 @@ const io = socketio(server)
 io.on('connection', (socket) => {
     console.log('New Connection')
 
-    socket.on('typing', (input) => {
-        io.sockets.emit('typing', input)
-    })
-
+    
     socket.on('subscribeToConversation', (conversation) => {
         // io.sockets.emit('typing', input)
         // console.log(conversation._id)
         socket.join(conversation._id)
+    })
+
+    socket.on('typing', ({selectedConversation,user,content}) => {
+        socket.broadcast.to(selectedConversation._id).emit('typing', {selectedConversation,user,content})
+        // io.to(conversation).emit('typing', "someone is typing")
     })
 
     socket.on('disconnect', () => {

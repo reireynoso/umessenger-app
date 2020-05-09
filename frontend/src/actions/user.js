@@ -18,7 +18,6 @@ export const fetchAutoLogin = (token) => dispatch => {
             return userData.errors
         }
         const {conversations, ...user} = userData
-        // console.log(conversations)
         dispatch(setUser(user))
         dispatch(setConversations(removeLoggedInUserFromConversation(conversations,user)))
         // console.log(removeLoggedInUserFromConversation(conversations,user))

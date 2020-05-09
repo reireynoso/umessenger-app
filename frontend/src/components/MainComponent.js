@@ -15,8 +15,8 @@ export default () => {
         const establishSocket = io(ENDPOINT)
         dispatch(setSocket(establishSocket))
         return () => {
-            socket.emit('disconnect')
-            socket.off()
+            establishSocket.emit('disconnect')
+            establishSocket.off()
         }
     }, [ENDPOINT])
 

@@ -8,8 +8,6 @@ const Message = require('../models/message')
 
 router.post("/conversations", auth, async(req,res) => {
     try{
-        // req.app.io.emit('test',{key: "value"})
-        req.app.io.to("5eb2de1eced8c5223da8d398").emit('typing', {"key":"value"})
         // const user = await User.findOne({name: "Test"})
         // console.log(req.body.emails)
         //make sure to include the user in the list
@@ -70,7 +68,7 @@ router.post("/conversations", auth, async(req,res) => {
             existingConversation.messages.push(newMessage)
             await existingConversation.save()
             // console.log(existingConversation.messages)
-
+            req.app.io.to(existingConversation._id).emit('typing', {"key":"value"})
             res.send({conversation: existingConversation})
         }
         // const convos = await Conversation.find({
