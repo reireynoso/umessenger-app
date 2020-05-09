@@ -16,7 +16,7 @@ export default () => {
                 // anyone typing is added into the array as long they have something in content
                 // if no content, user is removed from list of typers
                 setTypers(typers => {
-                    if(!typers.includes(user.name)){
+                    if(!typers.includes(user.name) && content){
                         return [...typers, user.name]
                     }
                     else if(!content){
@@ -36,11 +36,36 @@ export default () => {
         }
     }, [selectedConversation])
 
+    const checkWhich = (index) => {
+        //index passed in accounts for the 0. 1 is added already
+        if(typers.length === 1 || index === typers.length){ 
+            return " "
+        }
+        else if(index + 1 === typers.length){ //compares next number to length
+            return ", and "
+        }
+        else{
+            return ", "
+        }
+    }
+
     return (
         <div>
             <h1>Messages</h1>
             {
                 selectedConversation.messages && selectedConversation.messages.map(message => <Message message={message}/>)
+            }
+            {
+                typers.length > 0 &&
+                <div>
+                    {
+                        typers.map((typer,index) => 
+                        <span key={`${index+typer}`}>{typer}
+                            {checkWhich(index + 1)} 
+                        </span>)
+                    }
+                    {typers.length === 1 ? "is" : "are"} typing...
+                </div>
             }
         </div>
     )
