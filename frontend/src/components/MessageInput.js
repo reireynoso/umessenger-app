@@ -16,6 +16,7 @@ export default () => {
         //clean up. When user switches convo, this will unmount and send current convo to backend to alert other sockets
         return () => {
             if(socket.on && selectedConversation){
+                console.log(selectedConversation)
                 socket.emit('typing', {selectedConversation,user,content:""})
                 setContent("")
             }

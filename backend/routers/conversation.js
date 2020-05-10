@@ -76,7 +76,7 @@ router.post("/conversations", auth, async(req,res) => {
             existingConversation.messages.push(newMessage)
             await existingConversation.save()
             // console.log(existingConversation.messages)
-            req.app.io.to(existingConversation._id).emit('typing', {"key":"value"})
+            req.app.io.to(existingConversation._id).emit('existingConversation', existingConversation)
             res.send({conversation: existingConversation})
         }
         // const convos = await Conversation.find({

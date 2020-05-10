@@ -18,8 +18,10 @@ export default () => {
 
         establishSocket.emit("online", user)
         establishSocket.on('newConversation', (newConversation) => {
-            // console.log(newConversation)
             dispatch(addOrUpdateConversation(removeLoggedInUserFromConversation(newConversation,user)))
+        })
+        establishSocket.on('existingConversation', (existingConversation) => {
+            dispatch(addOrUpdateConversation(removeLoggedInUserFromConversation(existingConversation,user)))
         })
         dispatch(setSocket(establishSocket))
         return () => {

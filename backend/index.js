@@ -47,7 +47,7 @@ io.on('connection', (socket) => {
     })
 
     socket.on('typing', ({selectedConversation,user,content}) => {
-        // console.log(content)
+        // console.log(selectedConversation)
         socket.broadcast.to(selectedConversation._id).emit('typing', {selectedConversation,user,content})
         // io.to(conversation).emit('typing', "someone is typing")
     })

@@ -16,7 +16,8 @@ export default ({conversation, conversation: {messages, users}}) => {
             socket.emit('subscribeToConversation', conversation)
             socket.on('typing', ({selectedConversation,content}) => {
                 // console.log(content)
-                // console.log(conversation._id)
+                // console.log(selectedConversation)
+                // debugger
                 //pass is an arg from server that includes the user name and conversation obj for comparison
                 if(selectedConversation._id === conversation._id){
                     console.log(content)
@@ -27,7 +28,6 @@ export default ({conversation, conversation: {messages, users}}) => {
                     setTyping(content)
                 }
             })
-            socket.on('newConversation', (newConversation) => console.log(newConversation))
         }
         return () => {
             // if(socket.on){
