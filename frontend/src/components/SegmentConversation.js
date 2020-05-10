@@ -1,7 +1,7 @@
 import React, {useState,useEffect} from 'react'
 import {useDispatch, useSelector} from 'react-redux'
 
-import {selectedConversation} from '../actions/conversation'
+import {selectedConversation as selectConversation} from '../actions/conversation'
 
 export default ({conversation, conversation: {messages, users}}) => {
     const [typing, setTyping] = useState("")
@@ -27,6 +27,7 @@ export default ({conversation, conversation: {messages, users}}) => {
                     setTyping(content)
                 }
             })
+            socket.on('newConversation', (newConversation) => console.log(newConversation))
         }
         return () => {
             // if(socket.on){
@@ -45,7 +46,7 @@ export default ({conversation, conversation: {messages, users}}) => {
     // }
     const dispatch = useDispatch()
     return (
-        <div onClick={() => dispatch(selectedConversation(conversation))}>
+        <div onClick={() => dispatch(selectConversation(conversation))}>
             <h3>{users[0].name}</h3>
             <p>{messages[messages.length-1].content}</p>
             {

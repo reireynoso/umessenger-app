@@ -54,14 +54,14 @@ const data = async() => {
             users: [users[0], users[1]],
             messages: [messages[1], messages[0]]
         },
-        {
-            users: [users[0]],
-            messages: [messages[1], messages[0]]
-        },
-        {
-            users: [users[2], users[1]],
-            messages: [messages[1], messages[0]]
-        }
+        // {
+        //     users: [users[0]],
+        //     messages: [messages[1], messages[0]]
+        // },
+        // {
+        //     users: [users[2], users[1]],
+        //     messages: [messages[1], messages[0]]
+        // }
     ])
 
     // users[0].conversations = [conversations[1], conversations[0]]

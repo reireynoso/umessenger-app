@@ -9,10 +9,14 @@ import {setSocket} from '../actions/socket'
 
 export default () => {
     const dispatch = useDispatch()
+    const user = useSelector(state => state.user)
     // const socket = useSelector(state => state.socket)
     const ENDPOINT = 'localhost:4000'
     useEffect(() => {
         const establishSocket = io(ENDPOINT)
+
+        establishSocket.emit("online", user)
+
         dispatch(setSocket(establishSocket))
         return () => {
             establishSocket.emit('disconnect')

@@ -24,9 +24,21 @@ app.use(convoRouter)
 const server = http.createServer(app);
 const io = socketio(server)
 
+const onlineUsers = {
+
+}
+
 io.on('connection', (socket) => {
     console.log('New Connection')
 
+    socket.on('online', (user) => {
+        // console.log(user)
+        onlineUsers[user.email] = socket.id
+        // console.log(onlineUsers)
+        // if(onlineUsers[user.email]){
+        //     console.log(onlineUsers[user.email])
+        // }
+    })
     
     socket.on('subscribeToConversation', (conversation) => {
         // io.sockets.emit('typing', input)
@@ -42,10 +54,18 @@ io.on('connection', (socket) => {
 
     socket.on('disconnect', () => {
         console.log('someone had left')
+        //removes user from object list by socket id
+        for(let key in onlineUsers){
+            if(onlineUsers[key] === socket.id){
+                delete onlineUsers[key]
+            }
+        }
+        // console.log('dipped', onlineUsers)
     })
 })
 
 app.io = io
+app.onlineUsers = onlineUsers
 
 server.listen(port, () => {
     // data()

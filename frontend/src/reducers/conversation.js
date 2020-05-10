@@ -6,10 +6,11 @@ const conversation = (state = {
     // const onlyEmails = selectedConversation.users.map(user => user.email)
     switch(type){    
         case "SET_CONVERSATIONS":
+            let initialPayload = (payload[0] ? payload[0].users : false) || []
             return {
-                selectedConversation: payload[0],
+                selectedConversation: payload[0] || {},
                 conversations: payload,
-                emails: payload[0].users.map(user => user.email)
+                emails: initialPayload.map(user => user.email)
             }
         case "ADD_OR_UPDATE_CONVERSATION":
             //remove the old conversation if it exists,
