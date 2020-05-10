@@ -4,7 +4,6 @@ import {useDispatch, useSelector} from 'react-redux'
 import {selectedConversation} from '../actions/conversation'
 
 export default ({conversation, conversation: {messages, users}}) => {
-    const selectConversation = useSelector(state => state.conversation.selectedConversation)
     const [typing, setTyping] = useState("")
     const socket = useSelector(state => state.socket)
     
@@ -15,32 +14,27 @@ export default ({conversation, conversation: {messages, users}}) => {
         if(socket.io){
             // console.log(users)
             socket.emit('subscribeToConversation', conversation)
+            socket.on('typing', ({selectedConversation,content}) => {
+                // console.log(content)
+                // console.log(conversation._id)
+                //pass is an arg from server that includes the user name and conversation obj for comparison
+                if(selectedConversation._id === conversation._id){
+                    console.log(content)
+                    // console.log('matcg')
+                    // console.log(conversation._id)
+                    // console.log(selectedConversation._id)
+                    //possible bugs: multiple user typing. One stops but might overwrite the other user still typing
+                    setTyping(content)
+                }
+            })
         }
         return () => {
             // if(socket.on){
             //     socket.emit('disconnect')
             //     socket.off()
             // }
-            console.log('something')
         }
     }, [])
-
-    useEffect(() => {
-        if(socket.io){
-            socket.on('typing', ({selectedConversation,content}) => {
-                console.log(content)
-                // console.log(conversation._id)
-                //pass is an arg from server that includes the user name and conversation obj for comparison
-                // if(selectedConversation._id === conversation._id){
-                    // console.log('matcg')
-                    // console.log(conversation._id)
-                    // console.log(selectedConversation._id)
-                    //possible bugs: multiple user typing. One stops but might overwrite the other user still typing
-                    setTyping(content)
-                // }
-            })
-        }
-    }, [selectConversation])
 
     //does not account if the conversation includes only the logged in user
     // const usersRefactored = () => {

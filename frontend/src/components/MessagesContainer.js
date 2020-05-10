@@ -7,7 +7,7 @@ export default () => {
     const socket = useSelector(state => state.socket)
 
     const [typers, setTypers] = useState([])
-    console.log(typers)
+    // console.log(typers)
     useEffect(() => {
         // console.log(selectedConversation._id)
         if(socket.on){
@@ -31,10 +31,10 @@ export default () => {
         }
 
         return () => {
-            if(socket.on){
-                socket.emit('disconnect')
-                socket.off()
-            }
+            // if(socket.on){
+            //     socket.emit('disconnect')
+            //     socket.off()
+            // }
         }
     }, [selectConversation])
 
