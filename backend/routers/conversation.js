@@ -10,7 +10,6 @@ router.post("/conversations", auth, async(req,res) => {
     try{
         // const user = await User.findOne({name: "Test"})
         // console.log(req.body.emails)
-        console.log(req.app.onlineUsers)
         //make sure to include the user in the list
         const recipients = [...req.body.emails, req.user.email]
         // console.log(recipients)
@@ -66,7 +65,8 @@ router.post("/conversations", auth, async(req,res) => {
             const onlineUsers = req.app.onlineUsers
             const otherUsers = req.body.emails
             for(let i = 0; i<otherUsers.length; i++){
-                req.app.io.sockets.socket(onlineUsers[otherUsers[i]]).emit('newConversation', newConversation)
+                // console.log(onlineUsers[otherUsers[i]])
+                req.app.io.to(onlineUsers[otherUsers[i]]).emit('newConversation', newConversation)
             }
             res.send({conversation: newConversation})
         }

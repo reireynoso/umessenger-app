@@ -3,7 +3,8 @@ import {useDispatch,useSelector} from 'react-redux'
 import io from 'socket.io-client'
 import ConversationContainer from './ConversationContainer'
 import SideBarConversationsContainer from './SideBarConversationsContainer'
-import {removeSelectedConversation} from '../actions/conversation'
+import {removeSelectedConversation, addOrUpdateConversation} from '../actions/conversation'
+import {removeLoggedInUserFromConversation} from '../selectors/conversation'
 import {setSocket} from '../actions/socket'
 
 
@@ -16,7 +17,10 @@ export default () => {
         const establishSocket = io(ENDPOINT)
 
         establishSocket.emit("online", user)
-
+        establishSocket.on('newConversation', (newConversation) => {
+            // console.log(newConversation)
+            dispatch(addOrUpdateConversation(removeLoggedInUserFromConversation(newConversation,user)))
+        })
         dispatch(setSocket(establishSocket))
         return () => {
             establishSocket.emit('disconnect')
