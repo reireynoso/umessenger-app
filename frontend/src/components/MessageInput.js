@@ -15,9 +15,11 @@ export default () => {
     useEffect(() => {
         //clean up. When user switches convo, this will unmount and send current convo to backend to alert other sockets
         return () => {
+            const data = {selectedConversation,user,content:""}
             if(socket.on && selectedConversation){
-                // console.log(selectedConversation)
-                socket.emit('typing', {selectedConversation,user,content:""})
+                
+                socket.emit('typing', data)
+                socket.emit('messageTyping', data)
                 setContent("")
             }
         }

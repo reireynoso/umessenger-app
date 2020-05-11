@@ -9,7 +9,6 @@ export default () => {
     const [typers, setTypers] = useState([])
 
     useEffect(() => {
-        // setTypers([])
         if(socket.io){
             socket.on('messageTyping', ({user,content, selectedConversation}) => {
                 // typers array keeps track of who's typing in conversation
@@ -32,7 +31,8 @@ export default () => {
         }
 
         return () => {
-            // setTypers([])
+            //empties out typers if conversation is switched
+            setTypers([])
             if(socket.io){
                 //Everytime, selectConversation is changed, a typing socket listener is created.
                 //on unmount, remove typing socket listener to prevent more listeners from being added.
