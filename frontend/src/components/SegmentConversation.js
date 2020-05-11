@@ -1,16 +1,15 @@
 import React, {useState,useEffect} from 'react'
 import {useDispatch, useSelector} from 'react-redux'
 
-import {selectedConversation as selectConversation} from '../actions/conversation'
+import {selectedConversation as selectConversationAction} from '../actions/conversation'
 
 export default ({conversation, conversation: {messages, users}}) => {
     const [typing, setTyping] = useState("")
     const socket = useSelector(state => state.socket)
-    
+    // const selectConversation = useSelector(state => state.conversation.selectedConversation)
     // applies to all conversaton instances
     useEffect(() => {
-        // console.log('select')
-        // console.log(selectConversation)
+        // console.log(selectConversationAction)
         if(socket.io){
             // console.log(users)
             socket.emit('subscribeToConversation', conversation)
@@ -31,8 +30,8 @@ export default ({conversation, conversation: {messages, users}}) => {
         }
         return () => {
             // if(socket.on){
-            //     socket.emit('disconnect')
-            //     socket.off()
+            //     // socket.emit('disconnect')
+            //     socket.off('typing')
             // }
         }
     }, [])
@@ -46,7 +45,7 @@ export default ({conversation, conversation: {messages, users}}) => {
     // }
     const dispatch = useDispatch()
     return (
-        <div onClick={() => dispatch(selectConversation(conversation))}>
+        <div onClick={() => dispatch(selectConversationAction(conversation))}>
             <h3>{users[0].name}</h3>
             <p>{messages[messages.length-1].content}</p>
             {

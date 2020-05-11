@@ -46,9 +46,18 @@ io.on('connection', (socket) => {
         socket.join(conversation._id)
     })
 
+    // Why two typing listeners? For the one messageContainer, every time we select a new conversation, the component adds another typing listener.
+    // To prevent that, on unmount, we turn the socket listener off but it turns it off for the SegmentConversation component
+
     socket.on('typing', ({selectedConversation,user,content}) => {
         // console.log(selectedConversation)
         socket.broadcast.to(selectedConversation._id).emit('typing', {selectedConversation,user,content})
+        // io.to(conversation).emit('typing', "someone is typing")
+    })
+
+    socket.on('messageTyping', ({selectedConversation,user,content}) => {
+        // console.log(selectedConversation)
+        socket.broadcast.to(selectedConversation._id).emit('messageTyping', {selectedConversation,user,content})
         // io.to(conversation).emit('typing', "someone is typing")
     })
 

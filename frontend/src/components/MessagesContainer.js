@@ -7,13 +7,11 @@ export default () => {
     const socket = useSelector(state => state.socket)
 
     const [typers, setTypers] = useState([])
-    // console.log(typers)
 
     useEffect(() => {
-        // console.log(selectConversation._id)
         // setTypers([])
         if(socket.io){
-            socket.on('typing', ({user,content, selectedConversation}) => {
+            socket.on('messageTyping', ({user,content, selectedConversation}) => {
                 // typers array keeps track of who's typing in conversation
                 // anyone typing is added into the array as long they have something in content
                 // if no content, user is removed from list of typers
@@ -38,7 +36,7 @@ export default () => {
             if(socket.io){
                 //Everytime, selectConversation is changed, a typing socket listener is created.
                 //on unmount, remove typing socket listener to prevent more listeners from being added.
-                socket.off('typing')
+                socket.off('messageTyping')
             }
         }
     }, [selectConversation])
