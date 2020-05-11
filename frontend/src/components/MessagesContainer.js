@@ -17,27 +17,29 @@ export default () => {
                 // typers array keeps track of who's typing in conversation
                 // anyone typing is added into the array as long they have something in content
                 // if no content, user is removed from list of typers
-                // console.log(selectConversation._id)
-                console.log('hey')
-                // console.log(selectedConversation._id)
-                // if(selectedConversation._id === selectConversation._id){
-                //     // debugger
-                //     setTypers(typers => {
-                //         if(!typers.includes(user.name) && content){
-                //             return [...typers, user.name]
-                //         }
-                //         else if(!content){
-                //             const remove = typers.filter(typer => typer !==user.name)
-                //             return remove
-                //         }
-                //         return typers
-                //     })
-                // }
+                if(selectedConversation._id === selectConversation._id){
+                    // debugger
+                    setTypers(typers => {
+                        if(!typers.includes(user.name) && content){
+                            return [...typers, user.name]
+                        }
+                        else if(!content){
+                            const remove = typers.filter(typer => typer !==user.name)
+                            return remove
+                        }
+                        return typers
+                    })
+                }
             })
         }
 
         return () => {
             // setTypers([])
+            if(socket.io){
+                //Everytime, selectConversation is changed, a typing socket listener is created.
+                //on unmount, remove typing socket listener to prevent more listeners from being added.
+                socket.off('typing')
+            }
         }
     }, [selectConversation])
 
