@@ -20,7 +20,7 @@ export default ({conversation, conversation: {messages, users}}) => {
                 // debugger
                 //pass is an arg from server that includes the user name and conversation obj for comparison
                 if(selectedConversation._id === conversation._id){
-                    console.log(content)
+                    // console.log(content)
                     // console.log('matcg')
                     // console.log(conversation._id)
                     // console.log(selectedConversation._id)
