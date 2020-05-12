@@ -14,7 +14,7 @@ export default () => {
     // const [otherTypers, setOtherTypers] = useState({})
     // console.log(otherTypers)
     useEffect(() => {
-        console.log(obj[selectConversation._id])
+        //Issues to Fix: Severe refactor. Unknown bug somewhere. At some point, when user switches conversation as another person is typing and goes back to same conversation, person typing doesn't register again.
         if(obj[selectConversation._id]){
             setTypers(typers => {
                 if(!typers.includes(obj[selectConversation._id].user.name) && obj[selectConversation._id].content){
@@ -34,6 +34,21 @@ export default () => {
                 // if no content, user is removed from list of typers
                 if(selectedConversation._id === selectConversation._id){
                     // debugger
+                    if(!obj[selectedConversation._id]){
+                        obj[selectedConversation._id] = {
+                            content,
+                            user
+                        }
+                    }
+                    else if(!content){
+                        delete obj[selectedConversation._id]
+                    }
+                    else{
+                        obj[selectedConversation._id] = {
+                            ...obj[selectedConversation._id],
+                            content
+                        }
+                    }
                     setTypers(typers => {
                         if(!typers.includes(user.name) && content){
                             return [...typers, user.name]
@@ -63,7 +78,7 @@ export default () => {
                             content
                         }
                     }
-                    console.log(obj)
+                    // console.log(obj)
                     // setOtherTypers({
                     //     ...typers,
                     //     [selectedConversation._id]: {
