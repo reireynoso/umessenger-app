@@ -2,13 +2,31 @@ import React, {useEffect, useState} from 'react'
 import {useSelector} from 'react-redux'
 import Message from './Message'
 
+const obj = {
+
+}
+
 export default () => {
     const selectConversation = useSelector(state => state.conversation.selectedConversation)
     const socket = useSelector(state => state.socket)
 
     const [typers, setTypers] = useState([])
-
+    // const [otherTypers, setOtherTypers] = useState({})
+    // console.log(otherTypers)
     useEffect(() => {
+        console.log(obj[selectConversation._id])
+        if(obj[selectConversation._id]){
+            setTypers(typers => {
+                if(!typers.includes(obj[selectConversation._id].user.name) && obj[selectConversation._id].content){
+                    return [...typers, obj[selectConversation._id].user.name]
+                }
+                else if(!obj[selectConversation._id].content){
+                    const remove = typers.filter(typer => typer !==obj[selectConversation._id].user.name)
+                    return remove
+                }
+                return typers
+            })
+        }
         if(socket.io){
             socket.on('messageTyping', ({user,content, selectedConversation}) => {
                 // typers array keeps track of who's typing in conversation
@@ -26,6 +44,33 @@ export default () => {
                         }
                         return typers
                     })
+                }
+
+                else{
+                    // console.log('something')
+                    if(!obj[selectedConversation._id]){
+                        obj[selectedConversation._id] = {
+                            content,
+                            user
+                        }
+                    }
+                    else if(!content){
+                        delete obj[selectedConversation._id]
+                    }
+                    else{
+                        obj[selectedConversation._id] = {
+                            ...obj[selectedConversation._id],
+                            content
+                        }
+                    }
+                    console.log(obj)
+                    // setOtherTypers({
+                    //     ...typers,
+                    //     [selectedConversation._id]: {
+                    //         user,
+                    //         content
+                    //     }
+                    // })
                 }
             })
         }
