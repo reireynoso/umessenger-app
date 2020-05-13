@@ -17,9 +17,10 @@ const conversation = (state = {
             //add updated/new conversation to the beginning of the array
             const removeOld = state.conversations.filter(conversation => conversation._id!==payload._id)
             return {
+                ...state,
                 conversations: [payload, ...removeOld],
-                selectedConversation: payload,
-                emails: payload.users.map(user => user.email)
+                // selectedConversation: payload,
+                // emails: payload.users.map(user => user.email)
             }
         case "SELECTED_CONVERSATION":
             return {

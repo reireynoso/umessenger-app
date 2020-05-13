@@ -1,6 +1,9 @@
 import React, {useEffect, useState} from 'react'
-import {useSelector} from 'react-redux'
+import {useSelector, useDispatch} from 'react-redux'
 import Message from './Message'
+
+import {selectedConversation as selectedConversationAction} from '../actions/conversation'
+import {removeLoggedInUserFromConversation} from '../selectors/conversation'
 
 const obj = {
 
@@ -8,11 +11,14 @@ const obj = {
 
 export default () => {
     const selectConversation = useSelector(state => state.conversation.selectedConversation)
+    const user = useSelector(state => state.user)
     const socket = useSelector(state => state.socket)
+    const dispatch = useDispatch()
 
     const [typers, setTypers] = useState([])
     // const [otherTypers, setOtherTypers] = useState({})
     // console.log(otherTypers)
+  
     useEffect(() => {
         //Issues to Fix: Severe refactor. Unknown bug somewhere. At some point, when user switches conversation as another person is typing and goes back to same conversation, person typing doesn't register again.
         if(obj[selectConversation._id]){
@@ -28,6 +34,15 @@ export default () => {
             })
         }
         if(socket.io){
+            socket.on('newMessage', (conversation) => {
+                // console.log('newMessage')
+                //if a new message is sent from the server, socket emits the conversation is belongs to. Instead of everyone's viewing conversation being forced to switch to that updated conversation, only the users currently on that conversation is updated to the selectedConversation in state. 
+                if(conversation._id === selectConversation._id){
+                    //removes the current user from the conversation list before adding to the state
+                    dispatch(selectedConversationAction(removeLoggedInUserFromConversation(conversation,user)))
+                }
+
+            })
             socket.on('messageTyping', ({user,content, selectedConversation}) => {
                 // typers array keeps track of who's typing in conversation
                 // anyone typing is added into the array as long they have something in content
@@ -97,6 +112,7 @@ export default () => {
                 //Everytime, selectConversation is changed, a typing socket listener is created.
                 //on unmount, remove typing socket listener to prevent more listeners from being added.
                 socket.off('messageTyping')
+                socket.off('newMessage')
             }
         }
     }, [selectConversation])

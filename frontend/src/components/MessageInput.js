@@ -37,10 +37,16 @@ export default () => {
     const handleOnSubmit = async(e) => {     
         if(e.key=== "Enter" && emails.length > 0){
             //make a fetch request to the backend to create new convo
+        //  debugger
            const errors = await dispatch(sendMessageToConversation(emails,content,user))
             if(errors){
                 console.log(errors)
             }
+            // const data = {selectedConversation,user,content:""}
+            // if(socket.on && selectedConversation){         
+            //     socket.emit('typing', data)
+            //     socket.emit('messageTyping', data)
+            // }
             setContent("")
         }
         else{
