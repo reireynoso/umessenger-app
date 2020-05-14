@@ -26,7 +26,7 @@ export default () => {
     const dispatch = useDispatch()
 
     const [typers, setTypers] = useState([])
-    const [otherTypers, setOtherTypers] = useState({})
+    // const [otherTypers, setOtherTypers] = useState({})
     // console.log(otherTypers)
     
     const handleTypers = () => {
@@ -40,14 +40,15 @@ export default () => {
         //     }
         //     return typers
         // })
-        console.log(typersInfo[selectConversation._id])
+        
+        //checks to see if the selectConversation exists in typersInfo. If so, pull out the names of users from the array value and set it to the typers
         if(typersInfo[selectConversation._id]){
             const names = typersInfo[selectConversation._id].map(obj => obj.user.name)
-            
-
+    
             setTypers(names)
         }
         else{
+            //If it does not exist, no one is typing. Empty the typers array.
             setTypers([])
         }
         
@@ -56,6 +57,8 @@ export default () => {
   
     useEffect(() => {
         //Issues to Fix: Severe refactor. Unknown bug somewhere. At some point, when user switches conversation as another person is typing and goes back to same conversation, person typing doesn't register again.
+
+        //When the component reloads, check to see if typersInfo object was updated while viewing another conversation and update the typers.
         handleTypers()
         // if(obj[selectConversation._id]){
             // setTypers(typers => {
@@ -101,7 +104,9 @@ export default () => {
                 //     }
                 // }
 
+                // As a user is typing, we store the conversation id they're typing from as a key into the typersInfo object. 
                 if(!typersInfo[selectedConversation._id]){
+                    //If it doesn't already exist, create it and set it into an array container an object with the user and content information
                     typersInfo[selectedConversation._id] = [
                         {
                             user,
@@ -110,21 +115,28 @@ export default () => {
                     ]
                 }
                 else if(!content){
+                    //If content is blank, find the existing conversation and its array value in the typersInfo object, find the index of the object with the matching user. The goal is to remove just that object from the array.  
                     const findIndex = typersInfo[selectedConversation._id].findIndex(obj => obj.user.name === user.name)
+
+                    //There should always be a match but conditionally check if it returns something
                     if(findIndex > -1){
+                        //Using .splice, remove that object from the array
                         typersInfo[selectedConversation._id].splice(findIndex,1)
                     }
 
+                    //After removing the object from the array, check if the array is empty. If it is, delete that conversation from typersInfo object.
                     if(typersInfo[selectedConversation._id].length === 0){
                         delete typersInfo[selectedConversation._id]
                     }
                 }
                 else{
+                    //Otherwise, the conversation exists in the typersInfo object. Check to see if the typer is also in the array value. If found, replace their existing content value from the socket.
                     const existingTyper = typersInfo[selectedConversation._id].find(obj => obj.user.name === user.name)
                     if(existingTyper){
                         existingTyper.content = content
                     }
                     else{
+                        //If the user is not in the array yet, add them to that array.
                         typersInfo[selectedConversation._id] = [
                             ...typersInfo[selectedConversation._id],
                             {
@@ -134,11 +146,12 @@ export default () => {
                         ]
                     }
                 }
-                // console.log(typersInfo)
+               
+                //Update the list of typers after the typersInfo changes from the socket event.
                 handleTypers()
                 
                 //keeps track of typers as they're typing
-                if(selectedConversation._id === selectConversation._id){
+                // if(selectedConversation._id === selectConversation._id){
                     // setTypers(typers => {
                     //     if(!typers.includes(user.name) && content){
                     //         return [...typers, user.name]
@@ -152,7 +165,7 @@ export default () => {
                     // if(obj[selectConversation._id]){
                     //     handleTypers()
                     // }
-                }
+                // }
             })
         }
 
