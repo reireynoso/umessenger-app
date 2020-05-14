@@ -6,7 +6,8 @@ import {selectedConversation as selectConversationAction} from '../actions/conve
 export default ({conversation, conversation: {messages, users}}) => {
     const [typing, setTyping] = useState("")
     const socket = useSelector(state => state.socket)
-    // const selectConversation = useSelector(state => state.conversation.selectedConversation)
+    // const user = useSelector(state => state.user)
+    const selectConversation = useSelector(state => state.conversation.selectedConversation)
     // applies to all conversaton instances
     useEffect(() => {
         // console.log(selectConversationAction)
@@ -36,6 +37,12 @@ export default ({conversation, conversation: {messages, users}}) => {
         }
     }, [])
 
+    const handleConversationSelect = () => {
+        if(selectConversation._id !== conversation._id){
+            // console.log('hello')
+            dispatch(selectConversationAction(conversation))
+        }
+    }
     //does not account if the conversation includes only the logged in user
     // const usersRefactored = () => {
     //     return users.filter(user => user.email !== loggedInUser.email)
@@ -45,7 +52,7 @@ export default ({conversation, conversation: {messages, users}}) => {
     // }
     const dispatch = useDispatch()
     return (
-        <div onClick={() => dispatch(selectConversationAction(conversation))}>
+        <div onClick={handleConversationSelect}>
             <h3>{users[0].name}</h3>
             <p>{messages[messages.length-1].content}</p>
             {

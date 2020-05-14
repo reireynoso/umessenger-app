@@ -5,11 +5,9 @@ import Message from './Message'
 import {selectedConversation as selectedConversationAction} from '../actions/conversation'
 import {removeLoggedInUserFromConversation} from '../selectors/conversation'
 
-const obj = {
-
-}
 
 const typersInfo = {
+    // structure:
     // conversation_id: [{
     //     user: {},
     //     content: ""
@@ -17,6 +15,8 @@ const typersInfo = {
     //     user: {},
     //     content: ""
     // }]
+
+    //Why separate object instead of useState? Asynchrony issue. Need a state that directly manipulated instead of waiting for a render trigger. 
 }
 
 export default () => {
@@ -50,15 +50,14 @@ export default () => {
         else{
             //If it does not exist, no one is typing. Empty the typers array.
             setTypers([])
-        }
-        
-        
+        }       
     }
   
     useEffect(() => {
         //Issues to Fix: Severe refactor. Unknown bug somewhere. At some point, when user switches conversation as another person is typing and goes back to same conversation, person typing doesn't register again.
 
         //When the component reloads, check to see if typersInfo object was updated while viewing another conversation and update the typers.
+        // console.log(typersInfo)
         handleTypers()
         // if(obj[selectConversation._id]){
             // setTypers(typers => {
@@ -84,7 +83,6 @@ export default () => {
 
             })
             socket.on('messageTyping', ({user,content, selectedConversation}) => {
-
                 // typers array keeps track of who's typing in conversation
                 // anyone typing is added into the array as long they have something in content
                 // if no content, user is removed from list of typers
@@ -146,7 +144,7 @@ export default () => {
                         ]
                     }
                 }
-               
+                console.log('after', typersInfo)
                 //Update the list of typers after the typersInfo changes from the socket event.
                 handleTypers()
                 
@@ -177,6 +175,12 @@ export default () => {
                 //on unmount, remove typing socket listener to prevent more listeners from being added.
                 socket.off('messageTyping')
                 socket.off('newMessage')
+
+                // const data = {selectedConversation:selectConversation,user,content:""}
+                // if(socket.on && selectConversation){         
+                //     socket.emit('typing', data)
+                //     socket.emit('messageTyping', data)
+                // }
             }
         }
     }, [selectConversation])
