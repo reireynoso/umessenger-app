@@ -9,6 +9,16 @@ const obj = {
 
 }
 
+const typersInfo = {
+    // conversation_id: [{
+    //     user: {},
+    //     content: ""
+    // }, {
+    //     user: {},
+    //     content: ""
+    // }]
+}
+
 export default () => {
     const selectConversation = useSelector(state => state.conversation.selectedConversation)
     const user = useSelector(state => state.user)
@@ -16,23 +26,50 @@ export default () => {
     const dispatch = useDispatch()
 
     const [typers, setTypers] = useState([])
-    // const [otherTypers, setOtherTypers] = useState({})
+    const [otherTypers, setOtherTypers] = useState({})
     // console.log(otherTypers)
+    
+    const handleTypers = () => {
+        // setTypers(typers => {
+        //     if(!typers.includes(obj[selectConversation._id].user.name) && obj[selectConversation._id].content){
+        //         return [...typers, obj[selectConversation._id].user.name]
+        //     }
+        //     else if(!obj[selectConversation._id].content){
+        //         const remove = typers.filter(typer => typer !==obj[selectConversation._id].user.name)
+        //         return remove
+        //     }
+        //     return typers
+        // })
+        console.log(typersInfo[selectConversation._id])
+        if(typersInfo[selectConversation._id]){
+            const names = typersInfo[selectConversation._id].map(obj => obj.user.name)
+            
+
+            setTypers(names)
+        }
+        else{
+            setTypers([])
+        }
+        
+        
+    }
   
     useEffect(() => {
         //Issues to Fix: Severe refactor. Unknown bug somewhere. At some point, when user switches conversation as another person is typing and goes back to same conversation, person typing doesn't register again.
-        if(obj[selectConversation._id]){
-            setTypers(typers => {
-                if(!typers.includes(obj[selectConversation._id].user.name) && obj[selectConversation._id].content){
-                    return [...typers, obj[selectConversation._id].user.name]
-                }
-                else if(!obj[selectConversation._id].content){
-                    const remove = typers.filter(typer => typer !==obj[selectConversation._id].user.name)
-                    return remove
-                }
-                return typers
-            })
-        }
+        handleTypers()
+        // if(obj[selectConversation._id]){
+            // setTypers(typers => {
+            //     if(!typers.includes(obj[selectConversation._id].user.name) && obj[selectConversation._id].content){
+            //         return [...typers, obj[selectConversation._id].user.name]
+            //     }
+            //     else if(!obj[selectConversation._id].content){
+            //         const remove = typers.filter(typer => typer !==obj[selectConversation._id].user.name)
+            //         return remove
+            //     }
+            //     return typers
+            // })
+            // handleTypers()
+        // }
         if(socket.io){
             socket.on('newMessage', (conversation) => {
                 // console.log('newMessage')
@@ -44,63 +81,77 @@ export default () => {
 
             })
             socket.on('messageTyping', ({user,content, selectedConversation}) => {
+
                 // typers array keeps track of who's typing in conversation
                 // anyone typing is added into the array as long they have something in content
                 // if no content, user is removed from list of typers
-                if(selectedConversation._id === selectConversation._id){
-                    // debugger
-                    if(!obj[selectedConversation._id]){
-                        obj[selectedConversation._id] = {
-                            content,
-                            user
-                        }
-                    }
-                    else if(!content){
-                        delete obj[selectedConversation._id]
-                    }
-                    else{
-                        obj[selectedConversation._id] = {
-                            ...obj[selectedConversation._id],
-                            content
-                        }
-                    }
-                    setTypers(typers => {
-                        if(!typers.includes(user.name) && content){
-                            return [...typers, user.name]
-                        }
-                        else if(!content){
-                            const remove = typers.filter(typer => typer !==user.name)
-                            return remove
-                        }
-                        return typers
-                    })
-                }
+                // if(!obj[selectedConversation._id]){
+                //     obj[selectedConversation._id] = {
+                //         content,
+                //         user
+                //     }
+                // }
+                // else if(!content){
+                //     delete obj[selectedConversation._id]
+                // }
+                // else{
+                //     obj[selectedConversation._id] = {
+                //         ...obj[selectedConversation._id],
+                //         content
+                //     }
+                // }
 
-                else{
-                    // console.log('something')
-                    if(!obj[selectedConversation._id]){
-                        obj[selectedConversation._id] = {
-                            content,
-                            user
-                        }
-                    }
-                    else if(!content){
-                        delete obj[selectedConversation._id]
-                    }
-                    else{
-                        obj[selectedConversation._id] = {
-                            ...obj[selectedConversation._id],
+                if(!typersInfo[selectedConversation._id]){
+                    typersInfo[selectedConversation._id] = [
+                        {
+                            user,
                             content
                         }
+                    ]
+                }
+                else if(!content){
+                    const findIndex = typersInfo[selectedConversation._id].findIndex(obj => obj.user.name === user.name)
+                    if(findIndex > -1){
+                        typersInfo[selectedConversation._id].splice(findIndex,1)
                     }
-                    // console.log(obj)
-                    // setOtherTypers({
-                    //     ...typers,
-                    //     [selectedConversation._id]: {
-                    //         user,
-                    //         content
+
+                    if(typersInfo[selectedConversation._id].length === 0){
+                        delete typersInfo[selectedConversation._id]
+                    }
+                }
+                else{
+                    const existingTyper = typersInfo[selectedConversation._id].find(obj => obj.user.name === user.name)
+                    if(existingTyper){
+                        existingTyper.content = content
+                    }
+                    else{
+                        typersInfo[selectedConversation._id] = [
+                            ...typersInfo[selectedConversation._id],
+                            {
+                                user,
+                                content
+                            }
+                        ]
+                    }
+                }
+                // console.log(typersInfo)
+                handleTypers()
+                
+                //keeps track of typers as they're typing
+                if(selectedConversation._id === selectConversation._id){
+                    // setTypers(typers => {
+                    //     if(!typers.includes(user.name) && content){
+                    //         return [...typers, user.name]
                     //     }
+                    //     else if(!content){
+                    //         const remove = typers.filter(typer => typer !==user.name)
+                    //         return remove
+                    //     }
+                    //     return typers
                     // })
+                    // if(obj[selectConversation._id]){
+                    //     handleTypers()
+                    // }
                 }
             })
         }
