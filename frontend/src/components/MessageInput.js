@@ -13,22 +13,7 @@ export default () => {
     const socket = useSelector(state => state.socket)
 
     useEffect(() => {
-        //Issue to Fix: When user submits/switches conversation, empty out input field WITHOUT emptying others.
-        // const data = {selectedConversation,user,content:""}
-        //     if(socket.on && selectedConversation){         
-        //         socket.emit('typing', data)
-        //         socket.emit('messageTyping', data)
-        //     }
-        // handleResetInput()
-        //clean up. When user switches convo, this will unmount and send current convo to backend to alert other sockets
-        return () => {
-            // const data = {selectedConversation,user,content:""}
-            // if(socket.on && selectedConversation){         
-            //     socket.emit('typing', data)
-            //     socket.emit('messageTyping', data)
-            // }
-            // handleResetInput()
-        }
+        setContent("")
     },[selectedConversation])
 
     const handleResetInput = () =>{
@@ -57,12 +42,6 @@ export default () => {
             if(errors){
                 console.log(errors)
             }
-            // const data = {selectedConversation,user,content:""}
-            // if(socket.on && selectedConversation){         
-            //     socket.emit('typing', data)
-            //     socket.emit('messageTyping', data)
-            // }
-            // setContent("")
             handleResetInput()
         }
         else{

@@ -26,8 +26,6 @@ export default () => {
     const dispatch = useDispatch()
 
     const [typers, setTypers] = useState([])
-    // const [otherTypers, setOtherTypers] = useState({})
-    // console.log(otherTypers)
     
     const handleTypers = () => {
         // setTypers(typers => {
@@ -103,7 +101,7 @@ export default () => {
                 // }
 
                 // As a user is typing, we store the conversation id they're typing from as a key into the typersInfo object. 
-                if(!typersInfo[selectedConversation._id]){
+                if(!typersInfo[selectedConversation._id] && content){
                     //If it doesn't already exist, create it and set it into an array container an object with the user and content information
                     typersInfo[selectedConversation._id] = [
                         {
@@ -112,8 +110,9 @@ export default () => {
                         }
                     ]
                 }
-                else if(!content){
+                else if(typersInfo[selectedConversation._id] && !content){
                     //If content is blank, find the existing conversation and its array value in the typersInfo object, find the index of the object with the matching user. The goal is to remove just that object from the array.  
+                    // debugger
                     const findIndex = typersInfo[selectedConversation._id].findIndex(obj => obj.user.name === user.name)
 
                     //There should always be a match but conditionally check if it returns something
@@ -127,7 +126,7 @@ export default () => {
                         delete typersInfo[selectedConversation._id]
                     }
                 }
-                else{
+                else if(typersInfo[selectedConversation._id] && content){
                     //Otherwise, the conversation exists in the typersInfo object. Check to see if the typer is also in the array value. If found, replace their existing content value from the socket.
                     const existingTyper = typersInfo[selectedConversation._id].find(obj => obj.user.name === user.name)
                     if(existingTyper){
@@ -144,7 +143,8 @@ export default () => {
                         ]
                     }
                 }
-                console.log('after', typersInfo)
+                // debugger
+                // console.log('after', typersInfo)
                 //Update the list of typers after the typersInfo changes from the socket event.
                 handleTypers()
                 
@@ -173,14 +173,16 @@ export default () => {
             if(socket.io){
                 //Everytime, selectConversation is changed, a typing socket listener is created.
                 //on unmount, remove typing socket listener to prevent more listeners from being added.
-                socket.off('messageTyping')
-                socket.off('newMessage')
+
+                //Bug with this solution. Although it clears the typer on other sockets, Upon submission of new message, will empty out list of all typers
 
                 // const data = {selectedConversation:selectConversation,user,content:""}
                 // if(socket.on && selectConversation){         
-                //     socket.emit('typing', data)
-                //     socket.emit('messageTyping', data)
+                    // socket.emit('typing', data)
+                    // socket.emit('messageTyping', data)
                 // }
+                socket.off('messageTyping')
+                socket.off('newMessage')
             }
         }
     }, [selectConversation])

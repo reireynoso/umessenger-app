@@ -6,8 +6,11 @@ import {selectedConversation as selectConversationAction} from '../actions/conve
 export default ({conversation, conversation: {messages, users}}) => {
     const [typing, setTyping] = useState("")
     const socket = useSelector(state => state.socket)
-    // const user = useSelector(state => state.user)
+    const user = useSelector(state => state.user)
     const selectConversation = useSelector(state => state.conversation.selectedConversation)
+    
+    //BUG with updating which convo is being typed on after new message submission
+    
     // applies to all conversaton instances
     useEffect(() => {
         // console.log(selectConversationAction)
@@ -40,6 +43,12 @@ export default ({conversation, conversation: {messages, users}}) => {
     const handleConversationSelect = () => {
         if(selectConversation._id !== conversation._id){
             // console.log('hello')
+            //emits the event to remove this specific user from list of typers to other users' message container
+            if(socket.on && selectConversation){     
+                const data = {selectedConversation:selectConversation,user,content:""}    
+                socket.emit('typing', data)
+                socket.emit('messageTyping', data)
+            }
             dispatch(selectConversationAction(conversation))
         }
     }
