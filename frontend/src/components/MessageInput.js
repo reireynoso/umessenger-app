@@ -14,7 +14,7 @@ export default () => {
 
     useEffect(() => {
         setContent("")
-    },[selectedConversation])
+    },[selectedConversation._id])
 
     const handleResetInput = () =>{
         const data = {selectedConversation,user,content:""}
@@ -38,11 +38,12 @@ export default () => {
         if(e.key=== "Enter" && emails.length > 0){
             //make a fetch request to the backend to create new convo
         //  debugger
+        handleResetInput()
            const errors = await dispatch(sendMessageToConversation(emails,content,user))
             if(errors){
                 console.log(errors)
             }
-            handleResetInput()
+            
         }
         else{
             //please enters recipients error
