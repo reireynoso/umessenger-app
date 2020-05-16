@@ -1,42 +1,35 @@
-import React, {useState,useEffect} from 'react'
+import React, {useState,useEffect, useLayoutEffect} from 'react'
 import {useDispatch, useSelector} from 'react-redux'
 
 import {selectedConversation as selectConversationAction} from '../actions/conversation'
 
-export default ({conversation, conversation: {messages, users}}) => {
+export default ({socket, conversation, conversation: {messages, users}}) => {
     const [typing, setTyping] = useState("")
-    const socket = useSelector(state => state.socket)
     const user = useSelector(state => state.user)
     const selectConversation = useSelector(state => state.conversation.selectedConversation)
-    
-    //BUG with updating which convo is being typed on after new message submission
-    
+
     // applies to all conversaton instances
-    useEffect(() => {
-        // console.log(selectConversationAction)
-        if(socket.io){
-            // console.log(users)
-            socket.emit('subscribeToConversation', conversation)
-            socket.on('typing', ({selectedConversation,content}) => {
-                // console.log(content)
-                // console.log(selectedConversation)
-                // debugger
-                //pass is an arg from server that includes the user name and conversation obj for comparison
-                if(selectedConversation._id === conversation._id){
-                    // console.log(content)
-                    // console.log('matcg')
-                    // console.log(conversation._id)
-                    // console.log(selectedConversation._id)
-                    //possible bugs: multiple user typing. One stops but might overwrite the other user still typing
-                    setTyping(content)
-                }
-            })
-        }
+    useLayoutEffect(() => {
+        socket.on('typing', ({selectedConversation,content}) => {
+
+            //pass is an arg from server that includes the user name and conversation obj for comparison
+            if(selectedConversation._id === conversation._id){
+
+                //possible bugs: multiple user typing. One stops but might overwrite the other user still typing
+                setTyping(content)
+            }
+        })
+    
         return () => {
-            // if(socket.on){
-            //     // socket.emit('disconnect')
-            //     socket.off('typing')
-            // }
+            socket.off('typing')
+        }
+    })
+
+    useEffect(() => {
+        socket.emit('subscribeToConversation', conversation)
+
+        return () => {
+            socket.emit('leaveConversation', conversation)
         }
     }, [])
 
@@ -44,7 +37,7 @@ export default ({conversation, conversation: {messages, users}}) => {
         if(selectConversation._id !== conversation._id){
             // console.log('hello')
             //emits the event to remove this specific user from list of typers to other users' message container
-            if(socket.on && selectConversation){     
+            if(selectConversation){     
                 const data = {selectedConversation:selectConversation,user,content:""}    
                 socket.emit('typing', data)
                 socket.emit('messageTyping', data)
