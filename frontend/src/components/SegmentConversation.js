@@ -1,15 +1,17 @@
-import React, {useState,useEffect, useLayoutEffect} from 'react'
+import React, {useState, useLayoutEffect} from 'react'
 import {useDispatch, useSelector} from 'react-redux'
 
 import {selectedConversation as selectConversationAction} from '../actions/conversation'
 
-export default ({socket, conversation, conversation: {messages, users}}) => {
+export default ({conversations,socket, conversation, conversation: {messages, users}}) => {
     const [typing, setTyping] = useState("")
     const user = useSelector(state => state.user)
     const selectConversation = useSelector(state => state.conversation.selectedConversation)
 
     // applies to all conversaton instances
+    // why useLayoutEffect()? -> So React is attaching the socket event for the updated DOM before updated the screen. React will have to wait for this function to finish.
     useLayoutEffect(() => {
+        socket.emit('subscribeToConversation', conversation)
         socket.on('typing', ({selectedConversation,content}) => {
 
             //pass is an arg from server that includes the user name and conversation obj for comparison
@@ -23,15 +25,7 @@ export default ({socket, conversation, conversation: {messages, users}}) => {
         return () => {
             socket.off('typing')
         }
-    })
-
-    useEffect(() => {
-        socket.emit('subscribeToConversation', conversation)
-
-        return () => {
-            socket.emit('leaveConversation', conversation)
-        }
-    }, [])
+    }, [conversations])
 
     const handleConversationSelect = () => {
         if(selectConversation._id !== conversation._id){
