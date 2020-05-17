@@ -1,4 +1,5 @@
 import {removeLoggedInUserFromConversation} from '../selectors/conversation'
+import apiUrl from '../utils/apiUrl'
 
 export const addEmail = (email) => ({
     type: "ADD_EMAIL",
@@ -36,7 +37,7 @@ export const removeSelectedConversation = () => ({
 export const sendMessageToConversation = (emails,content,user) => dispatch => {
     // debugger
     const token = localStorage.getItem("token")
-    return fetch(`http://localhost:4000/conversations`, {
+    return fetch(`${apiUrl}/conversations`, {
         method: "POST",
         headers: {
             'Content-Type': 'application/json',

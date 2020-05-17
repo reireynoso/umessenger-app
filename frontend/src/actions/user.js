@@ -1,5 +1,6 @@
 import {setConversations} from './conversation'
 import {removeLoggedInUserFromConversation} from '../selectors/conversation'
+import apiUrl from '../utils/apiUrl'
 
 export const setUser = (userObj) => ({
     type: "SET_USER",
@@ -7,7 +8,7 @@ export const setUser = (userObj) => ({
 })
 
 export const fetchAutoLogin = (token) => dispatch => {
-    fetch(`http://localhost:4000/users/auto_login`, {
+    fetch(`${apiUrl}/users/auto_login`, {
         headers: {
             "Authorization": `Bearer ${token}`
         }
@@ -26,7 +27,7 @@ export const fetchAutoLogin = (token) => dispatch => {
 
 export const fetchUser = (route, userInfo) => dispatch => {
     // console.log(userInfo)
-    return fetch(`http://localhost:4000/users/${route}`, {
+    return fetch(`${apiUrl}/users/${route}`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
