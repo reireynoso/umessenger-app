@@ -13,6 +13,7 @@ export default () => {
     const dispatch = useDispatch()
     const user = useSelector(state => state.user)
     // const ENDPOINT = 'localhost:4000'
+    console.log(process.env.REACT_APP_PRODUCTION_URL)
     const ENDPOINT = apiUrl
     useEffect(() => {
         const establishSocket = io(ENDPOINT)
