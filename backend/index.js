@@ -3,7 +3,7 @@ const socketio = require('socket.io')
 const http = require('http')
 const cors = require('cors')
 // const errorHandling = require('./middleware/errorHandling')
-require('dotenv').config()
+process.env.NODE_ENV === 'production' ? null : require('dotenv').config()
 require('./db/mongoose')
 const data = require("./db/seed")
 
