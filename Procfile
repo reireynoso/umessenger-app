@@ -1,1 +1,0 @@
-server: node backend/index.js

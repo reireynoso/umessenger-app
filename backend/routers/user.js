@@ -7,19 +7,8 @@ const Conversation = require('../models/conversation')
 
 router.get('/test', async(req,res,next) => {
     try{
-        const user = await User.findOne({name: "Test"})
-       
-        // const convos = await Conversation.find({users: {
-        //     $all: [
-        //         {
-        //             $elemMatch: {_id: user._id}
-        //         }
-        //     ]
-        // }})
-
-        const yo = await Conversation.findUserConversations(user)
-        // const yo = await user.findUserConversations()
-        res.send({yo})
+        const test = {message: "Server is live."}
+        res.send(test)
     }catch(e){
         next(e)
     }
