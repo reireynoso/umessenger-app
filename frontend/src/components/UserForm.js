@@ -70,6 +70,21 @@ const UserForm = ({location, history}) => {
         }
     }
 
+    const whichButton = () => {
+        if(route === 'signup'){
+            return <div>
+                <p>Have an account?</p>
+                <button onClick={() => history.push('/login')}>Login</button>
+            </div>
+        }else if(route === 'login'){
+            return <div>
+                <p>No Account? Sign up!</p>
+                <button onClick={() => history.push('/signup')}>Sign Up</button>
+            </div>
+        }
+        
+    }
+
     const handleSubmit = async(e) => {
         e.preventDefault()
         const res = await dispatch(fetchUser(route, whichDataToSend()))
@@ -91,20 +106,24 @@ const UserForm = ({location, history}) => {
                 {errors.length > 0 && errors.map((error,index) => <li style={{color:"red"}} key={index+error}>{error}</li>)}
             </ul>
             {
-                !user.loggedIn ? <React.Fragment>
-                <h1>{checkRoute()}</h1>
-                <form onSubmit={handleSubmit}>
+                !user.loggedIn ? 
+                <React.Fragment>
+                    <h1>{checkRoute()}</h1>
+                    <form onSubmit={handleSubmit}>
+                        {
+                            route === "signup" && <input type="text" placeholder="Name" onChange={(e) => setName(e.target.value)}/>
+                        }
+                        <input type="text" placeholder="Email" onChange={(e) => setEmail(e.target.value)}/>
+                        {
+                            route === "signup" &&  <input type="text" value={format()} placeholder="Phone" onChange={handleSetPhone}/>
+                        
+                        }
+                        <input type="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)}/>
+                        <input type="submit"/>
+                    </form>
                     {
-                        route === "signup" && <input type="text" placeholder="Name" onChange={(e) => setName(e.target.value)}/>
+                        whichButton()
                     }
-                    <input type="text" placeholder="Email" onChange={(e) => setEmail(e.target.value)}/>
-                    {
-                        route === "signup" &&  <input type="text" value={format()} placeholder="Phone" onChange={handleSetPhone}/>
-                    
-                    }
-                    <input type="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)}/>
-                    <input type="submit"/>
-                </form>
                 </React.Fragment>
                 :
                 <Redirect to="/dashboard"/>

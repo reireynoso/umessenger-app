@@ -204,7 +204,7 @@ export default () => {
         <div>
             <h1>Messages</h1>
             {
-                selectConversation.messages && selectConversation.messages.map(message => <Message message={message}/>)
+                selectConversation.messages && selectConversation.messages.map(message => <Message key={message._id} message={message}/>)
             }
             {
                 typers.length > 0 &&

@@ -7,6 +7,11 @@ const user = (state = {
                 loggedIn: true,
                 ...payload
             }
+        case "UNSET_USER":
+            localStorage.removeItem("token")
+            return {
+                loggedIn:false
+            }
         default: return state
     }
 }

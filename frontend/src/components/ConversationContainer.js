@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React from 'react'
 import Recipient from './Recipient'
 import MessagesContainer from './MessagesContainer'
 import MessageInput from './MessageInput'

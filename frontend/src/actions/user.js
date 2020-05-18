@@ -7,6 +7,10 @@ export const setUser = (userObj) => ({
     payload: userObj
 })
 
+export const logOutUser = () => ({
+    type: "UNSET_USER"
+})
+
 export const fetchAutoLogin = (token) => dispatch => {
     fetch(`${apiUrl}/users/auto_login`, {
         headers: {
