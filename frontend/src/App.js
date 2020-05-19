@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import {useDispatch} from 'react-redux'
-import {Route, Switch} from 'react-router-dom'
+import {Route, Switch, Redirect} from 'react-router-dom'
 
 import {fetchAutoLogin} from './actions/user'
 
@@ -26,6 +26,7 @@ const App = () => {
           <Route path="/signup" component={UserForm}/>
           <Route path="/login" component={UserForm}/>
           <PrivateRoute path="/dashboard" component={MainComponent}/>
+          <Route path="/" render={() => <Redirect to="/login"/>}/>
         </Switch>
     </div>
   );

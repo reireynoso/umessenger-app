@@ -3,6 +3,8 @@ import {useSelector,useDispatch} from 'react-redux'
 import {Redirect} from 'react-router-dom'
 import {fetchUser} from '../actions/user'
 
+import apiUrl from '../utils/apiUrl'
+
 const UserForm = ({location, history}) => {
     const dispatch = useDispatch()
     const user = useSelector(state => state.user)
@@ -12,6 +14,8 @@ const UserForm = ({location, history}) => {
     const [password, setPassword] = useState("")
     const [email, setEmail] = useState("")
     const [phone, setPhone] = useState("")
+
+    const [image, setImage] = useState({})
 
     const [errors,setErrors] = useState([])
 
@@ -100,6 +104,17 @@ const UserForm = ({location, history}) => {
         //     setErrors([])
         // }
     }
+
+    const onTest = (e) => {
+        e.preventDefault()
+        const form = new FormData()
+        form.append("upload", image)
+        fetch(`${apiUrl}/upload`, {
+            method: "POST",
+            body: form
+        })
+    }
+
     return(
         <div>
             <ul>
@@ -124,6 +139,10 @@ const UserForm = ({location, history}) => {
                     {
                         whichButton()
                     }
+                    <form onSubmit={onTest}>
+                        <input type="file" name="image" onChange={(e) => setImage(e.target.files[0])}/>
+                        <button>Submit Photo</button>
+                    </form>
                 </React.Fragment>
                 :
                 <Redirect to="/dashboard"/>

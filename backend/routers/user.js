@@ -5,6 +5,30 @@ const auth = require('../middleware/auth')
 const User = require('../models/user')
 const Conversation = require('../models/conversation')
 
+const multer = require('multer')
+const upload = multer({
+    // dest: 'images', passes data to request
+    limits: {
+        fileSize: 2000000
+    },
+    fileFilter(req,file,cb) {
+        // cb(new Error('File must be pdf'))
+        // cb(undefined)
+        if(!file.originalname.match(/\.(jpg|jpeg|png)$/)){
+            return cb(new Error('Upload JPG JPEG or PNG'))
+        }
+        cb(undefined, true)
+    }
+})
+
+router.post('/upload', upload.single('upload'), (req,res) => {
+    console.log(req.body)
+    req.file.buffer
+    res.send()
+}, (error, req,res, next) => {
+    res.status(400).send({errors: [error.message]})
+})
+
 router.get('/test', async(req,res,next) => {
     try{
         const test = {message: "Server is live."}
@@ -26,6 +50,8 @@ router.post('/users/signup', async(req,res) => {
         // next(e)
         res.status(500).send({errors: e})
     }
+}, (error, req,res, next) => {
+    res.status(400).send({errors: [error.message]})
 })
 
 router.post('/users/login', cors(), async(req,res) => {
