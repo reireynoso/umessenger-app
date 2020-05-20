@@ -17,6 +17,8 @@ const UserForm = ({location, history}) => {
 
     const [image, setImage] = useState({})
 
+    const [test, setTest] = useState("")
+
     const [errors,setErrors] = useState([])
 
     const checkRoute = () => {
@@ -108,10 +110,20 @@ const UserForm = ({location, history}) => {
     const onTest = (e) => {
         e.preventDefault()
         const form = new FormData()
-        form.append("upload", image)
-        fetch(`${apiUrl}/upload`, {
+        form.append("name", "yo")
+        form.append("email", "yo@test.com")
+        form.append("phone", 1111111111)
+        form.append("password", "hey")
+        form.append('upload', image)
+        fetch(`${apiUrl}/users/signup`, {
             method: "POST",
             body: form
+        })
+        .then(res => res.json())
+        .then(data => {
+            console.log(data)
+            setTest(data.user.image_url)
+            console.log(data.user.image_url)
         })
     }
 
@@ -143,6 +155,10 @@ const UserForm = ({location, history}) => {
                         <input type="file" name="image" onChange={(e) => setImage(e.target.files[0])}/>
                         <button>Submit Photo</button>
                     </form>
+
+                    {
+                        test ? <img src={test}/> : null
+                    }
                 </React.Fragment>
                 :
                 <Redirect to="/dashboard"/>

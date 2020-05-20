@@ -5,6 +5,7 @@ const auth = require('../middleware/auth')
 const User = require('../models/user')
 const Conversation = require('../models/conversation')
 
+const sharp = require("sharp")
 const multer = require('multer')
 const upload = multer({
     // dest: 'images', passes data to request
@@ -21,14 +22,6 @@ const upload = multer({
     }
 })
 
-router.post('/upload', upload.single('upload'), (req,res) => {
-    console.log(req.body)
-    req.file.buffer
-    res.send()
-}, (error, req,res, next) => {
-    res.status(400).send({errors: [error.message]})
-})
-
 router.get('/test', async(req,res,next) => {
     try{
         const test = {message: "Server is live."}
@@ -38,9 +31,31 @@ router.get('/test', async(req,res,next) => {
     }
 })
 
-router.post('/users/signup', async(req,res) => {
-    // console.log(req.body)
-    const user = new User(req.body)
+router.get('/photo/:id', async(req,res) => {
+    try{
+        const user = await User.findById(req.params.id)
+        console.log(user)
+        res.set('Content-Type', 'image/png')
+        res.send(user.image_storage)
+    }catch(e){
+        res.status(404).send()
+    }
+})
+
+router.post('/users/signup', upload.single('upload'), async(req,res) => {
+    // console.log(req.get('host'))// gets the base domain name from request
+    let buffer;    
+    if(req.file){
+        buffer = await sharp(req.file.buffer).resize({ width: 200, height: 200 }).png().toBuffer()
+    }
+
+    const user = new User({
+        ...req.body,
+        image_storage: req.file ? buffer : null
+    })
+    
+    user.image_url = (req.file ? `http://${req.get('host')}/photo/${user._id}` : null)
+
     try{
         await user.save()
         const token = await user.generateAuthToken()

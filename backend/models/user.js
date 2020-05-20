@@ -41,9 +41,12 @@ const userSchema = mongoose.Schema({
         required: [true, 'Password is required'],
         trim: true
     },
-    // image: {
-    //     type: Buffer
-    // }
+    image_url: {
+        type: String
+    },
+    image_storage: {
+        type: Buffer
+    }
 }, {
     timestamps: true,
     // toObject: {
