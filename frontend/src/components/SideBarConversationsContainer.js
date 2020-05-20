@@ -12,8 +12,13 @@ export default () => {
 
     return (
         <div className="side-bar">
-            <button onClick={() => dispatch(removeSelectedConversation())}>New</button>
-            <button onClick={() => dispatch(logOutUser())}>Log Out</button>
+            <div className="side-bar__header">
+                <button className="button button__log-out" onClick={() => dispatch(logOutUser())}>Log Out</button>
+                <div className="side-bar__action">
+                    <input className="text_input" type="text"/>
+                    <button className="button button__primary" onClick={() => dispatch(removeSelectedConversation())}>New</button>
+                </div>
+            </div>
             {
                 conversations.map(conversation => 
                     <SegmentConversation 
