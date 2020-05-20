@@ -1,6 +1,8 @@
 import React, {useEffect} from 'react';
 import {useDispatch} from 'react-redux'
 import {Route, Switch, Redirect} from 'react-router-dom'
+import 'normalize.css/normalize.css';
+import './styles/styles.scss';
 
 import {fetchAutoLogin} from './actions/user'
 

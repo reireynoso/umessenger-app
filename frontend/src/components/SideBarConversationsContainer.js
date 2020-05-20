@@ -11,10 +11,9 @@ export default () => {
     const socket = useSelector(state => state.socket)
 
     return (
-        <div>
+        <div className="side-bar">
             <button onClick={() => dispatch(removeSelectedConversation())}>New</button>
             <button onClick={() => dispatch(logOutUser())}>Log Out</button>
-            <h2>Converations</h2>
             {
                 conversations.map(conversation => 
                     <SegmentConversation 

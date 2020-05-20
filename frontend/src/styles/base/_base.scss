@@ -1,0 +1,14 @@
+*{
+    box-sizing: border-box;//removes space it needs for border
+}
+
+html {
+    font-size: 62.5%;
+}
+
+body {
+    color: $dark-grey;
+    font-family: Helvitica, Arial, sans-serif;
+    font-size: $m-size;
+    line-height: 1.6;
+}

@@ -33,7 +33,7 @@ export default () => {
     }, [ENDPOINT])
 
     return (
-        <div>
+        <div className="main-component">
             <SideBarConversationsContainer/>
             <ConversationContainer/>
         </div>

@@ -7,15 +7,9 @@ export default () => {
 
     return (
         <div>
-            <div>
-                <Recipient/>
-            </div>
-            <div>
-                <MessagesContainer/>
-            </div>
-            <div>
-                <MessageInput/>  
-            </div>
+            <Recipient/>
+            <MessagesContainer/>
+            <MessageInput/>  
         </div>
     )
 }
