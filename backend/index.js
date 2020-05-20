@@ -82,6 +82,6 @@ app.io = io
 app.onlineUsers = onlineUsers
 
 server.listen(port, () => {
-    data()
+    // data()
     console.log('Server is up on ' + port)
 })

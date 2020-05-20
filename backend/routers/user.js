@@ -1,12 +1,12 @@
 const express = require('express')
 const router = new express.Router()
 const cors = require('cors')
+const sharp = require("sharp")
+const multer = require('multer')
 const auth = require('../middleware/auth')
 const User = require('../models/user')
 const Conversation = require('../models/conversation')
 
-const sharp = require("sharp")
-const multer = require('multer')
 const upload = multer({
     // dest: 'images', passes data to request
     limits: {
