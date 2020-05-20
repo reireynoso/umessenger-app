@@ -67,6 +67,7 @@ userSchema.methods.toJSON = function(){
     userObject.conversations = []
 
     delete userObject._id
+    delete userObject.image_storage
     delete userObject.password
     delete userObject.createdAt
     delete userObject.updatedAt

@@ -22,6 +22,7 @@ export const fetchAutoLogin = (token) => dispatch => {
         if(userData.errors){
             return userData.errors
         }
+        console.log(userData)
         const {conversations, ...user} = userData
         dispatch(setUser(user))
         dispatch(setConversations(removeLoggedInUserFromConversation(conversations,user)))
@@ -31,14 +32,25 @@ export const fetchAutoLogin = (token) => dispatch => {
 
 export const fetchUser = (route, userInfo) => dispatch => {
     // console.log(userInfo)
-    return fetch(`${apiUrl}/users/${route}`, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            "Accept": "application/json"
-        },
-        body: JSON.stringify(userInfo)
-    })
+    const headers = () => {
+        if(route === "signup"){
+            return {
+                method: "POST",
+                body: userInfo
+            }
+        }
+        else if(route === "login"){
+            return {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "application/json"
+                },
+                body: JSON.stringify(userInfo)
+            }
+        }
+    }
+    return fetch(`${apiUrl}/users/${route}`, headers())
     .then(res => res.json())
     .then(userData => {
         if(userData.errors){

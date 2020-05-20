@@ -3,8 +3,6 @@ import {useSelector,useDispatch} from 'react-redux'
 import {Redirect} from 'react-router-dom'
 import {fetchUser} from '../actions/user'
 
-import apiUrl from '../utils/apiUrl'
-
 const UserForm = ({location, history}) => {
     const dispatch = useDispatch()
     const user = useSelector(state => state.user)
@@ -14,10 +12,7 @@ const UserForm = ({location, history}) => {
     const [password, setPassword] = useState("")
     const [email, setEmail] = useState("")
     const [phone, setPhone] = useState("")
-
     const [image, setImage] = useState({})
-
-    const [test, setTest] = useState("")
 
     const [errors,setErrors] = useState([])
 
@@ -62,12 +57,22 @@ const UserForm = ({location, history}) => {
 
     const whichDataToSend = () => {
         if(route === 'signup'){
-            return {
-                name,
-                email,
-                password,
-                phone
-            }
+            // return {
+            //     name,
+            //     email,
+            //     password,
+            //     phone
+            // }
+
+            const form = new FormData()
+            form.append("name", name)
+            form.append("email", email)
+            form.append("phone", phone)
+            form.append("password", password)
+            form.append('upload', image)
+
+            return form
+
         }else{
             return {
                 email,
@@ -107,26 +112,6 @@ const UserForm = ({location, history}) => {
         // }
     }
 
-    const onTest = (e) => {
-        e.preventDefault()
-        const form = new FormData()
-        form.append("name", "yo")
-        form.append("email", "yo@test.com")
-        form.append("phone", 1111111111)
-        form.append("password", "hey")
-        form.append('upload', image)
-        fetch(`${apiUrl}/users/signup`, {
-            method: "POST",
-            body: form
-        })
-        .then(res => res.json())
-        .then(data => {
-            console.log(data)
-            setTest(data.user.image_url)
-            console.log(data.user.image_url)
-        })
-    }
-
     return(
         <div>
             <ul>
@@ -138,27 +123,24 @@ const UserForm = ({location, history}) => {
                     <h1>{checkRoute()}</h1>
                     <form onSubmit={handleSubmit}>
                         {
-                            route === "signup" && <input type="text" placeholder="Name" onChange={(e) => setName(e.target.value)}/>
+                            route === "signup" ? <div>
+                                <input type="text" placeholder="Name" onChange={(e) => setName(e.target.value)}/>
+                                <input type="text" value={format()} placeholder="Phone" onChange={handleSetPhone}/>
+                            </div>
+                            :
+                            null 
                         }
                         <input type="text" placeholder="Email" onChange={(e) => setEmail(e.target.value)}/>
-                        {
-                            route === "signup" &&  <input type="text" value={format()} placeholder="Phone" onChange={handleSetPhone}/>
-                        
-                        }
                         <input type="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)}/>
+                        {
+                            route === "signup" &&  <input type="file" name="image" onChange={(e) => setImage(e.target.files[0])}/>
+                        }
                         <input type="submit"/>
                     </form>
                     {
                         whichButton()
                     }
-                    <form onSubmit={onTest}>
-                        <input type="file" name="image" onChange={(e) => setImage(e.target.files[0])}/>
-                        <button>Submit Photo</button>
-                    </form>
 
-                    {
-                        test ? <img src={test}/> : null
-                    }
                 </React.Fragment>
                 :
                 <Redirect to="/dashboard"/>
