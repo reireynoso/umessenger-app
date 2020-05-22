@@ -1,0 +1,31 @@
+.recipient {
+    background: $dark-grey;
+    height: 10rem;
+    border-bottom: 1px solid $dark-white;
+    padding-top: 5rem;
+    p{
+        margin: 0;
+        padding-right: 1rem;
+    }
+}
+
+.recipient__email-list {
+    display:flex;
+    padding: 0 2rem;
+    font-size: 2rem;
+}
+
+.recipient__email {
+    padding: 0 0.5rem;
+    border-radius: 5px;
+    &:hover{
+        background: rgb(111, 159, 182);
+        .recipient__dropdown-icon{
+            color: $dark-white;
+        }
+    }
+}
+
+.recipient__dropdown-icon {
+    color: $dark-grey
+}

@@ -26,14 +26,14 @@ export default () => {
     const noSelectedConversation = () => !selectedConversation.users
     
     return (
-        <div>
-             <h3>Recipients</h3>
-             <div style={{display: "flex"}}>
+        <div className="recipient">
+             <div className="recipient__email-list">
+                <p>To:</p>
                 {
-                    emails.map(email => <div key={email}>
-                        <span>{email}</span>
+                    emails.map(email => <div className="recipient__email" key={email}>
+                        <span>{email} </span>
                         {
-                            noSelectedConversation() && <button onClick={() => dispatch(removeEmail(email))}>X</button>
+                            noSelectedConversation() ? <button onClick={() => dispatch(removeEmail(email))}>X</button> : <span className="recipient__dropdown-icon">^</span>
                         }
                     </div>
                     )

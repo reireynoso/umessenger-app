@@ -6,7 +6,7 @@ import MessageInput from './MessageInput'
 export default () => {
 
     return (
-        <div>
+        <div className="conversation">
             <Recipient/>
             <MessagesContainer/>
             <MessageInput/>  
