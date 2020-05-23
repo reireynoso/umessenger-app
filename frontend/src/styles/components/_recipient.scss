@@ -15,7 +15,16 @@
     font-size: 2rem;
 }
 
+.recipient__email-input{
+    width: 100%;
+    background: $dark-grey;
+    color: $dark-white;
+    border: 0;
+    outline: none;
+}
+
 .recipient__email {
+    display: flex;
     padding: 0 0.5rem;
     border-radius: 5px;
     &:hover{
@@ -27,5 +36,6 @@
 }
 
 .recipient__dropdown-icon {
-    color: $dark-grey
+    color: $dark-grey;
+    padding: 0 3px;
 }

@@ -9,6 +9,10 @@ export default () => {
     const emails = useSelector(state => state.conversation.emails)
     
     const [recipient, setRecipient] = useState("")
+
+    //check whether a conversation is selected.
+    //if not selected, able to remove and add recipients
+    const noSelectedConversation = () => !selectedConversation.users
     
     const handleKeyPress = (e) => {
         //email regex referenced from https://www.w3resource.com/javascript/form/email-validation.php
@@ -21,25 +25,30 @@ export default () => {
         }
     }
 
-    //check whether a conversation is selected.
-    //if not selected, able to remove and add recipients
-    const noSelectedConversation = () => !selectedConversation.users
-    
     return (
         <div className="recipient">
              <div className="recipient__email-list">
                 <p>To:</p>
                 {
                     emails.map(email => <div className="recipient__email" key={email}>
-                        <span>{email} </span>
-                        {
-                            noSelectedConversation() ? <button onClick={() => dispatch(removeEmail(email))}>X</button> : <span className="recipient__dropdown-icon">^</span>
+                        <div>{email}</div>
+                        { 
+                            <div className="recipient__dropdown-icon" 
+                                onClick={
+                                    noSelectedConversation() ? () => dispatch(removeEmail(email)) : null
+                                }
+                                >
+                                {
+                                    <i className={noSelectedConversation() ? "fas fa-times" : "fas fa-chevron-down"}></i>
+                                }
+                            </div> 
+                           
                         }
                     </div>
                     )
                 }
                 {
-                    noSelectedConversation() && <input type="email" value={recipient} onKeyPress={handleKeyPress} onChange={(e) => setRecipient(e.target.value)} placeholder="email"/>
+                    noSelectedConversation() && <input type="email" className="recipient__email-input" value={recipient} onKeyPress={handleKeyPress} onChange={(e) => setRecipient(e.target.value)} placeholder={emails.length === 0 ? "No recipients": "Add recipient"}/>
                 }
              </div>
         </div>
