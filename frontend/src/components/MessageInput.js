@@ -50,8 +50,8 @@ export default () => {
         }
     }
     return(
-        <div>
-            <input type="text" value={content} onKeyPress={handleOnSubmit} onChange={handleOnChange} placeholder="content"/>
+        <div className="content">
+            <textarea type="text" className="content__input" value={content} onKeyPress={handleOnSubmit} onChange={handleOnChange} placeholder="uMessage..."/>
         </div>    
     )
 }

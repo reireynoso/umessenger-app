@@ -1,0 +1,19 @@
+.content {
+    display:flex;
+    background: $dark-grey;
+    // min-height: 4rem;
+    max-height: 6rem;
+    padding: 10px;
+}
+
+.content__input {
+    // max-height: 4rem;
+    display: block;
+    color: $dark-white;
+    outline: none;
+    border: none;
+    border-radius: 5px;
+    width: 100%;
+    background: $light-grey;
+    resize: none;
+}
