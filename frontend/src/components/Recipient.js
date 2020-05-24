@@ -16,10 +16,16 @@ export default () => {
         setError(false)
     }, [selectedConversation])
 
-    useEffect(() => {
+    const scrollToRef = () => {
         if(myRef.current){
-            scrollToRef()
+            return myRef.current.scrollIntoView({ behavior: "smooth", block: 'end' })
         }
+    }
+
+    useEffect(() => {
+        // if(myRef.current){
+            scrollToRef()
+        // }
     }, [emails.length])
 
     //check whether a conversation is selected.
@@ -48,9 +54,6 @@ export default () => {
         setRecipient(e.target.value)
     }
 
-    const scrollToRef = () => {
-        return myRef.current.scrollIntoView({ behavior: "smooth", block: 'end' })
-    }
 
     return (
         <div className="recipient">
