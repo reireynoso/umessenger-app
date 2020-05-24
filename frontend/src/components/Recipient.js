@@ -16,6 +16,12 @@ export default () => {
         setError(false)
     }, [selectedConversation])
 
+    useEffect(() => {
+        if(myRef.current){
+            scrollToRef()
+        }
+    }, [emails.length])
+
     //check whether a conversation is selected.
     //if not selected, able to remove and add recipients
     const noSelectedConversation = () => !selectedConversation.users
@@ -27,7 +33,6 @@ export default () => {
             // console.log((recipient !== user.email))
             // setEmails(prevEmails => [...prevEmails, recipient])
             dispatch(addEmail(recipient))
-            scrollToRef()
             setError(false)
             setRecipient("")
         }
@@ -44,7 +49,7 @@ export default () => {
     }
 
     const scrollToRef = () => {
-        return myRef.current.scrollIntoView({ behavior: "smooth" })
+        return myRef.current.scrollIntoView({ behavior: "smooth", block: 'end' })
     }
 
     return (
