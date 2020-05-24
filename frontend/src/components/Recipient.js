@@ -1,14 +1,20 @@
-import React, {useState} from 'react'
+import React, {useState, useRef, useEffect} from 'react'
 import {useSelector, useDispatch} from 'react-redux'
 import {addEmail,removeEmail} from '../actions/conversation'
 
 export default () => {
+    const myRef = useRef(null)
     const dispatch = useDispatch()
     const selectedConversation = useSelector(state => state.conversation.selectedConversation)
     const user = useSelector(state => state.user)
     const emails = useSelector(state => state.conversation.emails)
     
     const [recipient, setRecipient] = useState("")
+    const [error, setError] = useState(false)
+
+    useEffect(() => {
+        setError(false)
+    }, [selectedConversation])
 
     //check whether a conversation is selected.
     //if not selected, able to remove and add recipients
@@ -21,13 +27,30 @@ export default () => {
             // console.log((recipient !== user.email))
             // setEmails(prevEmails => [...prevEmails, recipient])
             dispatch(addEmail(recipient))
+            scrollToRef()
+            setError(false)
             setRecipient("")
         }
+        else{
+            setError(true)
+        }
+    }
+
+    const handleEmailChange = (e) => {
+        if(!e.target.value){
+            setError(false)
+        }
+        setRecipient(e.target.value)
+    }
+
+    const scrollToRef = () => {
+        return myRef.current.scrollIntoView({ behavior: "smooth" })
     }
 
     return (
         <div className="recipient">
-             <div className="recipient__email-list">
+            <div className="recipient__errors-list">{error && "Please write email in the right format"}</div>
+            <div className="recipient__email-list">
                 <p>To:</p>
                 {
                     emails.map(email => <div className="recipient__email" key={email}>
@@ -41,16 +64,16 @@ export default () => {
                                 {
                                     <i className={noSelectedConversation() ? "fas fa-times" : "fas fa-chevron-down"}></i>
                                 }
-                            </div> 
-                           
+                            </div>           
                         }
                     </div>
                     )
+                
                 }
                 {
-                    noSelectedConversation() && <input type="email" className="recipient__email-input" value={recipient} onKeyPress={handleKeyPress} onChange={(e) => setRecipient(e.target.value)} placeholder={emails.length === 0 ? "No recipients": "Add recipient"}/>
+                    noSelectedConversation() && <input ref={myRef} type="email" className="recipient__email-input" value={recipient} onKeyPress={handleKeyPress} onChange={handleEmailChange} placeholder={emails.length === 0 ? "No recipients": "Add recipient"}/>
                 }
-             </div>
+            </div>
         </div>
     )
 }
