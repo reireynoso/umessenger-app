@@ -1,7 +1,7 @@
 .recipient {
     background: $dark-grey;
     height: 6rem;
-    min-width: 40rem;
+    // min-width: 40rem;
     min-height: 10rem;
     border-bottom: 1px solid $dark-white;
     // padding-top: 5rem;
@@ -23,7 +23,7 @@
     flex-wrap: wrap;
     padding: 0 2rem;
     font-size: 2rem;   
-    max-height: 7rem; 
+    max-height: 6rem; 
     overflow: scroll;
 }
 

@@ -29,13 +29,15 @@ export default ({messageInputHeight, recipientHeight}) => {
     const [screen, setScreen] = useState(0)
 
     const messageRef = useRef(null)
+    // const typersInfo = useRef({})
 
     //these three methods are responsible for adjusting the height of the component
     //add an event listener on the window anytime it is resized accounting for the toggle device.
     useEffect(() => {
+        console.log(typersInfo)
         window.addEventListener('resize', setScreenOrientation)
     }, [])
-    
+
     // dynamically changes the components height 
     useLayoutEffect(() => {
         // console.log(messageInputHeight + recipientHeight)
@@ -44,6 +46,7 @@ export default ({messageInputHeight, recipientHeight}) => {
     }, [messageInputHeight, recipientHeight, screen])
     
     const setScreenOrientation = (e) => {
+        console.log(e.target.innerHeight)
         setScreen(e.target.innerHeight)
     }
 
