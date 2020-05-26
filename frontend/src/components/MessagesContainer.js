@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useRef} from 'react'
+import React, {useEffect, useState, useLayoutEffect, useRef} from 'react'
 import {useSelector, useDispatch} from 'react-redux'
 import Message from './Message'
 
@@ -26,14 +26,27 @@ export default ({messageInputHeight, recipientHeight}) => {
     const dispatch = useDispatch()
 
     const [typers, setTypers] = useState([])
+    const [screen, setScreen] = useState(0)
 
     const messageRef = useRef(null)
 
+    //these three methods are responsible for adjusting the height of the component
+    //add an event listener on the window anytime it is resized accounting for the toggle device.
     useEffect(() => {
-        // console.log(messageInputHeight + recipientHeight)
-        messageRef.current.style.height = (window.innerHeight - (messageInputHeight + recipientHeight)) + 'px'
-    }, [messageInputHeight, recipientHeight])
+        window.addEventListener('resize', setScreenOrientation)
+    }, [])
     
+    // dynamically changes the components height 
+    useLayoutEffect(() => {
+        // console.log(messageInputHeight + recipientHeight)
+        // console.log(messageInputHeight)
+        messageRef.current.style.height = (window.innerHeight - (messageInputHeight + recipientHeight)) + 'px'
+    }, [messageInputHeight, recipientHeight, screen])
+    
+    const setScreenOrientation = (e) => {
+        setScreen(e.target.innerHeight)
+    }
+
     const handleTypers = () => {
         // setTypers(typers => {
         //     if(!typers.includes(obj[selectConversation._id].user.name) && obj[selectConversation._id].content){

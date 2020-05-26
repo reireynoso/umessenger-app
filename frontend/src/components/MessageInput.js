@@ -1,8 +1,8 @@
-import React, {useState,useEffect,useRef} from 'react'
+import React, {useState,useEffect,useRef, forwardRef} from 'react'
 import {useSelector, useDispatch} from 'react-redux'
 import {sendMessageToConversation} from '../actions/conversation'
 
-export default React.forwardRef((props,ref) => {
+export default forwardRef((props,ref) => {
     const dispatch = useDispatch()
     const user = useSelector(state => state.user)
     const emails = useSelector(state => state.conversation.emails)
