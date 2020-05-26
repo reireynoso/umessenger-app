@@ -2,7 +2,7 @@ import React, {useState,useEffect,useRef} from 'react'
 import {useSelector, useDispatch} from 'react-redux'
 import {sendMessageToConversation} from '../actions/conversation'
 
-export default () => {
+export default React.forwardRef((props,ref) => {
     const dispatch = useDispatch()
     const user = useSelector(state => state.user)
     const emails = useSelector(state => state.conversation.emails)
@@ -13,6 +13,13 @@ export default () => {
     const [content, setContent] = useState("")
 
     const socket = useSelector(state => state.socket)
+
+    useEffect(() => {
+        if(ref.current){
+            ref.current.height = ref.current.offsetHeight
+            props.setmessageInputHeight(ref.current.height)
+        }
+    }, [textArea.current ? textArea.current.offsetHeight : null])
 
     useEffect(() => {
         setContent("")
@@ -32,7 +39,6 @@ export default () => {
         textArea.current.style.height = '2rem';
         //grabs the scrollHeight from that initial height of 2rem and assigns to new accounting for the extra 2px
         textArea.current.style.height = (textArea.current.scrollHeight - 2) + 'px'
-        
         const data = {selectedConversation,user,content:e.target.value}
         if(socket.on && selectedConversation){
             socket.emit('typing', data)
@@ -57,8 +63,8 @@ export default () => {
         }
     }
     return(
-        <div className="content">
+        <div ref={ref} className="content">
             <textarea ref={textArea} type="text" className="content__input" value={content} onKeyPress={handleOnSubmit} onChange={handleOnChange} placeholder="uMessage..."/>
         </div>    
     )
-}
+})

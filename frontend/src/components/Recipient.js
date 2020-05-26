@@ -2,7 +2,7 @@ import React, {useState, useRef, useEffect} from 'react'
 import {useSelector, useDispatch} from 'react-redux'
 import {addEmail,removeEmail} from '../actions/conversation'
 
-export default () => {
+export default React.forwardRef((props,ref) => {
     const myRef = useRef(null)
     const dispatch = useDispatch()
     const selectedConversation = useSelector(state => state.conversation.selectedConversation)
@@ -11,6 +11,13 @@ export default () => {
     
     const [recipient, setRecipient] = useState("")
     const [error, setError] = useState(false)
+
+    useEffect(() => {
+        if(ref.current){
+            ref.current.height = ref.current.offsetHeight
+            props.setrecipientHeight(ref.current.height)
+        }
+    }, [myRef.current ? myRef.current.offsetHeight : null])
 
     useEffect(() => {
         setError(false)
@@ -56,7 +63,7 @@ export default () => {
 
 
     return (
-        <div className="recipient">
+        <div ref={ref} className="recipient">
             <div className="recipient__errors-list">{error && "Please write email in the right format"}</div>
             <div className="recipient__email-list">
                 <p>To:</p>
@@ -84,4 +91,4 @@ export default () => {
             </div>
         </div>
     )
-}
+})

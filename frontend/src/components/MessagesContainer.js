@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react'
+import React, {useEffect, useState, useRef} from 'react'
 import {useSelector, useDispatch} from 'react-redux'
 import Message from './Message'
 
@@ -19,13 +19,20 @@ const typersInfo = {
     //Why separate object instead of useState? Asynchrony issue. Need a state that directly manipulated instead of waiting for a render trigger. 
 }
 
-export default () => {
+export default ({messageInputHeight, recipientHeight}) => {
     const selectConversation = useSelector(state => state.conversation.selectedConversation)
     const user = useSelector(state => state.user)
     const socket = useSelector(state => state.socket)
     const dispatch = useDispatch()
 
     const [typers, setTypers] = useState([])
+
+    const messageRef = useRef(null)
+
+    useEffect(() => {
+        // console.log(messageInputHeight + recipientHeight)
+        messageRef.current.style.height = (window.innerHeight - (messageInputHeight + recipientHeight)) + 'px'
+    }, [messageInputHeight, recipientHeight])
     
     const handleTypers = () => {
         // setTypers(typers => {
@@ -201,7 +208,7 @@ export default () => {
     }
 
     return (
-        <div className="messages-container">
+        <div ref={messageRef} className="messages-container">
             <h1>Messages</h1>
             {
                 selectConversation.messages && selectConversation.messages.map(message => <Message key={message._id} message={message}/>)
