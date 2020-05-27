@@ -22,6 +22,9 @@ export default forwardRef((props,ref) => {
     }, [textArea.current ? textArea.current.offsetHeight : null])
 
     useEffect(() => {
+        if(textArea.current){
+            textArea.current.focus()
+        }
         setContent("")
     },[selectedConversation._id])
 

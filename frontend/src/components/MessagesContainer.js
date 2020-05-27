@@ -6,7 +6,7 @@ import {selectedConversation as selectedConversationAction} from '../actions/con
 import {removeLoggedInUserFromConversation} from '../selectors/conversation'
 
 
-const typersInfo = {
+// const typersInfo = {
     // structure:
     // conversation_id: [{
     //     user: {},
@@ -17,7 +17,7 @@ const typersInfo = {
     // }]
 
     //Why separate object instead of useState? Asynchrony issue. Need a state that directly manipulated instead of waiting for a render trigger. 
-}
+// }
 
 export default ({messageInputHeight, recipientHeight}) => {
     const selectConversation = useSelector(state => state.conversation.selectedConversation)
@@ -29,12 +29,13 @@ export default ({messageInputHeight, recipientHeight}) => {
     const [screen, setScreen] = useState(0)
 
     const messageRef = useRef(null)
-    // const typersInfo = useRef({})
+    // react alternative to creating a mutable object
+    // any errors, switch back to typersInfo object and change references below
+    const typersInfo = useRef({})
 
     //these three methods are responsible for adjusting the height of the component
     //add an event listener on the window anytime it is resized accounting for the toggle device.
     useEffect(() => {
-        console.log(typersInfo)
         window.addEventListener('resize', setScreenOrientation)
     }, [])
 
@@ -46,7 +47,7 @@ export default ({messageInputHeight, recipientHeight}) => {
     }, [messageInputHeight, recipientHeight, screen])
     
     const setScreenOrientation = (e) => {
-        console.log(e.target.innerHeight)
+        // console.log(e.target.innerHeight)
         setScreen(e.target.innerHeight)
     }
 
@@ -63,8 +64,8 @@ export default ({messageInputHeight, recipientHeight}) => {
         // })
         
         //checks to see if the selectConversation exists in typersInfo. If so, pull out the names of users from the array value and set it to the typers
-        if(typersInfo[selectConversation._id]){
-            const names = typersInfo[selectConversation._id].map(obj => obj.user.name)
+        if(typersInfo.current[selectConversation._id]){
+            const names = typersInfo.current[selectConversation._id].map(obj => obj.user.name)
     
             setTypers(names)
         }
@@ -124,41 +125,41 @@ export default ({messageInputHeight, recipientHeight}) => {
                 // }
 
                 // As a user is typing, we store the conversation id they're typing from as a key into the typersInfo object. 
-                if(!typersInfo[selectedConversation._id] && content){
+                if(!typersInfo.current[selectedConversation._id] && content){
                     //If it doesn't already exist, create it and set it into an array container an object with the user and content information
-                    typersInfo[selectedConversation._id] = [
+                    typersInfo.current[selectedConversation._id] = [
                         {
                             user,
                             content
                         }
                     ]
                 }
-                else if(typersInfo[selectedConversation._id] && !content){
+                else if(typersInfo.current[selectedConversation._id] && !content){
                     //If content is blank, find the existing conversation and its array value in the typersInfo object, find the index of the object with the matching user. The goal is to remove just that object from the array.  
                     // debugger
-                    const findIndex = typersInfo[selectedConversation._id].findIndex(obj => obj.user.name === user.name)
+                    const findIndex = typersInfo.current[selectedConversation._id].findIndex(obj => obj.user.name === user.name)
 
                     //There should always be a match but conditionally check if it returns something
                     if(findIndex > -1){
                         //Using .splice, remove that object from the array
-                        typersInfo[selectedConversation._id].splice(findIndex,1)
+                        typersInfo.current[selectedConversation._id].splice(findIndex,1)
                     }
 
                     //After removing the object from the array, check if the array is empty. If it is, delete that conversation from typersInfo object.
-                    if(typersInfo[selectedConversation._id].length === 0){
-                        delete typersInfo[selectedConversation._id]
+                    if(typersInfo.current[selectedConversation._id].length === 0){
+                        delete typersInfo.current[selectedConversation._id]
                     }
                 }
-                else if(typersInfo[selectedConversation._id] && content){
+                else if(typersInfo.current[selectedConversation._id] && content){
                     //Otherwise, the conversation exists in the typersInfo object. Check to see if the typer is also in the array value. If found, replace their existing content value from the socket.
-                    const existingTyper = typersInfo[selectedConversation._id].find(obj => obj.user.name === user.name)
+                    const existingTyper = typersInfo.current[selectedConversation._id].find(obj => obj.user.name === user.name)
                     if(existingTyper){
                         existingTyper.content = content
                     }
                     else{
                         //If the user is not in the array yet, add them to that array.
-                        typersInfo[selectedConversation._id] = [
-                            ...typersInfo[selectedConversation._id],
+                        typersInfo.current[selectedConversation._id] = [
+                            ...typersInfo.current[selectedConversation._id],
                             {
                                 user,
                                 content
@@ -225,7 +226,6 @@ export default ({messageInputHeight, recipientHeight}) => {
 
     return (
         <div ref={messageRef} className="messages-container">
-            <h1>Messages</h1>
             {
                 selectConversation.messages && selectConversation.messages.map(message => <Message key={message._id} message={message}/>)
             }
