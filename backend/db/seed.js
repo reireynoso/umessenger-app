@@ -71,6 +71,7 @@ const data = async() => {
     // await users[0].save()
     // users[1].conversations = [conversations[1]]
     // await users[1].save()
+    // console.log(conversations)
     console.log('seed')
 }
 

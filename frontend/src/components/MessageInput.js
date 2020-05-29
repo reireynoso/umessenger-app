@@ -39,9 +39,14 @@ export default forwardRef((props,ref) => {
     
     const handleOnChange = (e) => {
         //always resets height to 2rem
-        textArea.current.style.height = '2rem';
+        
+        textArea.current.style.height = '20px';
         //grabs the scrollHeight from that initial height of 2rem and assigns to new accounting for the extra 2px
         textArea.current.style.height = (textArea.current.scrollHeight - 2) + 'px'
+        if(textArea.current.value.trim() === ""){
+            textArea.current.value = ""
+            textArea.current.style.height = '20px'
+        }
         const data = {selectedConversation,user,content:e.target.value}
         if(socket.on && selectedConversation){
             socket.emit('typing', data)
@@ -54,13 +59,16 @@ export default forwardRef((props,ref) => {
         if(e.key=== "Enter" && emails.length > 0){
             //make a fetch request to the backend to create new convo
         //  debugger
-        handleResetInput()
-           const errors = await dispatch(sendMessageToConversation(emails,content,user))
-            if(errors){
-                console.log(errors)
-            }
             
+            handleResetInput()
+            // console.log(textArea.current.value)
+            // const errors = await dispatch(sendMessageToConversation(emails,content,user))
+            // if(errors){
+            //     console.log(errors)
+            // }
+                
         }
+
         else{
             //please enters recipients error
         }
