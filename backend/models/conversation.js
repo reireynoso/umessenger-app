@@ -1,14 +1,10 @@
 const mongoose = require("mongoose")
+const {messageSchema} = require('./message')
 
+// KNOWN BUG: Cannot get User Schema and Model. Returns undefined. Below solution is workaround.
 const conversationSchema = mongoose.Schema({
-    users: {
-        type: Array,
-        default: []
-    },
-    messages: {
-        type: Array,
-        default: []
-    }
+    users: [{type: mongoose.Schema.Types.ObjectId, ref:"User"}],
+    messages: [messageSchema]
 }, {
     timestamps: true
     // toObject: {
@@ -26,6 +22,13 @@ conversationSchema.methods.toJSON = function(){
        delete user.createdAt
        delete user.updatedAt
    })
+
+   conversationObject.messages.map(message => {
+        delete message.user._id
+        delete message.user.password
+        delete message.user.updatedAt
+    }) 
+
 
     return conversationObject
 }

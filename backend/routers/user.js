@@ -24,8 +24,9 @@ const upload = multer({
 
 router.get('/test', async(req,res,next) => {
     try{
+        const conversation = await Conversation.find({}).populate('messages.user').populate("users")
         const test = {message: "Server is live."}
-        res.send(test)
+        res.send({test: conversation[0]})
     }catch(e){
         next(e)
     }

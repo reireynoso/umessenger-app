@@ -1,5 +1,5 @@
 const User = require('../models/user')
-const Message = require('../models/message')
+const {Message} = require('../models/message')
 const Conversation = require('../models/conversation')
 
 const bcrypt = require('bcryptjs')
@@ -66,6 +66,17 @@ const data = async() => {
             messages: [messages[1], messages[0]]
         }
     ])
+
+      // await conversations[0].messages.push(messages[1])
+
+    // const some = await messages[0].populate("user")
+    // console.log('yo', some)
+    const conversation = await Conversation.find({}).populate('messages.user').populate("users")
+    // console.log(Object.keys(messages[0]))
+
+    console.log(conversation[0].users)
+
+    // console.log(conversation[0].messages[0] instanceof Message)
 
     // users[0].conversations = [conversations[1], conversations[0]]
     // await users[0].save()
