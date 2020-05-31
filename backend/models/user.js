@@ -136,7 +136,7 @@ userSchema.statics.checkIfEmailsAreValid = async(emailList) => {
     if(users.length !== emailList.length){
         throw new Error()
     }
-    return users
+    return users.map(user => user.toInfo())
 }
 
 //hashes plain text pw before saving

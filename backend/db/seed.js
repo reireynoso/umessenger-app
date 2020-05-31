@@ -52,7 +52,7 @@ const data = async() => {
         },
     ])
 
-    console.log('yo', users[0] instanceof User)
+    // console.log('yo', users[0] instanceof User)
     const test = users[0].toInfo()
     const sample = users[1].toInfo()
     const hello = users[2].toInfo()
