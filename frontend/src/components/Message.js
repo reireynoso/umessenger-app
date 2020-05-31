@@ -1,6 +1,7 @@
 import React from 'react'
 
-export default ({message: {content}}) => {
+export default ({message, message: {content}}) => {
+    console.log(message)
     return (
         <div>
            {content}

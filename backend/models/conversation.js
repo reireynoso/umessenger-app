@@ -1,9 +1,16 @@
 const mongoose = require("mongoose")
 const {messageSchema} = require('./message')
+const User = require('./user')
+
+// console.log(mongoose.model('User'))
 
 // KNOWN BUG: Cannot get User Schema and Model. Returns undefined. Below solution is workaround.
 const conversationSchema = mongoose.Schema({
-    users: [{type: mongoose.Schema.Types.ObjectId, ref:"User"}],
+    // users: [{type: mongoose.Schema.Types.ObjectId, ref:"User"}],
+    users: {
+        type: Array,
+        default: []
+    },
     messages: [messageSchema]
 }, {
     timestamps: true
@@ -38,11 +45,29 @@ conversationSchema.statics.findUserConversations = async(user) => {
     const conversations = await Conversation.find({users: {
         $all: [
             {
-                $elemMatch: {_id: user._id}
+                $elemMatch: {email: user.email}
             }
         ]
     }})
+    .populate('messages.user')
     .sort({'updatedAt': -1})
+
+    //method with user documents in users array
+    // const conversations = await Conversation.find({users: {
+    //     $all: [
+    //         {
+    //             $elemMatch: {_id: user._id}
+    //         }
+    //     ]
+    // }})
+    // .sort({'updatedAt': -1})
+
+    //adjusted method with array containing objectId of users
+    // const conversations = await Conversation.find({users: user._id})
+    // .populate('messages.user')
+    // // .populate("users")
+    // .sort({'updatedAt': -1})
+    // console.log(conversations)
     //sorts by updated with recent being on top
     userObject.conversations = conversations
     

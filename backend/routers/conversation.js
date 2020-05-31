@@ -4,7 +4,7 @@ const cors = require('cors')
 const auth = require('../middleware/auth')
 const User = require('../models/user')
 const Conversation = require('../models/conversation')
-const Message = require('../models/message')
+const {Message} = require('../models/message')
 
 router.post("/conversations", auth, async(req,res) => {
     try{
@@ -52,7 +52,7 @@ router.post("/conversations", auth, async(req,res) => {
         //second, the size of array of users must also be equal to the size of the list
         //this simulates close to exact match of convo
         const existingConversation = await Conversation.findAssociatedConversation(recipients)
-        // console.log(existingConversation)
+    
         if(!existingConversation){
             //if no existingConversation exist, create a convo and push message in array message, with users
             // console.log(existingConversation)
@@ -100,7 +100,6 @@ router.post("/conversations", auth, async(req,res) => {
 
         // res.send({convos})
     }catch(e){
-        // console.log(e)
         res.send({errors: ["An email provided is invalid."]})
     }
 })

@@ -75,6 +75,21 @@ userSchema.methods.toJSON = function(){
     return userObject
 }
 
+userSchema.methods.toInfo = function(){
+
+    const user = this 
+    const userObject = user.toObject()
+
+    delete userObject._id
+    delete userObject.image_storage
+    delete userObject.password
+    delete userObject.createdAt
+    delete userObject.updatedAt
+
+    // console.log(userObject)
+    return userObject
+}
+
 // userSchema.methods.findUserConversations = async function(){
 //     const user = this
 //     const userObject = user.toJSON()
@@ -118,11 +133,9 @@ userSchema.statics.checkIfEmailsAreValid = async(emailList) => {
             $in: emailList
         }
     })
-
     if(users.length !== emailList.length){
         throw new Error()
     }
-
     return users
 }
 

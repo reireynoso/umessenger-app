@@ -62,10 +62,10 @@ export default forwardRef((props,ref) => {
             
             handleResetInput()
             // console.log(textArea.current.value)
-            // const errors = await dispatch(sendMessageToConversation(emails,content,user))
-            // if(errors){
-            //     console.log(errors)
-            // }
+            const errors = await dispatch(sendMessageToConversation(emails,content,user))
+            if(errors){
+                console.log(errors)
+            }
                 
         }
 

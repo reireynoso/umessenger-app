@@ -52,9 +52,13 @@ const data = async() => {
         },
     ])
 
+    console.log('yo', users[0] instanceof User)
+    const test = users[0].toInfo()
+    const sample = users[1].toInfo()
+    const hello = users[2].toInfo()
     const conversations = await Conversation.insertMany([
         {
-            users: [users[0], users[1]],
+            users: [test, sample],
             messages: [messages[1], messages[0]]
         },
         // {
@@ -62,8 +66,8 @@ const data = async() => {
         //     messages: [messages[1], messages[0]]
         // },
         {
-            users: [users[2], users[1]],
-            messages: [messages[1], messages[0]]
+            users: [hello, sample],
+            messages: [messages[2], messages[3]]
         }
     ])
 
@@ -71,10 +75,10 @@ const data = async() => {
 
     // const some = await messages[0].populate("user")
     // console.log('yo', some)
-    const conversation = await Conversation.find({}).populate('messages.user').populate("users")
+    // const conversation = await Conversation.find({}).populate('messages.user').populate("users")
     // console.log(Object.keys(messages[0]))
 
-    console.log(conversation[0].users)
+    // console.log(conversation[0].users)
 
     // console.log(conversation[0].messages[0] instanceof Message)
 
