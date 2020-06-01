@@ -1,10 +1,9 @@
 const express = require('express')
 const router = new express.Router()
-const cors = require('cors')
+// const cors = require('cors')
 const auth = require('../middleware/auth')
 const User = require('../models/user')
 const Conversation = require('../models/conversation')
-const {Message} = require('../models/message')
 
 router.post("/conversations", auth, async(req,res) => {
     try{
@@ -73,7 +72,6 @@ router.post("/conversations", auth, async(req,res) => {
         }
         else{
             //push message into existing convos message array
-            // console.log("hey")
             existingConversation.messages.push(newMessage)
             await existingConversation.save()
             // console.log(existingConversation.messages)

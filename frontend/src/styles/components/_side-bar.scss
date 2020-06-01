@@ -2,7 +2,7 @@
     color: $dark-white;
     background: $light-grey;
     height: 100vh;
-    width: 27rem;
+    width: 35rem;
     border-right: 1px solid black;
 }
 
@@ -14,6 +14,7 @@
 
 .side-bar__action {
     padding-top: 1rem;
+    // display: flex;
    .text_input{
        margin-right: 2rem;
    }

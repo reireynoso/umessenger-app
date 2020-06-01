@@ -23,12 +23,12 @@ conversationSchema.methods.toJSON = function(){
     const conversation = this 
     const conversationObject = conversation.toObject()
 
-   conversationObject.users.map(user => {
-       delete user._id
-       delete user.password
-       delete user.createdAt
-       delete user.updatedAt
-   })
+//    conversationObject.users.map(user => {
+//        delete user._id
+//        delete user.password
+//        delete user.createdAt
+//        delete user.updatedAt
+//    })
 
    conversationObject.messages.map(message => {
         delete message.user._id
@@ -98,6 +98,7 @@ conversationSchema.statics.findAssociatedConversation = async(emails) => {
             }
         ]
     })
+    console.log(conversation)
     return conversation
 }
 
