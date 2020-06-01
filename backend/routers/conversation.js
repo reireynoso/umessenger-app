@@ -43,8 +43,10 @@ router.post("/conversations", auth, async(req,res) => {
 
         //     ]
         // })
-        const newMessage = await new Message({user, content})
-        await newMessage.save()
+        // const newMessage = await new Message({user, content})
+        // await newMessage.save()
+
+        const newMessage = {user,content}
 
         //multiple queries
         //goal is to iterate through the array of users in Conversation,

@@ -56,31 +56,17 @@ const data = async() => {
     const test = users[0].toInfo()
     const sample = users[1].toInfo()
     const hello = users[2].toInfo()
+    
     const conversations = await Conversation.insertMany([
         {
             users: [test, sample],
             messages: [messages[1], messages[0]]
         },
-        // {
-        //     users: [users[0]],
-        //     messages: [messages[1], messages[0]]
-        // },
         {
             users: [hello, sample],
             messages: [messages[2], messages[3]]
         }
     ])
-
-      // await conversations[0].messages.push(messages[1])
-
-    // const some = await messages[0].populate("user")
-    // console.log('yo', some)
-    // const conversation = await Conversation.find({}).populate('messages.user').populate("users")
-    // console.log(Object.keys(messages[0]))
-
-    // console.log(conversation[0].users)
-
-    // console.log(conversation[0].messages[0] instanceof Message)
 
     // users[0].conversations = [conversations[1], conversations[0]]
     // await users[0].save()

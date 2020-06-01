@@ -48,14 +48,7 @@ const userSchema = mongoose.Schema({
         type: Buffer
     }
 }, {
-    timestamps: true,
-    // toObject: {
-        // virtuals: true
-    //     getters:true
-    // },
-    // toJSON: {
-    //     virtuals: true
-    // }
+    timestamps: true
 })
 
 
