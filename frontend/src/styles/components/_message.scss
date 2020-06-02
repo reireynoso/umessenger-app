@@ -1,0 +1,21 @@
+.message-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.message {
+    border-radius: 20px;
+    padding: 8px 15px;
+    margin: 5px 0;
+}
+
+.mine {
+    align-self: flex-end;
+    background: linear-gradient(to bottom, #00D0EA 0%, #0085D1 100%);
+}
+
+.other {
+    align-self: flex-start;
+    background: $grey;
+}
