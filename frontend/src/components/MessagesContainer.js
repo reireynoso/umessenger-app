@@ -77,21 +77,25 @@ export default ({messageInputHeight, recipientHeight}) => {
     }
 
     const scrollToRef = () => {
-        console.log('called')
+        // console.log('called')
         return bottom.current.scrollIntoView({ behavior: "smooth" })
-
     }
 
-    useLayoutEffect(() => {
-        if(bottom.current){
-            scrollToRef()
-        }
-        // console.log('executed')
-    }, [selectConversation])
+    // useEffect(() => {
+        //async solution to auto scroll for new message and switching convo.
+        //might cause BUG. Not sure yet.
+        // setTimeout(() => {
+        //     scrollToRef()
+
+        // }, 0)
+    // }, [selectConversation])
   
     useEffect(() => {
         //Issues to Fix: Severe refactor. Unknown bug somewhere. At some point, when user switches conversation as another person is typing and goes back to same conversation, person typing doesn't register again.
         // scrollToRef()
+        setTimeout(() => {
+            scrollToRef()
+        }, 0)
         //When the component reloads, check to see if typersInfo object was updated while viewing another conversation and update the typers.
         // console.log(typersInfo)
         handleTypers()
@@ -240,22 +244,28 @@ export default ({messageInputHeight, recipientHeight}) => {
 
     return (
         <div ref={messageRef} className="messages-container">
-            {
-                selectConversation.messages && selectConversation.messages.map((message,index) => <Message key={message._id} message={message}/>)
-            }
-            {
-                typers.length > 0 &&
-                <div>
+            <div className="messages-container__inner">
+                <div className="messages-container__message">  
                     {
-                        typers.map((typer,index) => 
-                        <span key={`${index+typer}`}>{typer}
-                            {checkWhich(index + 1)} 
-                        </span>)
+                        selectConversation.messages && selectConversation.messages.map(message => <Message key={message._id} message={message}/>)
                     }
-                    {typers.length === 1 ? "is" : "are"} typing...
+                    <div ref={bottom}></div>
                 </div>
-            }
-            <div ref={bottom}></div>
+                <div className="messages-typing__container">
+                {
+                    typers.length > 0 &&
+                    <div className="messages-typing">
+                        {
+                            typers.map((typer,index) => 
+                            <span key={`${index+typer}`}>{typer}
+                                {checkWhich(index + 1)} 
+                            </span>)
+                        }
+                        {typers.length === 1 ? "is" : "are"} typing...
+                    </div>
+                }
+                </div>
+            </div>
         </div>
     )
 }

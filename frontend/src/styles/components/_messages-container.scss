@@ -2,9 +2,30 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 0 1rem;
-    overflow: scroll;
     height: calc(100vh - 14rem);
     max-height: calc(100vh - 14rem);
     background: $dark-grey;
+}
+
+.messages-container__inner {
+    width: 100%;
+    height: 100%;
+    padding: 0 1.5rem;
+}
+
+.messages-container__message {
+    overflow: scroll;
+    height: calc(100% - 25px);
+}
+
+.messages-typing__container {
+  & > * {
+      font-size: 1.5rem;
+  }
+}
+
+.messages-typing {
+    // height: 30px;
+    position: sticky;
+    bottom: 0;
 }

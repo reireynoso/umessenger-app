@@ -76,10 +76,13 @@ export default ({conversations,socket, conversation, conversation: {messages, us
                         <h3>{users[0].name}</h3>
                         <p>4:55 AM</p>
                     </div>
-                    <p>{truncate()}</p>
                     {
-                        typing && <p>Typing...</p>
+                        typing ? 
+                        <img className="segment__typing" src={'/image/typing_dots.gif'}/>
+                        :
+                        <p>{truncate()}</p>
                     }
+                   
                 </div>
             </div>
         </div>
