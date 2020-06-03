@@ -98,7 +98,7 @@ conversationSchema.statics.findAssociatedConversation = async(emails) => {
             }
         ]
     })
-    console.log(conversation)
+    .populate('messages.user')
     return conversation
 }
 

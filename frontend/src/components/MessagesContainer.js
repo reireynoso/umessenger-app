@@ -29,6 +29,7 @@ export default ({messageInputHeight, recipientHeight}) => {
     const [screen, setScreen] = useState(0)
 
     const messageRef = useRef(null)
+    const bottom = useRef(null)
     // react alternative to creating a mutable object
     // any errors, switch back to typersInfo object and change references below
     const typersInfo = useRef({})
@@ -74,10 +75,23 @@ export default ({messageInputHeight, recipientHeight}) => {
             setTypers([])
         }       
     }
+
+    const scrollToRef = () => {
+        console.log('called')
+        return bottom.current.scrollIntoView({ behavior: "smooth" })
+
+    }
+
+    useLayoutEffect(() => {
+        if(bottom.current){
+            scrollToRef()
+        }
+        // console.log('executed')
+    }, [selectConversation])
   
     useEffect(() => {
         //Issues to Fix: Severe refactor. Unknown bug somewhere. At some point, when user switches conversation as another person is typing and goes back to same conversation, person typing doesn't register again.
-
+        // scrollToRef()
         //When the component reloads, check to see if typersInfo object was updated while viewing another conversation and update the typers.
         // console.log(typersInfo)
         handleTypers()
@@ -227,7 +241,7 @@ export default ({messageInputHeight, recipientHeight}) => {
     return (
         <div ref={messageRef} className="messages-container">
             {
-                selectConversation.messages && selectConversation.messages.map(message => <Message key={message._id} message={message}/>)
+                selectConversation.messages && selectConversation.messages.map((message,index) => <Message key={message._id} message={message}/>)
             }
             {
                 typers.length > 0 &&
@@ -241,6 +255,7 @@ export default ({messageInputHeight, recipientHeight}) => {
                     {typers.length === 1 ? "is" : "are"} typing...
                 </div>
             }
+            <div ref={bottom}></div>
         </div>
     )
 }
