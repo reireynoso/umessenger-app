@@ -2,7 +2,7 @@ import React, {useState,useEffect,useRef, forwardRef} from 'react'
 import {useSelector, useDispatch} from 'react-redux'
 import {sendMessageToConversation} from '../actions/conversation'
 
-export default forwardRef((props,ref) => {
+export default forwardRef(({setmessageInputHeight},ref) => {
     const dispatch = useDispatch()
     const user = useSelector(state => state.user)
     const emails = useSelector(state => state.conversation.emails)
@@ -17,9 +17,10 @@ export default forwardRef((props,ref) => {
     useEffect(() => {
         if(ref.current){
             ref.current.height = ref.current.offsetHeight
-            props.setmessageInputHeight(ref.current.height)
+            setmessageInputHeight(ref.current.height)
         }
-    }, [textArea.current ? textArea.current.offsetHeight : null])
+    // }, [textArea.current ? textArea.current.offsetHeight : null])
+    }, [content])
 
     useEffect(() => {
         if(textArea.current){
@@ -64,9 +65,8 @@ export default forwardRef((props,ref) => {
             // console.log(textArea.current.value)
             const errors = await dispatch(sendMessageToConversation(emails,content,user))
             if(errors){
-                console.log(errors)
+                return console.log(errors)
             }
-                
         }
 
         else{

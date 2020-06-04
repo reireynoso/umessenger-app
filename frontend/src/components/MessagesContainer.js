@@ -43,7 +43,7 @@ export default ({messageInputHeight, recipientHeight}) => {
     // dynamically changes the components height 
     useLayoutEffect(() => {
         // console.log(messageInputHeight + recipientHeight)
-        // console.log(messageInputHeight)
+        console.log(messageInputHeight)
         messageRef.current.style.height = (window.innerHeight - (messageInputHeight + recipientHeight)) + 'px'
     }, [messageInputHeight, recipientHeight, screen])
     
@@ -230,16 +230,16 @@ export default ({messageInputHeight, recipientHeight}) => {
     }, [selectConversation])
 
     const checkWhich = (index) => {
-        //index passed in accounts for the 0. 1 is added already
-        if(typers.length === 1 || index === typers.length){ 
-            return " "
-        }
-        else if(index + 1 === typers.length){ //compares next number to length
-            return ", and "
-        }
-        else{
-            return ", "
-        }
+            //index passed in accounts for the 0. 1 is added already
+            if(typers.length === 1 || index === typers.length){ 
+                return " "
+            }
+            else if(index + 1 === typers.length){ //compares next number to length
+                return ", and "
+            }
+            else{
+                return ", "
+            }
     }
 
     return (
@@ -249,6 +249,9 @@ export default ({messageInputHeight, recipientHeight}) => {
                     {
                         selectConversation.messages && selectConversation.messages.map(message => <Message key={message._id} message={message}/>)
                     }
+                    {
+                        typers.length > 0 && <Message key={"typingMessageGif1234454455"} message={{content: "", user: false}}/>
+                    }
                     <div ref={bottom}></div>
                 </div>
                 <div className="messages-typing__container">
@@ -256,12 +259,15 @@ export default ({messageInputHeight, recipientHeight}) => {
                     typers.length > 0 &&
                     <div className="messages-typing">
                         {
+                            typers.length < 3 ?
                             typers.map((typer,index) => 
                             <span key={`${index+typer}`}>{typer}
                                 {checkWhich(index + 1)} 
                             </span>)
+                            :
+                            <span>Several people</span>
                         }
-                        {typers.length === 1 ? "is" : "are"} typing...
+                        {typers.length === 1 ? " is" : " are"} typing...
                     </div>
                 }
                 </div>
