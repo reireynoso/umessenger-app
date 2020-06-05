@@ -1,7 +1,7 @@
 .message-container {
     display: flex;
     flex-direction: column;
-    width: 100%;
+    // width: 100%;
     padding: 0 1.5rem;
 }
 
@@ -9,7 +9,7 @@
     border-radius: 20px;
     padding: 8px 15px;
     margin: 5px 0;
-    max-width: 40rem;
+    max-width: 50%;
     word-wrap: break-word;
 }
 
