@@ -27,7 +27,9 @@ export default () => {
         })
         dispatch(setSocket(establishSocket))
         return () => {
-            establishSocket.emit('disconnect')
+            console.log('dipped')
+            establishSocket.disconnect()
+            // establishSocket.emit('disconnect')
             establishSocket.off()
         }
     }, [ENDPOINT])

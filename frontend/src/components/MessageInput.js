@@ -30,9 +30,8 @@ export default forwardRef(({setmessageInputHeight},ref) => {
         }
     },[selectedConversation._id])
 
-    // Implement a feature to handle logout of user.
-
     const handleResetInput = () =>{
+        // console.log('logged out')
         // const data = {selectedConversation,user,content:""}
         // if(socket.on && selectedConversation){         
         //     socket.emit('typing', data)
@@ -45,7 +44,7 @@ export default forwardRef(({setmessageInputHeight},ref) => {
     // emits changes of typing
     const socketRequest = (value) => {
         const data = {selectedConversation,user,content:value}
-        if(socket.on && selectedConversation){         
+        if(socket.on && selectedConversation){     
             socket.emit('typing', data)
             socket.emit('messageTyping', data)
         }

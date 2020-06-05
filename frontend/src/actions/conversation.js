@@ -34,6 +34,10 @@ export const removeSelectedConversation = () => ({
     type: "REMOVE_SELECTED_CONVERSATION"
 })
 
+export const resetConversations = () => ({
+    type: "RESET_CONVERSATIONS"
+})
+
 export const sendMessageToConversation = (emails,content,user) => dispatch => {
     // debugger
     const token = localStorage.getItem("token")
