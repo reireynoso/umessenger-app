@@ -43,7 +43,6 @@ export default ({messageInputHeight, recipientHeight}) => {
     // dynamically changes the components height 
     useLayoutEffect(() => {
         // console.log(messageInputHeight + recipientHeight)
-        console.log(messageInputHeight)
         messageRef.current.style.height = (window.innerHeight - (messageInputHeight + recipientHeight)) + 'px'
     }, [messageInputHeight, recipientHeight, screen])
     

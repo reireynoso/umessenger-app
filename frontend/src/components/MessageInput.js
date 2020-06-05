@@ -1,4 +1,4 @@
-import React, {useState,useEffect,useRef, forwardRef} from 'react'
+import React, {useState,useEffect,useRef, forwardRef, useLayoutEffect} from 'react'
 import {useSelector, useDispatch} from 'react-redux'
 import {sendMessageToConversation} from '../actions/conversation'
 
@@ -14,33 +14,51 @@ export default forwardRef(({setmessageInputHeight},ref) => {
 
     const socket = useSelector(state => state.socket)
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         if(ref.current){
             ref.current.height = ref.current.offsetHeight
             setmessageInputHeight(ref.current.height)
         }
-    // }, [textArea.current ? textArea.current.offsetHeight : null])
-    }, [content])
+    }, [textArea.current ? textArea.current.offsetHeight : null])
 
     useEffect(() => {
         if(textArea.current){
             textArea.current.focus()
         }
-        setContent("")
+        return () => {
+           resetDivHeight()
+        }
     },[selectedConversation._id])
 
+    // Implement a feature to handle logout of user.
+
     const handleResetInput = () =>{
-        const data = {selectedConversation,user,content:""}
+        // const data = {selectedConversation,user,content:""}
+        // if(socket.on && selectedConversation){         
+        //     socket.emit('typing', data)
+        //     socket.emit('messageTyping', data)
+        // }
+        socketRequest("")
+        resetDivHeight()
+    }
+
+    // emits changes of typing
+    const socketRequest = (value) => {
+        const data = {selectedConversation,user,content:value}
         if(socket.on && selectedConversation){         
             socket.emit('typing', data)
             socket.emit('messageTyping', data)
         }
+    }
+
+    const resetDivHeight = () => {
+        textArea.current.value = ""
+        textArea.current.style.height = '20px'
         setContent("")
     }
     
     const handleOnChange = (e) => {
         //always resets height to 2rem
-        
         textArea.current.style.height = '20px';
         //grabs the scrollHeight from that initial height of 2rem and assigns to new accounting for the extra 2px
         textArea.current.style.height = (textArea.current.scrollHeight - 2) + 'px'
@@ -48,11 +66,12 @@ export default forwardRef(({setmessageInputHeight},ref) => {
             textArea.current.value = ""
             textArea.current.style.height = '20px'
         }
-        const data = {selectedConversation,user,content:e.target.value}
-        if(socket.on && selectedConversation){
-            socket.emit('typing', data)
-            socket.emit('messageTyping', data)
-        }
+        // const data = {selectedConversation,user,content:e.target.value}
+        // if(socket.on && selectedConversation){
+        //     socket.emit('typing', data)
+        //     socket.emit('messageTyping', data)
+        // }
+        socketRequest(e.target.value)
         setContent(e.target.value)
     }
     
