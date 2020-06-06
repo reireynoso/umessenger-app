@@ -29,8 +29,8 @@
 
 .recipient__email-input{
     display: block;
-    // width: 100%;
-    background: $dark-grey;
+    flex-grow: 1;
+    background: $grey;
     color: $dark-white;
     border: 0;
     outline: none;
