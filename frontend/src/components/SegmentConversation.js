@@ -51,13 +51,14 @@ export default ({conversations,socket, conversation, conversation: {messages, us
 
     const checkTime = () => {
         const today = Date.now()
-        const sameDay = moment(updatedAt).isBefore(Date.now(), "day")
-        const twoDaysAgo = moment(today).subtract(2, 'days').calendar()
-        const isAfterTwoDaysAgo = moment(updatedAt).isAfter(twoDaysAgo)
+        const sameDay = moment(updatedAt).isBefore(today, "day")
+        const yesterday = moment(today).subtract(1, 'day')
+        const checkIfYesterday = moment(updatedAt).isSame(yesterday, 'day')
+      
         if(!sameDay){
             return moment(updatedAt).format('LT')
         }
-        else if (sameDay && isAfterTwoDaysAgo){
+        else if (checkIfYesterday){
             return "Yesterday"
         }
         else{
@@ -69,8 +70,8 @@ export default ({conversations,socket, conversation, conversation: {messages, us
         //function truncates the names and message contents
         const condition = (infoToTrunc === "message")
         const info = condition ? messages[messages.length-1].content : users.map(user => user.name).join(', ')
-        let shortenedInfo = info.slice(0,(condition ? 18 : 11)) 
-        if(info.length > (condition ? 18 : 11)){
+        let shortenedInfo = info.slice(0,(condition ? 18 : 10)) 
+        if(info.length > (condition ? 18 : 10)){
             return shortenedInfo + '...'
         }
         return shortenedInfo

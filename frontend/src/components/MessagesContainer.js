@@ -1,5 +1,6 @@
 import React, {useEffect, useState, useLayoutEffect, useRef} from 'react'
 import {useSelector, useDispatch} from 'react-redux'
+import moment from 'moment'
 import Message from './Message'
 
 import {selectedConversation as selectedConversationAction} from '../actions/conversation'
@@ -76,7 +77,6 @@ export default ({messageInputHeight, recipientHeight}) => {
     }
 
     const scrollToRef = () => {
-        // console.log('called')
         return bottom.current.scrollIntoView({ behavior: "smooth" })
     }
 
@@ -91,7 +91,6 @@ export default ({messageInputHeight, recipientHeight}) => {
   
     useEffect(() => {
         //Issues to Fix: Severe refactor. Unknown bug somewhere. At some point, when user switches conversation as another person is typing and goes back to same conversation, person typing doesn't register again.
-        // scrollToRef()
         setTimeout(() => {
             scrollToRef()
         }, 0)
@@ -246,7 +245,7 @@ export default ({messageInputHeight, recipientHeight}) => {
             <div className="messages-container__inner">
                 <div className="messages-container__message">  
                     {
-                        selectConversation.messages && selectConversation.messages.map(message => <Message key={message._id} message={message}/>)
+                        selectConversation.messages && selectConversation.messages.map(message => <Message key={message._id} message={message} users={selectConversation.users}/>)
                     }
                     {
                         typers.length > 0 && <Message key={"typingMessageGif1234454455"} message={{content: "", user: false}}/>

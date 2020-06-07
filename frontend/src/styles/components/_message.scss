@@ -13,6 +13,13 @@
     word-wrap: break-word;
 }
 
+.message__nametag {
+    padding-left: 15px;
+    max-width: 50%;
+    word-wrap: break-word;
+    font-size: 13px;
+}
+
 .mine {
     align-self: flex-end;
     background: linear-gradient(to bottom, #00D0EA 0%, #0085D1 100%);
