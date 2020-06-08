@@ -1,6 +1,5 @@
 import React, {useEffect, useState, useLayoutEffect, useRef} from 'react'
 import {useSelector, useDispatch} from 'react-redux'
-import moment from 'moment'
 import Message from './Message'
 
 import {selectedConversation as selectedConversationAction} from '../actions/conversation'
@@ -245,7 +244,7 @@ export default ({messageInputHeight, recipientHeight}) => {
             <div className="messages-container__inner">
                 <div className="messages-container__message">  
                     {
-                        selectConversation.messages && selectConversation.messages.map(message => <Message key={message._id} message={message} users={selectConversation.users}/>)
+                        selectConversation.messages && selectConversation.messages.map((message,index) => <Message key={message._id} message={message} users={selectConversation.users} prevConversation = {(index - 1) > -1 ? selectConversation.messages[index-1] : null}/>)
                     }
                     {
                         typers.length > 0 && <Message key={"typingMessageGif1234454455"} message={{content: "", user: false}}/>

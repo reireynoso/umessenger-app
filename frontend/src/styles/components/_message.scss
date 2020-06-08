@@ -17,7 +17,7 @@
     padding-left: 15px;
     max-width: 50%;
     word-wrap: break-word;
-    font-size: 13px;
+    font-size: $s-size;
 }
 
 .mine {
@@ -28,4 +28,15 @@
 .other {
     align-self: flex-start;
     background: $grey;
+}
+
+.message__time {
+    max-width: 50%;
+    font-size: $s-size;
+    background: none;
+}
+
+.message__calendar {
+    margin: auto;
+    font-size: $s-size;
 }
