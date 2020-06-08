@@ -24,15 +24,9 @@ const upload = multer({
 
 router.get('/test', async(req,res,next) => {
     try{
-        const recipient = ["sample@test.com", "test@test.com"]
-        // const recipient2 = await User.lookup({
-        //     path: "email",
-        //     query: {"email": {"$in": [recipient]}}
-        // })
-        // console.log(recipient2)
-        const conversation = await Conversation.find({}).populate('messages.user')
+        // const conversation = await Conversation.find({}).populate('messages.user')
         const test = {message: "Server is live."}
-        res.send({test: conversation[0]})
+        res.send({test})
     }catch(e){
         next(e)
     }

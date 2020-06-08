@@ -2,7 +2,7 @@
     display: flex;
     flex-direction: column;
     // width: 100%;
-    padding: 0 1.5rem;
+    padding: 1rem $m-size;
 }
 
 .message {
@@ -37,6 +37,13 @@
 }
 
 .message__calendar {
+    // position: sticky;
+    // top: 20px;
+    // z-index: 2;
     margin: auto;
     font-size: $s-size;
+    font-weight: 600;
+    padding: 5px 10px;
+    border: 1px solid $dark-white;
+    border-radius: 30px;
 }

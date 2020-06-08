@@ -90,11 +90,11 @@ export default ({conversations,socket, conversation, conversation: {messages, us
                 {
                     users.length > 1 ? 
                     <div className="segment__image-container">
-                        <img className="segment__image multiple first"  src={userImage(users[0].image_url)}/>
-                        <img className="segment__image multiple second" src={userImage(users[1].image_url)}/>
+                        <img alt={`${users[0].name}`} className="segment__image multiple first"  src={userImage(users[0].image_url)}/>
+                        <img alt={`${users[1].name}`} className="segment__image multiple second" src={userImage(users[1].image_url)}/>
                     </div> 
                     : 
-                    <img className="segment__image" src={userImage(users[0].image_url)}/>
+                    <img alt={`${users[0].name}`} className="segment__image" src={userImage(users[0].image_url)}/>
                 }
                 <div className="segment__details">
                     <div className="segment__details-top">
@@ -103,7 +103,7 @@ export default ({conversations,socket, conversation, conversation: {messages, us
                     </div>
                     {
                         typing ? 
-                        <img className="segment__typing" src={'/image/typing_dots.gif'}/>
+                        <img alt="typing-gif" className="segment__typing" src={'/image/typing_dots.gif'}/>
                         :
                         <p>{refactoredTruncate("message")}</p>
                     }
