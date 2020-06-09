@@ -37,13 +37,28 @@
 }
 
 .message__calendar {
-    // position: sticky;
-    // top: 20px;
-    // z-index: 2;
-    margin: auto;
+    position: sticky;
+    top: 5px;
+    margin: 5px auto;
     font-size: $s-size;
     font-weight: 600;
     padding: 5px 10px;
     border: 1px solid $dark-white;
     border-radius: 30px;
+    width: fit-content;
+    background: $dark-grey;
+}
+
+.message_and_calendar {
+    align-self: center;
+    position: relative;
+}
+
+hr{
+    border: 0;
+    height: 1px;
+    background: $dark-white;
+    position: absolute;
+    top: 6px;
+    width: 100%;
 }

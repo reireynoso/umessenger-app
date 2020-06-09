@@ -1,5 +1,6 @@
 import React, {useEffect, useState, useLayoutEffect, useRef} from 'react'
 import {useSelector, useDispatch} from 'react-redux'
+import moment from 'moment'
 import Message from './Message'
 
 import {selectedConversation as selectedConversationAction} from '../actions/conversation'
@@ -30,6 +31,7 @@ export default ({messageInputHeight, recipientHeight}) => {
 
     const messageRef = useRef(null)
     const bottom = useRef(null)
+    const sortedMessagesByTime = useRef({})
     // react alternative to creating a mutable object
     // any errors, switch back to typersInfo object and change references below
     const typersInfo = useRef({})
@@ -89,6 +91,9 @@ export default ({messageInputHeight, recipientHeight}) => {
     // }, [selectConversation])
   
     useEffect(() => {
+        if(selectConversation.messages){
+            organizeMessages(selectConversation.messages)
+        }
         //Issues to Fix: Severe refactor. Unknown bug somewhere. At some point, when user switches conversation as another person is typing and goes back to same conversation, person typing doesn't register again.
         setTimeout(() => {
             scrollToRef()
@@ -239,12 +244,58 @@ export default ({messageInputHeight, recipientHeight}) => {
             }
     }
 
+    const organizeMessages = (messages) => {
+        let previousDate;
+        for(let i = 0; i < messages.length; i++){
+            if(!previousDate){
+                previousDate = moment(messages[i].createdAt).format('L')
+                sortedMessagesByTime.current[previousDate] = [{...messages[i]}]
+            }else if(!moment(previousDate).isSame(messages[i].createdAt, 'day')){
+                previousDate = moment(messages[i].createdAt).format('L')
+                sortedMessagesByTime.current[previousDate] = [{...messages[i]}]
+            }
+            else if(sortedMessagesByTime.current[moment(messages[i].createdAt).format('L')]){
+                sortedMessagesByTime.current[moment(messages[i].createdAt).format('L')] = [...sortedMessagesByTime.current[moment(messages[i].createdAt).format('L')], messages[i]]
+            }
+        }
+        // messages.map(message => {
+        //     if(!previousDate){
+        //         previousDate = moment(message.createdAt).format('L')
+        //         sortedMessagesByTime.current[previousDate] = [{...message}]
+        //     }else if(!moment(previousDate).isSame(message.createdAt, 'day')){
+        //         previousDate = moment(message.createdAt).format('L')
+        //         sortedMessagesByTime.current[previousDate] = [{...message}]
+        //     }
+        //     else if(sortedMessagesByTime.current[moment(message.createdAt).format('L')]){
+        //         sortedMessagesByTime.current[moment(message.createdAt).format('L')] = [...sortedMessagesByTime.current[moment(message.createdAt).format('L')], message]
+        //     }
+        // })
+    }
+
     return (
         <div ref={messageRef} className="messages-container">
             <div className="messages-container__inner">
                 <div className="messages-container__message">  
                     {
-                        selectConversation.messages && selectConversation.messages.map((message,index) => <Message key={message._id} message={message} users={selectConversation.users} prevConversation = {(index - 1) > -1 ? selectConversation.messages[index-1] : null}/>)
+                       // selectConversation.messages && selectConversation.messages.map((message,index) => <Message key={message._id} message={message} users={selectConversation.users} prevConversation = {(index - 1) > -1 ? selectConversation.messages[index-1] : null}/>)
+                       selectConversation.messages && Object.keys(sortedMessagesByTime.current).map(key => 
+                        <div key={key} className="message_and_calendar">
+                            <hr/>
+                            <div key={key} className="message__calendar">
+                                {moment(key).calendar({
+                                    sameDay: '[Today]',
+                                    nextDay: '[Tomorrow]',
+                                    nextWeek: 'dddd',
+                                    lastDay: '[Yesterday], MM/DD/YY',
+                                    lastWeek: '[Last] dddd, MM/DD/YY',
+                                    sameElse: 'MM/DD/YY'
+                                })}
+                            </div>
+                            {
+                                sortedMessagesByTime.current[key].map(message => <Message key={message._id} users={selectConversation.users} message={message}/>)
+                            }
+                        </div>
+                       ) 
                     }
                     {
                         typers.length > 0 && <Message key={"typingMessageGif1234454455"} message={{content: "", user: false}}/>

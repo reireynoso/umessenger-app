@@ -5,29 +5,29 @@ import {useSelector} from 'react-redux'
 export default ({prevConversation, users=[], message: {content, user, createdAt}}) => {
     const loggedUser = useSelector(state => state.user)
 
-    const calendarDiv = () => <div className="message__calendar">{moment(createdAt).calendar({
-        sameDay: '[Today]',
-        nextDay: '[Tomorrow]',
-        nextWeek: 'dddd',
-        lastDay: '[Yesterday], MM/DD/YY',
-        lastWeek: '[Last] dddd, MM/DD/YY',
-        sameElse: 'MM/DD/YY'
-    })}</div>
+    // const calendarDiv = () => <div className="message__calendar">{moment(createdAt).calendar({
+    //     sameDay: '[Today]',
+    //     nextDay: '[Tomorrow]',
+    //     nextWeek: 'dddd',
+    //     lastDay: '[Yesterday], MM/DD/YY',
+    //     lastWeek: '[Last] dddd, MM/DD/YY',
+    //     sameElse: 'MM/DD/YY'
+    // })}</div>
 
-    const checkDay = () => {
-        // if the prevConversation is null, set the initial calendar.
-        if(!prevConversation){
-            return calendarDiv()
-        }
-        // check if prevConversatoin date is the same current.
-        else if(!moment(prevConversation.createdAt).isSame(createdAt, 'day')){
-            return calendarDiv()
-        }
-    }
+    // const checkDay = () => {
+    //     // if the prevConversation is null, set the initial calendar.
+    //     if(!prevConversation){
+    //         return calendarDiv()
+    //     }
+    //     // check if prevConversatoin date is the same current.
+    //     else if(!moment(prevConversation.createdAt).isSame(createdAt, 'day')){
+    //         return calendarDiv()
+    //     }
+    // }
     return (
         <div className="message-container">
             {
-               user && checkDay()   
+            //    user && checkDay()   
             }      
             {
                 users.length > 1 && user.email !== loggedUser.email && <div className="message__nametag">
