@@ -213,6 +213,7 @@ export default ({messageInputHeight, recipientHeight}) => {
 
         return () => {
             //empties out typers if conversation is switched
+            sortedMessagesByTime.current = {}
             setTypers([])
             if(socket.io){
                 //Everytime, selectConversation is changed, a typing socket listener is created.

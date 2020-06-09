@@ -1,8 +1,8 @@
 .message-container {
     display: flex;
     flex-direction: column;
-    // width: 100%;
     padding: 1rem $m-size;
+    position: relative;
 }
 
 .message {
@@ -22,13 +22,69 @@
 
 .mine {
     align-self: flex-end;
-    background: linear-gradient(to bottom, #00D0EA 0%, #0085D1 100%);
+    background: #0085D1;
 }
 
 .other {
     align-self: flex-start;
     background: $grey;
 }
+
+.other.last {
+    border-bottom-left-radius: 5px;
+}
+
+.mine.last {
+    border-bottom-right-radius: 5px;
+}
+
+.other.message.last:before {
+    content: "";
+    position: absolute;
+    z-index: 0;
+    bottom: 28px;
+    left: 12px;
+    height: 15px;
+    width: 20px;
+    background: $grey;
+    border-bottom-right-radius: 15px;
+}
+
+.other.message.last:after {
+    content: "";
+    position: absolute;
+    z-index: 1;
+    bottom: 28px;
+    left: 6px;
+    width: 10px;
+    height: 20px;
+    background: $dark-grey;
+    border-bottom-right-radius: 10px;
+  }
+
+.mine.message.last:before {
+    content: "";
+    position: absolute;
+    z-index: 0;
+    bottom: 28px;
+    right: 12px;
+    height: 15px;
+    width: 20px;
+    background: linear-gradient(to bottom, #0085D1 100%, #00D0EA 50%);
+    border-bottom-left-radius: 15px;
+}
+
+.mine.message.last:after {
+    content: "";
+    position: absolute;
+    z-index: 1;
+    bottom: 28px;
+    right: 6px;
+    width: 10px;
+    height: 20px;
+    background: $dark-grey;
+    border-bottom-left-radius: 10px;
+  }
 
 .message__time {
     max-width: 50%;
@@ -47,6 +103,7 @@
     border-radius: 30px;
     width: fit-content;
     background: $dark-grey;
+    z-index: 2000;
 }
 
 .message_and_calendar {

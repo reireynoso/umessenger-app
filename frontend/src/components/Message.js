@@ -34,7 +34,7 @@ export default ({prevConversation, users=[], message: {content, user, createdAt}
                     {user.name}
                 </div>  
             }
-            <div className={`message ${loggedUser.email === user.email ? "mine" : "other"}`}>
+            <div className={`message ${loggedUser.email === user.email ? "mine last" : "other last"}`}>
                 {!user ? <img className="segment__typing" src="/image/typing_dots.gif"/> : content}
             </div>
             {
