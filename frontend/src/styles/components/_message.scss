@@ -1,7 +1,8 @@
 .message-container {
     display: flex;
     flex-direction: column;
-    padding: 1rem $m-size;
+    // padding: 1rem $m-size;
+    padding: 0 $m-size;
     position: relative;
 }
 
@@ -42,7 +43,7 @@
     content: "";
     position: absolute;
     z-index: 0;
-    bottom: 28px;
+    bottom: 24px;
     left: 12px;
     height: 15px;
     width: 20px;
@@ -54,7 +55,7 @@
     content: "";
     position: absolute;
     z-index: 1;
-    bottom: 28px;
+    bottom: 24px;
     left: 6px;
     width: 10px;
     height: 20px;
@@ -66,7 +67,7 @@
     content: "";
     position: absolute;
     z-index: 0;
-    bottom: 28px;
+    bottom: 24px;
     right: 12px;
     height: 15px;
     width: 20px;
@@ -78,7 +79,7 @@
     content: "";
     position: absolute;
     z-index: 1;
-    bottom: 28px;
+    bottom: 24px;
     right: 6px;
     width: 10px;
     height: 20px;

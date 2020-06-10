@@ -5,29 +5,13 @@ import {useSelector} from 'react-redux'
 export default ({users=[], message: {content, user, createdAt, nextMessageUser}}) => {
     const loggedUser = useSelector(state => state.user)
 
-    const check = () => {
-        if(loggedUser.email === user.email){
-            return `mine`
-        }
-        else{
-            return `other`
-        }
-    }
+    const checkIfMineOrOther = () => loggedUser.email === user.email ? "mine" : "other"
 
-    const checkIfLastMessage = () => {
-        if(lastMessage()){
-            return "last"
-        }
-        return ""
-    }
+    const checkIfLastMessage = () => lastMessage() ? "last" : ""
 
-    const lastMessage = () => {
-        return !nextMessageUser || nextMessageUser.email !== user.email
-    }
+    const lastMessage = () => !nextMessageUser || nextMessageUser.email !== user.email
 
-    const combinedClasses = () => {
-        return `${check()} ${checkIfLastMessage()}`
-    }
+    const checkIfMineAndLast = () => `${checkIfMineOrOther()} ${checkIfLastMessage()}`
 
     return (
         <div className="message-container">  
@@ -36,11 +20,11 @@ export default ({users=[], message: {content, user, createdAt, nextMessageUser}}
                     {user.name}
                 </div>  
             }
-            <div className={`message ${combinedClasses()}`}>
+            <div className={`message ${checkIfMineAndLast()}`}>
                 {!user ? <img className="segment__typing" src="/image/typing_dots.gif"/> : content}
             </div>
             {
-                lastMessage() && <div className={`message__time ${combinedClasses()}`}>
+                lastMessage() && <div className={`message__time ${checkIfMineAndLast()}`}>
                     {moment(createdAt).format('LT')}
                 </div>  
             }
