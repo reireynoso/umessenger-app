@@ -2,43 +2,45 @@ import React from 'react'
 import moment from 'moment'
 import {useSelector} from 'react-redux'
 
-export default ({prevConversation, users=[], message: {content, user, createdAt}}) => {
+export default ({users=[], message: {content, user, createdAt, nextMessageUser}}) => {
     const loggedUser = useSelector(state => state.user)
 
-    // const calendarDiv = () => <div className="message__calendar">{moment(createdAt).calendar({
-    //     sameDay: '[Today]',
-    //     nextDay: '[Tomorrow]',
-    //     nextWeek: 'dddd',
-    //     lastDay: '[Yesterday], MM/DD/YY',
-    //     lastWeek: '[Last] dddd, MM/DD/YY',
-    //     sameElse: 'MM/DD/YY'
-    // })}</div>
+    const check = () => {
+        if(loggedUser.email === user.email){
+            return `mine`
+        }
+        else{
+            return `other`
+        }
+    }
 
-    // const checkDay = () => {
-    //     // if the prevConversation is null, set the initial calendar.
-    //     if(!prevConversation){
-    //         return calendarDiv()
-    //     }
-    //     // check if prevConversatoin date is the same current.
-    //     else if(!moment(prevConversation.createdAt).isSame(createdAt, 'day')){
-    //         return calendarDiv()
-    //     }
-    // }
+    const checkIfLastMessage = () => {
+        if(lastMessage()){
+            return "last"
+        }
+        return ""
+    }
+
+    const lastMessage = () => {
+        return !nextMessageUser || nextMessageUser.email !== user.email
+    }
+
+    const combinedClasses = () => {
+        return `${check()} ${checkIfLastMessage()}`
+    }
+
     return (
-        <div className="message-container">
-            {
-            //    user && checkDay()   
-            }      
+        <div className="message-container">  
             {
                 users.length > 1 && user.email !== loggedUser.email && <div className="message__nametag">
                     {user.name}
                 </div>  
             }
-            <div className={`message ${loggedUser.email === user.email ? "mine last" : "other last"}`}>
+            <div className={`message ${combinedClasses()}`}>
                 {!user ? <img className="segment__typing" src="/image/typing_dots.gif"/> : content}
             </div>
             {
-                user && <div className={`message__time ${loggedUser.email === user.email ? "mine" : "other"}`}>
+                lastMessage() && <div className={`message__time ${combinedClasses()}`}>
                     {moment(createdAt).format('LT')}
                 </div>  
             }

@@ -250,13 +250,13 @@ export default ({messageInputHeight, recipientHeight}) => {
         for(let i = 0; i < messages.length; i++){
             if(!previousDate){
                 previousDate = moment(messages[i].createdAt).format('L')
-                sortedMessagesByTime.current[previousDate] = [{...messages[i]}]
+                sortedMessagesByTime.current[previousDate] = [{...messages[i], nextMessageUser: messages[i+1] ? messages[i+1].user : null}]
             }else if(!moment(previousDate).isSame(messages[i].createdAt, 'day')){
                 previousDate = moment(messages[i].createdAt).format('L')
-                sortedMessagesByTime.current[previousDate] = [{...messages[i]}]
+                sortedMessagesByTime.current[previousDate] = [{...messages[i], nextMessageUser: messages[i+1] ? messages[i+1].user : null}]
             }
             else if(sortedMessagesByTime.current[moment(messages[i].createdAt).format('L')]){
-                sortedMessagesByTime.current[moment(messages[i].createdAt).format('L')] = [...sortedMessagesByTime.current[moment(messages[i].createdAt).format('L')], messages[i]]
+                sortedMessagesByTime.current[moment(messages[i].createdAt).format('L')] = [...sortedMessagesByTime.current[moment(messages[i].createdAt).format('L')], {...messages[i], nextMessageUser: messages[i+1] ? messages[i+1].user : null}]
             }
         }
         // messages.map(message => {
