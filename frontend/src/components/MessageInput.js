@@ -11,6 +11,7 @@ export default forwardRef(({setmessageInputHeight},ref) => {
     const textArea = useRef()
 
     const [content, setContent] = useState("")
+    const audio = useRef(new Audio('/audio/sent_message.mp3'))
 
     const socket = useSelector(state => state.socket)
 
@@ -77,14 +78,14 @@ export default forwardRef(({setmessageInputHeight},ref) => {
     const handleOnSubmit = async(e) => {     
         if(e.key=== "Enter" && emails.length > 0){
             //make a fetch request to the backend to create new convo
-        //  debugger
-            
+
             handleResetInput()
             // console.log(textArea.current.value)
             const errors = await dispatch(sendMessageToConversation(emails,content,user))
             if(errors){
                 return console.log(errors)
             }
+            audio.current.play()
         }
 
         else{
