@@ -2,8 +2,8 @@
     color: $dark-white;
     background: $light-grey;
     height: 100vh;
-    // width: 35rem;
-    min-width: 271px;
+    width: 270px;
+    // min-width: 270px;
     border-right: 1px solid black;
 }
 
@@ -15,7 +15,7 @@
 
 .side-bar__action {
     padding-top: 1rem;
-    // display: flex;
+    display: flex;
    .text_input{
        margin-right: 2rem;
    }

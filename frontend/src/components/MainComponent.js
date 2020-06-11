@@ -35,11 +35,9 @@ export default () => {
             audio.play()
         }
     }, [playing])
-    
+
     useEffect(() => {
         const establishSocket = io(ENDPOINT)
-        console.log(music)
-        // music.mute()
         establishSocket.emit("online", user)
         establishSocket.on('newConversation', (newConversation) => {
             notification(newConversation)

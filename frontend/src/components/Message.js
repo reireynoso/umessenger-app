@@ -21,7 +21,7 @@ export default ({users=[], message: {content, user, createdAt, nextMessageUser}}
                 </div>  
             }
             <div className={`message ${checkIfMineAndLast()}`}>
-                {!user ? <img className="segment__typing" src="/image/typing_dots.gif"/> : content}
+                {!user ? <img alt="typing-gif" className="segment__typing" src="/image/typing_dots.gif"/> : content}
             </div>
             {
                 lastMessage() && <div className={`message__time ${checkIfMineAndLast()}`}>

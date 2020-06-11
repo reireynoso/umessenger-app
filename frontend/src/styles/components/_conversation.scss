@@ -1,5 +1,6 @@
 .conversation {
     // rough estimation to enable max-width for .message to be percentage and responsive
-    width: calc(100vw - 271px);
+    width: calc(100vw - 270px);
     color: $dark-white;
+    min-width: 300px;
 }
