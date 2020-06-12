@@ -9,7 +9,7 @@
     max-height: 8rem;
     height: 2rem;
     width: 100%;
-    overflow-x: scroll;
+    overflow-y: auto;
     display: block;
     color: $dark-white;
     outline: none;
@@ -17,5 +17,4 @@
     border-radius: 5px;
     background: $light-grey;
     resize: none;
-    overflow-y: hidden;
 }

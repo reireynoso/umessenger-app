@@ -5,7 +5,7 @@
     min-height: 10rem;
     border-bottom: 1px solid $dark-white;
     // padding-top: 5rem;
-    overflow-x: scroll;
+    // overflow-y: auto;
     p{
         margin: 0;
         padding-right: 1rem;
@@ -24,7 +24,7 @@
     padding: 0 2rem;
     font-size: 2rem;   
     max-height: 6rem; 
-    overflow-x: scroll;
+    overflow-y: scroll;
 }
 
 .recipient__email-input{

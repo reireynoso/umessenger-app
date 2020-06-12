@@ -10,5 +10,25 @@ body {
     color: $dark-grey;
     font-family: Helvitica, Arial, sans-serif;
     font-size: $m-size;
-    line-height: 1.6;
+    line-height: 1.4;
 }
+
+// ::-webkit-scrollbar {
+//     width: 2px;
+//   }
+  
+//   /* Track */
+//   ::-webkit-scrollbar-track {
+//     background: #f1f1f1;
+//     overflow-y: auto;
+//   }
+  
+//   /* Handle */
+//   ::-webkit-scrollbar-thumb {
+//     background: #888;
+//   }
+  
+//   /* Handle on hover */
+//   ::-webkit-scrollbar-thumb:hover {
+//     background: #555;
+//   }
