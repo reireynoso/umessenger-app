@@ -1,8 +1,9 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import {useSelector, useDispatch} from 'react-redux'
 import SegmentConversation from './SegmentConversation'
 
-import {removeSelectedConversation, resetConversations} from '../actions/conversation'
+import {matchConversations} from '../selectors/conversation'
+import {removeSelectedConversation, resetConversations, setSearchConversation} from '../actions/conversation'
 import {logOutUser} from '../actions/user'
 
 export default () => {
@@ -11,7 +12,12 @@ export default () => {
     const socket = useSelector(state => state.socket)
     const user = useSelector(state => state.user)
     const selectedConversation = useSelector(state => state.conversation.selectedConversation)
+    const searchTerm = useSelector(state => state.conversation.searchTerm)
 
+    // useEffect(() => {
+    //     console.log(searchTerm)
+        
+    // }, [searchTerm])
     const handleLogOut = () => {
         const data = {selectedConversation,user,content:""}
         if(socket.on && selectedConversation){         
@@ -26,12 +32,12 @@ export default () => {
             <div className="side-bar__header">
                 <button className="button button__log-out" onClick={handleLogOut}>Log Out</button>
                 <div className="side-bar__action">
-                    <input className="text_input" type="text"/>
+                    <input className="text_input" placeholder="Search for names..." type="text" onChange={(e) => dispatch(setSearchConversation(e.target.value))}/>
                     <button className="button button__primary" onClick={() => dispatch(removeSelectedConversation())}>New</button>
                 </div>
             </div>
             {
-                conversations.map(conversation => 
+                matchConversations(conversations,searchTerm).map(conversation => 
                     <SegmentConversation 
                         key={conversation._id}
                         conversations={conversations} 

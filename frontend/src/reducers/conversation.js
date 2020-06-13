@@ -1,7 +1,8 @@
 const conversation = (state = {
     conversations: [],
     selectedConversation: {},
-    emails: []
+    emails: [],
+    searchConversation: ""
 }, {type,payload}) => {
     // const onlyEmails = selectedConversation.users.map(user => user.email)
     switch(type){    
@@ -10,7 +11,8 @@ const conversation = (state = {
             return {
                 selectedConversation: payload[0] || {},
                 conversations: payload,
-                emails: initialPayload.map(user => user.email)
+                emails: initialPayload.map(user => user.email),
+                searchConversation: ""
             }
         case "ADD_OR_UPDATE_CONVERSATION":
             //remove the old conversation if it exists,
@@ -46,7 +48,8 @@ const conversation = (state = {
             return {
                 conversations: [],
                 selectedConversation: {},
-                emails: []
+                emails: [],
+                searchConversation: ""
             }
         case "ADD_EMAIL":
             return {
@@ -57,6 +60,11 @@ const conversation = (state = {
             return {
                 ...state,
                 emails: state.emails.filter(email => email!== payload)
+            }
+        case "SET_SEARCH_TERM":
+            return {
+                ...state,
+                searchTerm: payload
             }
         default: return state
     }

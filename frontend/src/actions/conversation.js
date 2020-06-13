@@ -38,6 +38,11 @@ export const resetConversations = () => ({
     type: "RESET_CONVERSATIONS"
 })
 
+export const setSearchConversation = (searchTerm) => ({
+    type: "SET_SEARCH_TERM",
+    payload: searchTerm
+})
+
 export const sendMessageToConversation = (emails,content,user) => dispatch => {
     // debugger
     const token = localStorage.getItem("token")

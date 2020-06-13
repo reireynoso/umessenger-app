@@ -28,3 +28,12 @@ export const removeLoggedInUserFromConversation = (data,userObj) => {
     // }
     return formatConversation(data,userObj)
 }
+
+export const matchConversations = (conversations, searchTerm="") => {
+    const filteredConversations = conversations.filter(conversation => {
+        if(conversation.users.some(user => user.name.toLowerCase().includes(searchTerm.toLowerCase()))){
+            return conversation
+        }
+    })
+    return filteredConversations
+}
