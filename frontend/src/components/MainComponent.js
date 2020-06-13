@@ -45,6 +45,7 @@ export default () => {
         })
         establishSocket.on('existingConversation', (existingConversation) => {
             notification(existingConversation)
+            console.log(existingConversation)
             dispatch(addOrUpdateConversation(removeLoggedInUserFromConversation(existingConversation,user)))
         })
         dispatch(setSocket(establishSocket))

@@ -31,6 +31,10 @@ export default forwardRef(({setmessageInputHeight},ref) => {
         }
     },[selectedConversation._id])
 
+    useEffect(() => {
+        console.log('looking', selectedConversation)
+    }, [selectedConversation])
+
     const handleResetInput = () =>{
         // console.log('logged out')
         // const data = {selectedConversation,user,content:""}

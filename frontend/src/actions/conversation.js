@@ -44,7 +44,6 @@ export const setSearchConversation = (searchTerm) => ({
 })
 
 export const sendMessageToConversation = (emails,content,user) => dispatch => {
-    // debugger
     const token = localStorage.getItem("token")
     return fetch(`${apiUrl}/conversations`, {
         method: "POST",
@@ -60,7 +59,6 @@ export const sendMessageToConversation = (emails,content,user) => dispatch => {
     })
     .then(res => res.json())
     .then(data => {
-        // debugger
         if(data.errors){
             // console.log(data.errors)
             return data.errors
