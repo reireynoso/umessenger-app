@@ -20,3 +20,8 @@
        margin-right: 2rem;
    }
 }
+
+.segment-conversation__container {
+    overflow-y: scroll;
+    height: calc(100% - 100px);
+}

@@ -70,8 +70,8 @@ export default ({conversations,socket, conversation, conversation: {messages, us
         //function truncates the names and message contents
         const condition = (infoToTrunc === "message")
         const info = condition ? messages[messages.length-1].content : users.map(user => user.name).join(', ')
-        let shortenedInfo = info.slice(0,(condition ? 18 : 10)) 
-        if(info.length > (condition ? 18 : 10)){
+        let shortenedInfo = info.slice(0,(condition ? 20 : 12)) 
+        if(info.length > (condition ? 20 : 12)){
             return shortenedInfo + '...'
         }
         return shortenedInfo

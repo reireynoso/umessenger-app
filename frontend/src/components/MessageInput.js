@@ -31,10 +31,6 @@ export default forwardRef(({setmessageInputHeight},ref) => {
         }
     },[selectedConversation._id])
 
-    useEffect(() => {
-        console.log('looking', selectedConversation)
-    }, [selectedConversation])
-
     const handleResetInput = () =>{
         // console.log('logged out')
         // const data = {selectedConversation,user,content:""}
@@ -80,7 +76,7 @@ export default forwardRef(({setmessageInputHeight},ref) => {
     }
     
     const handleOnSubmit = async(e) => {     
-        if(e.key=== "Enter" && emails.length > 0){
+        if(e.key=== "Enter" && emails.length > 0 && content){
             //make a fetch request to the backend to create new convo
 
             handleResetInput()
