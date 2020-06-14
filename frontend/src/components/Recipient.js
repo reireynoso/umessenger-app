@@ -10,7 +10,8 @@ export default forwardRef((props,ref) => {
     const emails = useSelector(state => state.conversation.emails)
     
     const [recipient, setRecipient] = useState("")
-    const [error, setError] = useState(false)
+    const [error, setError] = useState([])
+    // 
 
     useEffect(() => {
         if(ref.current){
@@ -20,7 +21,7 @@ export default forwardRef((props,ref) => {
     }, [myRef.current ? myRef.current.offsetHeight : null])
 
     useEffect(() => {
-        setError(false)
+        setError("")
     }, [selectedConversation])
 
     const scrollToRef = () => {
@@ -42,29 +43,43 @@ export default forwardRef((props,ref) => {
     const handleKeyPress = (e) => {
         //email regex referenced from https://www.w3resource.com/javascript/form/email-validation.php
         //check if recipient is in the email format before adding it to the array of emails
-        if(e.key === "Enter" && /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(recipient) && !emails.includes(recipient) && (recipient !== user.email)){
+        if(e.key === "Enter"){
             // console.log((recipient !== user.email))
             // setEmails(prevEmails => [...prevEmails, recipient])
-            dispatch(addEmail(recipient))
-            setError(false)
-            setRecipient("")
-        }
-        else{
-            setError(true)
+            if(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(recipient) && !emails.includes(recipient) && (recipient !== user.email)){
+                dispatch(addEmail(recipient))
+                setError("")
+                setRecipient("")
+
+                // console.log(error)
+            }
+            else{
+                if(!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(recipient)){  
+                    setError("Email must be in right format (Ex. something@sample.com)")
+                }
+          
+                if(emails.includes(recipient)){    
+                    setError("Email is included the list")  
+                }
+               
+                if(recipient === user.email){
+                    setError("Email cannot be yours")
+                }
+
+            }
         }
     }
 
     const handleEmailChange = (e) => {
         if(!e.target.value){
-            setError(false)
+            setError("")
         }
         setRecipient(e.target.value)
     }
 
-
     return (
         <div ref={ref} className="recipient">
-            <div className="recipient__errors-list">{error && "Please write email in the right format"}</div>
+            <div className="recipient__errors-list">{error}</div>
             <div className="recipient__email-list">
                 <p>To:</p>
                 {
