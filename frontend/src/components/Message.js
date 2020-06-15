@@ -22,6 +22,7 @@ export default ({users=[], message: {content, user, createdAt, nextMessageUser}}
             }
             <div className={`message ${checkIfMineAndLast()}`}>
                 {!user ? <img alt="typing-gif" className="segment__typing" src="/image/typing_dots.gif"/> : content}
+                <div className={`message__tooltip ${checkIfMineOrOther()}`}>{moment(createdAt).format('MMMM Do YYYY, h:mm:ss a')}</div>
             </div>
             {
                 lastMessage() && <div className={`message__time ${checkIfMineAndLast()}`}>

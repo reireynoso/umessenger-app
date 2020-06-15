@@ -3,7 +3,7 @@
     flex-direction: column;
     // padding: 1rem $m-size;
     padding: 0 $m-size;
-    position: relative;
+    // position: relative;
 }
 
 .message {
@@ -12,6 +12,37 @@
     margin: 5px 0;
     max-width: 50%;
     word-wrap: break-word;
+    position: relative;
+}
+
+.message__tooltip {
+    color: $dark-white;
+    position: absolute;
+    z-index: 20;
+    opacity: 0;
+    border-radius: 10px;
+    text-align: center;
+    padding: 5px;
+    width: 180px;
+    font-size: small;
+    border: 1px solid $dark-white;
+    transition: opacity 0.1s ease-in;
+}
+
+.message__tooltip.mine{
+    top: 110%;
+    right: 40%;
+    background: $grey;
+}
+
+.message__tooltip.other{
+    top: 110%;
+    left: 40%;
+    background: $grey;
+}
+
+.message:hover .message__tooltip{
+    opacity: 1;
 }
 
 .message__nametag {
@@ -43,8 +74,8 @@
     content: "";
     position: absolute;
     z-index: 0;
-    bottom: 20px;
-    left: 12px;
+    bottom: -4px;
+    left: -8px;
     height: 15px;
     width: 20px;
     background: $grey;
@@ -55,8 +86,8 @@
     content: "";
     position: absolute;
     z-index: 1;
-    bottom: 20px;
-    left: 6px;
+    bottom: -4px;
+    left: -10px;
     width: 10px;
     height: 20px;
     background: $dark-grey;
@@ -67,8 +98,8 @@
     content: "";
     position: absolute;
     z-index: 0;
-    bottom: 20px;
-    right: 12px;
+    bottom: -4px;
+    right: -8px;
     height: 15px;
     width: 20px;
     background: linear-gradient(to bottom, #0085D1 100%, #00D0EA 50%);
@@ -79,8 +110,8 @@
     content: "";
     position: absolute;
     z-index: 1;
-    bottom: 20px;
-    right: 6px;
+    bottom: -4px;
+    right: -10px;
     width: 10px;
     height: 20px;
     background: $dark-grey;

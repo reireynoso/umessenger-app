@@ -23,7 +23,7 @@ export default () => {
     const notification = (conversation) => {
         const messages = conversation.messages
         const lastMessage = messages[messages.length-1]
-        if(lastMessage.user.email !== user.email){
+        if(lastMessage.user.email !== user.email && !playing){
             setPlaying(true)
             setTimeout(() => {
                 setPlaying(false)
@@ -45,7 +45,6 @@ export default () => {
         })
         establishSocket.on('existingConversation', (existingConversation) => {
             notification(existingConversation)
-            console.log(existingConversation)
             dispatch(addOrUpdateConversation(removeLoggedInUserFromConversation(existingConversation,user)))
         })
         dispatch(setSocket(establishSocket))
