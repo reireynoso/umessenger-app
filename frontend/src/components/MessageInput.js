@@ -8,6 +8,7 @@ export default forwardRef(({setmessageInputHeight},ref) => {
     const user = useSelector(state => state.user)
     const emails = useSelector(state => state.conversation.emails)
     const selectedConversation = useSelector(state => state.conversation.selectedConversation)
+    const conversationError = useSelector(state => state.errors.conversationError)
     
     const textArea = useRef()
 
@@ -31,6 +32,12 @@ export default forwardRef(({setmessageInputHeight},ref) => {
            resetDivHeight()
         }
     },[selectedConversation._id])
+
+    useEffect(() => {
+        if(content){
+            dispatch(emptyConversationError())
+        }
+    }, [content])
 
     const handleResetInput = () =>{
         // console.log('logged out')
@@ -77,25 +84,28 @@ export default forwardRef(({setmessageInputHeight},ref) => {
     }
     
     const handleOnSubmit = async(e) => {     
-        if(e.key=== "Enter" && emails.length > 0 && content){
+        if(e.key=== "Enter"){
             //make a fetch request to the backend to create new convo
-
-            handleResetInput()
-            // console.log(textArea.current.value)
-            const errors = await dispatch(sendMessageToConversation(emails,content,user))
-            if(errors){
-                return dispatch(setConversationError(errors[0]))
+            if(!content){
+                dispatch(setConversationError("Message cannot be empty!"))
             }
-            audio.current.play()
-        }
 
-        else{
-            //please enters recipients error
+            if(emails.length > 0 && content){
+                handleResetInput()
+                // console.log(textArea.current.value)
+                const errors = await dispatch(sendMessageToConversation(emails,content,user))
+                if(errors){
+                    return dispatch(setConversationError(errors[0]))
+                }
+                audio.current.play()
+            }
+
+            
         }
     }
     return(
         <div ref={ref} className="content">
-            <textarea ref={textArea} type="text" className="content__input" value={content} onKeyPress={handleOnSubmit} onChange={handleOnChange} placeholder="uMessage..."/>
+            <textarea ref={textArea} type="text" className={`content__input ${conversationError ? "error" : null}`} value={content} onKeyPress={handleOnSubmit} onChange={handleOnChange} placeholder="uMessage..."/>
         </div>    
     )
 })
