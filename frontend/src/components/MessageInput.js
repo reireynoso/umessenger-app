@@ -1,6 +1,7 @@
 import React, {useState,useEffect,useRef, forwardRef, useLayoutEffect} from 'react'
 import {useSelector, useDispatch} from 'react-redux'
 import {sendMessageToConversation} from '../actions/conversation'
+import {setConversationError, emptyConversationError} from '../actions/errors'
 
 export default forwardRef(({setmessageInputHeight},ref) => {
     const dispatch = useDispatch()
@@ -83,7 +84,7 @@ export default forwardRef(({setmessageInputHeight},ref) => {
             // console.log(textArea.current.value)
             const errors = await dispatch(sendMessageToConversation(emails,content,user))
             if(errors){
-                return console.log(errors)
+                return dispatch(setConversationError(errors[0]))
             }
             audio.current.play()
         }

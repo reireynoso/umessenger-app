@@ -30,10 +30,6 @@ export const removeLoggedInUserFromConversation = (data,userObj) => {
 }
 
 export const matchConversations = (conversations, searchTerm="") => {
-    const filteredConversations = conversations.filter(conversation => {
-        if(conversation.users.some(user => user.name.toLowerCase().includes(searchTerm.toLowerCase()))){
-            return conversation
-        }
-    })
+    const filteredConversations = conversations.filter(conversation => (conversation.users.some(user => user.name.toLowerCase().includes(searchTerm.toLowerCase()))))
     return filteredConversations
 }

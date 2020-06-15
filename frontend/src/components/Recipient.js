@@ -1,6 +1,7 @@
 import React, {useState, useRef, useEffect, forwardRef} from 'react'
 import {useSelector, useDispatch} from 'react-redux'
 import {addEmail,removeEmail} from '../actions/conversation'
+import {setConversationError, emptyConversationError} from '../actions/errors'
 
 export default forwardRef((props,ref) => {
     const myRef = useRef(null)
@@ -8,10 +9,9 @@ export default forwardRef((props,ref) => {
     const selectedConversation = useSelector(state => state.conversation.selectedConversation)
     const user = useSelector(state => state.user)
     const emails = useSelector(state => state.conversation.emails)
+    const conversationError = useSelector(state => state.errors.conversationError)
     
     const [recipient, setRecipient] = useState("")
-    const [error, setError] = useState([])
-    // 
 
     useEffect(() => {
         if(ref.current){
@@ -21,7 +21,7 @@ export default forwardRef((props,ref) => {
     }, [myRef.current ? myRef.current.offsetHeight : null])
 
     useEffect(() => {
-        setError("")
+        emptyConversationError()
     }, [selectedConversation])
 
     const scrollToRef = () => {
@@ -31,9 +31,7 @@ export default forwardRef((props,ref) => {
     }
 
     useEffect(() => {
-        // if(myRef.current){
             scrollToRef()
-        // }
     }, [emails.length])
 
     //check whether a conversation is selected.
@@ -48,38 +46,36 @@ export default forwardRef((props,ref) => {
             // setEmails(prevEmails => [...prevEmails, recipient])
             if(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(recipient) && !emails.includes(recipient) && (recipient !== user.email)){
                 dispatch(addEmail(recipient))
-                setError("")
+                // setError("")
+                dispatch(emptyConversationError())
                 setRecipient("")
-
-                // console.log(error)
             }
             else{
                 if(!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(recipient)){  
-                    setError("Email must be in right format (Ex. something@sample.com)")
+                    dispatch(setConversationError("Email must be in right format (Ex. something@sample.com)"))
                 }
           
                 if(emails.includes(recipient)){    
-                    setError("Email is included the list")  
+                    dispatch(setConversationError("Email is included the list"))  
                 }
                
                 if(recipient === user.email){
-                    setError("Email cannot be yours")
+                    dispatch(setConversationError("Email cannot be yours"))
                 }
-
             }
         }
     }
 
     const handleEmailChange = (e) => {
         if(!e.target.value){
-            setError("")
+            dispatch(emptyConversationError())
         }
         setRecipient(e.target.value)
     }
 
     return (
         <div ref={ref} className="recipient">
-            <div className="recipient__errors-list">{error}</div>
+            <div className="recipient__errors-list">{conversationError}</div>
             <div className="recipient__email-list">
                 <p>To:</p>
                 {
