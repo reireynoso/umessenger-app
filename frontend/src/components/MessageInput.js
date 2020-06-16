@@ -87,7 +87,12 @@ export default forwardRef(({setmessageInputHeight},ref) => {
         if(e.key=== "Enter"){
             //make a fetch request to the backend to create new convo
             if(!content){
-                dispatch(setConversationError("Message cannot be empty!"))
+                return dispatch(setConversationError("Message cannot be empty!"))
+            }
+
+            if(emails.length === 0 && content){
+                e.preventDefault()
+                return dispatch(setConversationError("Please enter a recipient!"))
             }
 
             if(emails.length > 0 && content){

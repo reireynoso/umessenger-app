@@ -12,6 +12,10 @@ router.post("/conversations", auth, async(req,res) => {
         const recipients = [...req.body.emails, req.user.email]
         // console.log(recipients)
         const content = req.body.content
+
+        if(!content){
+            throw "Message cannot be empty!"
+        }
         //query for users in database whose names are included in list
         //$in email is included in the given list
         const users = await User.checkIfEmailsAreValid(recipients) 
@@ -100,7 +104,8 @@ router.post("/conversations", auth, async(req,res) => {
 
         // res.send({convos})
     }catch(e){
-        res.send({errors: ["An email provided is invalid."]})
+        // res.send({errors: ["An email provided is invalid."]})
+        res.send({errors: [e]})
     }
 })
 

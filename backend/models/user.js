@@ -125,7 +125,7 @@ userSchema.statics.checkIfEmailsAreValid = async(emailList) => {
         }
     })
     if(users.length !== emailList.length){
-        throw new Error()
+        throw "An email provided is invalid"
     }
     return users.map(user => user.toInfo())
 }

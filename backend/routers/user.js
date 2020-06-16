@@ -35,7 +35,7 @@ router.get('/test', async(req,res,next) => {
 router.get('/photo/:id', async(req,res) => {
     try{
         const user = await User.findById(req.params.id)
-        console.log(user)
+
         res.set('Content-Type', 'image/png')
         res.send(user.image_storage)
     }catch(e){
