@@ -111,6 +111,9 @@ export default forwardRef(({setmessageInputHeight},ref) => {
     return(
         <div ref={ref} className="content">
             <textarea ref={textArea} type="text" className={`content__input ${conversationError ? "error" : null}`} value={content} onKeyPress={handleOnSubmit} onChange={handleOnChange} placeholder="uMessage..."/>
+            <div id="emoji-container">
+                <i class="fas fa-smile"></i>
+            </div>
         </div>    
     )
 })
