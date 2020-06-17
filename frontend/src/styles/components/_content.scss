@@ -33,8 +33,31 @@
     > i {
         display: inline-block;
     }
+
+    > i:hover {
+        color: #0085D1;
+        transition: color 0.1s ease-in;
+    }
 }
 
 .error {
     border: 1px solid $cool-red;
+}
+
+.pickerContainer {
+    animation: fadeIn 0.5s ease-in-out;
+    transform-origin: 100% 100% 0;
+}
+
+@keyframes fadeIn {
+    from {
+    //     // transform-origin: bottom right;
+        transform: scale(0);
+    }
+
+    to {
+    //     // transform-origin: top;
+        transform: scale(1);
+    }
+    
 }
