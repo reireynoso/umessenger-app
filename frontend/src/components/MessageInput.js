@@ -1,5 +1,7 @@
 import React, {useState,useEffect,useRef, forwardRef, useLayoutEffect} from 'react'
 import {useSelector, useDispatch} from 'react-redux'
+import "emoji-mart/css/emoji-mart.css"
+import {Picker} from 'emoji-mart'
 import {sendMessageToConversation} from '../actions/conversation'
 import {setConversationError, emptyConversationError} from '../actions/errors'
 
@@ -17,6 +19,8 @@ export default forwardRef(({setmessageInputHeight},ref) => {
 
     const socket = useSelector(state => state.socket)
 
+    const [emojiPickerState, setEmojiPicker] = useState(false)
+
     useLayoutEffect(() => {
         if(ref.current){
             ref.current.height = ref.current.offsetHeight
@@ -32,6 +36,16 @@ export default forwardRef(({setmessageInputHeight},ref) => {
            resetDivHeight()
         }
     },[selectedConversation._id])
+
+    useEffect(() => {
+        const documentObj = document
+        documentObj.addEventListener('click', closeEmoji)
+        // debugger
+        return () => {
+            // windowObject.removeEventListener('click', closeEmoji)
+            documentObj.removeEventListener('click', closeEmoji)
+        }
+    }, [emojiPickerState])
 
     useEffect(() => {
         if(content){
@@ -108,11 +122,40 @@ export default forwardRef(({setmessageInputHeight},ref) => {
             
         }
     }
+
+    const closeEmoji = (e) => {
+        // maybe an issue with performance to add event listener to document
+        if(e.target.className !== "emoji-mart emoji-mart-dark" && emojiPickerState){
+            setEmojiPicker(false)
+        }
+    }
+
+    const pickerStyle = () => ({
+        position: "absolute", 
+        bottom: ref.current.offsetHeight, 
+        right: 0, 
+        zIndex:30,
+        // height: "300px",
+        // width: "300px"
+    })
+
     return(
         <div ref={ref} className="content">
+            {
+                emojiPickerState && <Picker
+                    title="Pick your emoji"
+                    emoji="point_up"
+                    theme="dark"
+                    style={pickerStyle()}
+                    onSelect={emoji => {
+                        setContent(content + emoji.native)
+                        setEmojiPicker(false)
+                    }}
+                />
+            }
             <textarea ref={textArea} type="text" className={`content__input ${conversationError ? "error" : null}`} value={content} onKeyPress={handleOnSubmit} onChange={handleOnChange} placeholder="uMessage..."/>
-            <div id="emoji-container">
-                <i class="fas fa-smile"></i>
+            <div onClick={() => setEmojiPicker(!emojiPickerState)} id="emoji-container">
+                <i className="fas fa-smile"></i>
             </div>
         </div>    
     )
