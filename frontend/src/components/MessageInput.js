@@ -141,23 +141,22 @@ export default forwardRef(({setmessageInputHeight},ref) => {
     return(
         <div ref={ref} className="content">
             {
-                emojiPickerState && <div 
+               <div 
                     ref={pickerRef}
-                    className="pickerContainer"
-                    style={pickerStyle()}
+                    className={emojiPickerState? "fadeIn" : "fadeOut"}
+                    style={ref.current ? pickerStyle(): null}
                     >
                         <Picker
                         title="Pick your emoji"
                         emoji="point_up"
                         theme="dark"
-                        // style={pickerStyle()}
                         onSelect={emoji => {
                             setContent(content + emoji.native)
                             setEmojiPicker(false)
                             textArea.current.focus()
                         }}
                     />
-                    </div>
+                </div>
             }
             <textarea ref={textArea} type="text" className={`content__input ${conversationError ? "error" : null}`} value={content} onKeyPress={handleOnSubmit} onChange={handleOnChange} placeholder="uMessage..."/>
             <div onClick={() => setEmojiPicker(!emojiPickerState)} id="emoji-container">

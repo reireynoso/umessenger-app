@@ -44,20 +44,76 @@
     border: 1px solid $cool-red;
 }
 
-.pickerContainer {
-    animation: fadeIn 0.5s ease-in-out;
+.fadeIn {
+    visibility: visible;
+    transition: visibility 0.3s ease-in-out;
+    animation: fadeIn 0.3s ease-in-out;
     transform-origin: 100% 100% 0;
 }
 
 @keyframes fadeIn {
     from {
-    //     // transform-origin: bottom right;
-        transform: scale(0);
+        transform: scale(0.1);
+    }
+    to {
+        transform: scale(1);
+    }   
+}
+
+.fadeOut {
+    visibility: hidden;
+    transition: visibility 0.3s ease-in-out;
+    animation: fadeOut 0.3s ease-in-out;
+    transform-origin: 100% 100% 0;
+}
+
+@keyframes fadeOut {
+    from {
+        transform: scale(1);
     }
 
     to {
-    //     // transform-origin: top;
-        transform: scale(1);
+        transform: scale(0.1);
     }
-    
 }
+
+// .emojiContainer {
+//     width: 0;
+//     height: 0;
+// }
+
+// @keyframes fadeIn {
+//     from {
+//         width: 0;
+//         height: 0
+//     }
+
+//     to {
+//         width: 300px;
+//         height: 300px;
+//     }
+// }
+
+// .fadeIn {
+//     animation: fadeIn 0.3s ease-in-out;
+//     width: auto;
+//     height: auto;
+// }
+
+// .fadeOut {
+//     animation: fadeOut 0.3s ease-in-out;
+//     width: 0;
+//     height: 0;
+// }
+
+// @keyframes fadeOut {
+//     from {
+//         width: 300px;
+//         height: 300px;
+//     }
+
+//     to {
+//         width: 0;
+//         height: 0;
+//     }
+// }
