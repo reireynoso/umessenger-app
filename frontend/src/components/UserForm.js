@@ -16,10 +16,6 @@ const UserForm = ({location, history}) => {
 
     const [errors,setErrors] = useState([])
 
-    const checkRoute = () => {
-        return route === "signup" ? "Sign Up" : "Login"
-    }
-
     const handleSetPhone = (e) => {
         //format() add dashes to the the input field.
         //unformattedPhone will remove those dashes and join the number strings together
@@ -81,20 +77,11 @@ const UserForm = ({location, history}) => {
         }
     }
 
-    const whichButton = () => {
-        if(route === 'signup'){
-            return <button type="button" className="toggle-btn" onClick={() => history.push('/login')}>Login</button>
-        }else if(route === 'login'){
-            return <button type="button" className="toggle-btn" onClick={() => history.push('/signup')}>Sign Up</button>
-        }
-        
-    }
-
     const handleSubmit = async(e) => {
         e.preventDefault()
         const res = await dispatch(fetchUser(route, whichDataToSend()))
         if(res && res.errors){
-            console.log(res.errors)
+            // console.log(res.errors)
             setErrors(res.errors)
         }
         // else{
@@ -114,26 +101,28 @@ const UserForm = ({location, history}) => {
     const formatName = () => {
         if(image.name.length > 12){
             // const fileType = "." + image.name.split(".")[image.name.split(".").length - 1]
-            const fileName = image.name.slice(0, 15) + "..." 
+            const fileName = image.name.slice(0, 16) + "..." 
             return fileName
         }
-        return "None"
+        return "No file name"
     }
+
+    const checkRoute = () => route === "signup"
 
     return(
         <div className="form__container">
             <div className="form__inner-container">
                 <h1 className="form__title">uMessenger</h1>
                 <div className="form__button-box">
-                    <div id="btn" className={`${route === "signup" ? "signup" : "login"}`}></div>
-                    <button type="button" className={`toggle-btn ${route === "login" ? "toggle-selected" : ""}`} onClick={() => optionClick('/login')}>Login</button>
-                    <button type="button" className={`toggle-btn ${route === "signup" ? "toggle-selected": ""}`} onClick={() => optionClick('/signup')}>Sign Up</button>
+                    <div id="btn" className={`${checkRoute() ? "signup" : "login"}`}></div>
+                    <button type="button" className={`toggle-btn ${!checkRoute() ? "toggle-selected" : ""}`} onClick={() => optionClick('/login')}>Login</button>
+                    <button type="button" className={`toggle-btn ${checkRoute() ? "toggle-selected": ""}`} onClick={() => optionClick('/signup')}>Sign Up</button>
                 </div>
                 {
                     !user.loggedIn ? 
-                        <form className={`form__input-group ${route === "signup" ? "signup-group" : "login-group"}`} onSubmit={handleSubmit}>
+                        <form className={`form__input-group ${checkRoute() ? "signup-group" : "login-group"}`} onSubmit={handleSubmit}>
                             {
-                                route === "signup" ? <React.Fragment>
+                                checkRoute() ? <React.Fragment>
                                     <input className="form__input-field" type="text" placeholder="Name" onChange={(e) => setName(e.target.value)}/>
                                     <input className="form__input-field" type="text" value={format()} placeholder="Phone" onChange={handleSetPhone}/>
                                 </React.Fragment>
@@ -143,7 +132,7 @@ const UserForm = ({location, history}) => {
                             <input className="form__input-field" type="text" placeholder="Email" onChange={(e) => setEmail(e.target.value)}/>
                             <input className="form__input-field" type="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)}/>
                             {
-                                route === "signup" &&  <div>
+                                checkRoute() &&  <div>
                                     <input id="form__input-file" type="file" name="image" onChange={(e) => setImage(e.target.files[0] === undefined ? {} : e.target.files[0])}/>
                                     <label htmlFor="form__input-file">
                                         <i className="fas fa-upload"></i>
@@ -151,7 +140,7 @@ const UserForm = ({location, history}) => {
                                     </label>
                                     <span>
                                         <strong>Choose file:</strong>
-                                        <span id="file-name">{image.name ? formatName() : "None"}</span>
+                                        <span id="file-name">{image.name ? formatName() : "No file"}</span>
                                     </span>
                                 </div>
                             }

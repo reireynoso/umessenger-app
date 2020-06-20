@@ -149,7 +149,7 @@ export default forwardRef(({setmessageInputHeight},ref) => {
                         emoji="point_up"
                         theme="dark"
                         onSelect={emoji => {
-                            setContent(content + emoji.native)
+                            setContent(content + emoji.native + " ")
                             setEmojiPicker(false)
                             textArea.current.focus()
                         }}
