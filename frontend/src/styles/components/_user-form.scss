@@ -1,0 +1,161 @@
+.form__container {
+    width: 100%;
+    height: 100%;
+    min-width: 380px;
+    background: $dark-grey;
+    background-position: center;
+    background-size: cover;
+    position: absolute;
+    text-align: center;
+    p, h1, ul {
+        margin: 0;
+    }
+}
+
+.form__inner-container {
+    width: 380px;
+    height: 520px;
+    position: relative;
+    margin: 6% auto;
+    background: $dark-white;
+    padding: 5px;
+    overflow: hidden;
+}
+
+.form__title {
+    color: $cool-blue;
+}
+
+.form__button-box {
+    width: 220px;
+    margin: 1.1rem auto;
+    position: relative;
+    box-shadow: 0 0 20px 9px rgb(154, 212, 230);
+    border-radius: 30px;
+}
+
+.form__input-group{
+    // top: 100px;
+    // left: 0;
+    position: relative;
+    width: 280px;
+    // transition: 0.5s;
+    // transition: 0.5s ease-in;
+    margin: auto;
+}
+
+.signup-group {
+    right: 0px;
+    animation: signup 0.5s ease-in;
+}
+
+@keyframes signup {
+    from {
+        right: -400px;
+    }
+    to {
+        right: 0px;
+    }   
+}
+
+.login-group {
+    left: 0px;
+    animation: login 0.5s ease-in;
+}
+
+@keyframes login {
+    from {
+        left: -400px;
+    }
+    to {
+        left: 0px;
+    }   
+}
+
+
+.form__input-field {
+    width: 100%;
+    padding: 8px 0;
+    margin: 5px 0;
+    border-left: 0;
+    border-top: 0;
+    border-right: 0;
+    border-bottom: 1px solid #999;
+    outline: none;
+    background:transparent;
+}
+
+#form__input-file {
+    display: none;
+}
+
+#form__input-file + label {
+    display: block;
+    margin: auto;
+    width: 25rem;
+    background: $cool-blue;
+    padding: 8px;
+    color: $dark-white;
+    border: 2px solid #9ec3ff;
+    border-radius: 9px;
+}
+
+#form__input-file + label:hover {
+    background: #3b73ce;
+    border-color: #729fe7;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.form__submit-btn {
+    width: 80%;
+    padding: 10px 20px;
+    cursor: pointer;
+    display: block;
+    margin: 5px auto;
+    background: linear-gradient(to right, $cool-blue, $cooler-blue);
+    border: 0;
+    outline: none;
+    border-radius: 30px;
+}
+
+.toggle-btn {
+    padding: 10px 30px;
+    cursor: pointer;
+    background: transparent;
+    border: 0;
+    outline: none;
+    position: relative;
+}
+
+.toggle-selected {
+    color: $dark-white;
+}
+
+#btn {
+    top: 0;
+    position: absolute;
+    width: 110px;
+    height: 100%;
+    background: linear-gradient(to right, $cool-blue, $cooler-blue);
+    border-radius: 30px;
+    transition: 0.5s;
+}
+
+.signup {
+    left: 110px;
+}
+
+.login {
+    left: 0px;
+}
+
+.form__errors {
+    padding: 0;
+}
+
+.form__error {
+    list-style: none;
+    color: $cool-red;
+}
+

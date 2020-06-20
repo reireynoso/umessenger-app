@@ -134,8 +134,6 @@ export default forwardRef(({setmessageInputHeight},ref) => {
         bottom: ref.current.offsetHeight, 
         right: 0, 
         zIndex:30,
-        // height: "300px",
-        // width: "300px"
     })
 
     return(

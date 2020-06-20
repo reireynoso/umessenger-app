@@ -54,7 +54,7 @@
 
 .mine {
     align-self: flex-end;
-    background: #0085D1;
+    background: $cool-blue;
 }
 
 .other {
@@ -102,7 +102,7 @@
     right: -8px;
     height: 15px;
     width: 20px;
-    background: linear-gradient(to bottom, #0085D1 100%, #00D0EA 50%);
+    background: linear-gradient(to bottom, $cool-blue 100%, #00D0EA 50%);
     border-bottom-left-radius: 15px;
 }
 

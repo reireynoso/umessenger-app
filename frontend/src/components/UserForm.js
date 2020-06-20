@@ -83,15 +83,9 @@ const UserForm = ({location, history}) => {
 
     const whichButton = () => {
         if(route === 'signup'){
-            return <div>
-                <p>Have an account?</p>
-                <button onClick={() => history.push('/login')}>Login</button>
-            </div>
+            return <button type="button" className="toggle-btn" onClick={() => history.push('/login')}>Login</button>
         }else if(route === 'login'){
-            return <div>
-                <p>No Account? Sign up!</p>
-                <button onClick={() => history.push('/signup')}>Sign Up</button>
-            </div>
+            return <button type="button" className="toggle-btn" onClick={() => history.push('/signup')}>Sign Up</button>
         }
         
     }
@@ -112,40 +106,64 @@ const UserForm = ({location, history}) => {
         // }
     }
 
-    return(
-        <div>
-            <ul>
-                {errors.length > 0 && errors.map((error,index) => <li style={{color:"red"}} key={index+error}>{error}</li>)}
-            </ul>
-            {
-                !user.loggedIn ? 
-                <React.Fragment>
-                    <h1>{checkRoute()}</h1>
-                    <form onSubmit={handleSubmit}>
-                        {
-                            route === "signup" ? <div>
-                                <input type="text" placeholder="Name" onChange={(e) => setName(e.target.value)}/>
-                                <input type="text" value={format()} placeholder="Phone" onChange={handleSetPhone}/>
-                            </div>
-                            :
-                            null 
-                        }
-                        <input type="text" placeholder="Email" onChange={(e) => setEmail(e.target.value)}/>
-                        <input type="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)}/>
-                        {
-                            route === "signup" &&  <input type="file" name="image" onChange={(e) => setImage(e.target.files[0])}/>
-                        }
-                        <input type="submit"/>
-                    </form>
-                    {
-                        whichButton()
-                    }
+    const optionClick = (urlRoute) => {
+        setErrors([])
+        history.push(urlRoute);
+    }
 
-                </React.Fragment>
-                :
-                <Redirect to="/dashboard"/>
-            }
-            
+    const formatName = () => {
+        if(image.name.length > 12){
+            // const fileType = "." + image.name.split(".")[image.name.split(".").length - 1]
+            const fileName = image.name.slice(0, 15) + "..." 
+            return fileName
+        }
+        return "None"
+    }
+
+    return(
+        <div className="form__container">
+            <div className="form__inner-container">
+                <h1 className="form__title">uMessenger</h1>
+                <div className="form__button-box">
+                    <div id="btn" className={`${route === "signup" ? "signup" : "login"}`}></div>
+                    <button type="button" className={`toggle-btn ${route === "login" ? "toggle-selected" : ""}`} onClick={() => optionClick('/login')}>Login</button>
+                    <button type="button" className={`toggle-btn ${route === "signup" ? "toggle-selected": ""}`} onClick={() => optionClick('/signup')}>Sign Up</button>
+                </div>
+                {
+                    !user.loggedIn ? 
+                        <form className={`form__input-group ${route === "signup" ? "signup-group" : "login-group"}`} onSubmit={handleSubmit}>
+                            {
+                                route === "signup" ? <React.Fragment>
+                                    <input className="form__input-field" type="text" placeholder="Name" onChange={(e) => setName(e.target.value)}/>
+                                    <input className="form__input-field" type="text" value={format()} placeholder="Phone" onChange={handleSetPhone}/>
+                                </React.Fragment>
+                                :
+                                null 
+                            }
+                            <input className="form__input-field" type="text" placeholder="Email" onChange={(e) => setEmail(e.target.value)}/>
+                            <input className="form__input-field" type="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)}/>
+                            {
+                                route === "signup" &&  <div>
+                                    <input id="form__input-file" type="file" name="image" onChange={(e) => setImage(e.target.files[0] === undefined ? {} : e.target.files[0])}/>
+                                    <label htmlFor="form__input-file">
+                                        <i className="fas fa-upload"></i>
+                                        &nbsp;Upload an image (optional)
+                                    </label>
+                                    <span>
+                                        <strong>Choose file:</strong>
+                                        <span id="file-name">{image.name ? formatName() : "None"}</span>
+                                    </span>
+                                </div>
+                            }
+                            <input className="form__submit-btn toggle-selected" type="submit"/>
+                        </form>
+                    :
+                    <Redirect to="/dashboard"/>
+                }
+                <ul className="form__errors">
+                    {errors.length > 0 && errors.map((error,index) => <li className="form__error" key={index+error}><i className="fas fa-exclamation-circle"></i> {error}</li>)}
+                </ul>
+            </div>
         </div>
     )
 }
