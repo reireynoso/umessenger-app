@@ -1,4 +1,4 @@
-import React, {useState, useRef, useEffect, forwardRef} from 'react'
+import React, {useState, useRef, useEffect, forwardRef, useLayoutEffect} from 'react'
 import {useSelector, useDispatch} from 'react-redux'
 import {addEmail,removeEmail} from '../actions/conversation'
 import {setConversationError, emptyConversationError} from '../actions/errors'
@@ -12,6 +12,9 @@ export default forwardRef((props,ref) => {
     const conversationError = useSelector(state => state.errors.conversationError)
     
     const [recipient, setRecipient] = useState("")
+    const [modal, setModal] = useState("")
+
+    const emailRef = useRef(null)
 
     useEffect(() => {
         if(ref.current){
@@ -33,6 +36,15 @@ export default forwardRef((props,ref) => {
     useEffect(() => {
             scrollToRef()
     }, [emails.length])
+
+    useLayoutEffect(() => {
+        const documentObj = document
+        documentObj.addEventListener('click', closeModal)
+        // debugger
+        return () => {
+            documentObj.removeEventListener('click', closeModal)
+        }
+    }, [modal])
 
     //check whether a conversation is selected.
     //if not selected, able to remove and add recipients
@@ -73,18 +85,33 @@ export default forwardRef((props,ref) => {
         setRecipient(e.target.value)
     }
 
+    const handleModal = (email) => {
+        if(modal === email){
+            setModal("")
+        }
+        else{
+            setModal(email)
+        }
+    }
+
+    const closeModal = (e) => {
+        if(modal && !emailRef.current.contains(e.target)){
+            setModal("")
+        }
+    }
+
     return (
         <div ref={ref} className="recipient">
             <div className="recipient__errors-list">{conversationError}</div>
             <div className="recipient__email-list">
                 <p>To:</p>
                 {
-                    emails.map(email => <div className="recipient__email" key={email}>
+                    emails.map(email => <div className="recipient__email" ref={emailRef} key={email}>
                         <div>{email}</div>
                         { 
                             <div className="recipient__dropdown-icon" 
                                 onClick={
-                                    noSelectedConversation() ? () => dispatch(removeEmail(email)) : null
+                                    noSelectedConversation() ? () => dispatch(removeEmail(email)) : () => handleModal(email)
                                 }
                                 >
                                 {
@@ -92,6 +119,10 @@ export default forwardRef((props,ref) => {
                                 }
                             </div>           
                         }
+                        {
+                            email === modal && <div className="recipient__modal">Open Modal</div>
+                        }
+                        
                     </div>
                     )
                 
