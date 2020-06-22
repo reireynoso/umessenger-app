@@ -14,7 +14,6 @@ export default forwardRef((props,ref) => {
     const [recipient, setRecipient] = useState("")
     const [modal, setModal] = useState("")
 
-    const emailRef = useRef(null)
     const modalRef = useRef(null)
 
     useEffect(() => {
@@ -120,9 +119,9 @@ export default forwardRef((props,ref) => {
         }
         else{
             setModal(email)
-            modalRef.current.style.top = (posY + 20) + "px";
+            modalRef.current.style.top = posY + "px";
             //270 accounts for the width of the segment
-            const width = posX- 270
+            const width = posX - 270
             //300 accounts for the width of the modal element
             if((width + 300) > (window.innerWidth - 270)){
                 modalRef.current.style.right = "0px"
@@ -135,7 +134,7 @@ export default forwardRef((props,ref) => {
     }
 
     const closeModal = (e) => {
-        if(modal && !emailRef.current.contains(e.target)){
+        if(modal && !modalRef.current.contains(e.target)){
             setModal("")
         }
     }
@@ -146,7 +145,7 @@ export default forwardRef((props,ref) => {
             <div className="recipient__email-list">
                 <p>To:</p>
                 {
-                    emails.map(email => <div className="recipient__email" ref={emailRef} key={email}>
+                    emails.map(email => <div className="recipient__email" key={email}>
                         <div>{email}</div>
                         { 
                             <div className="recipient__dropdown-icon" 
@@ -158,11 +157,7 @@ export default forwardRef((props,ref) => {
                                     <i className={noSelectedConversation() ? "fas fa-times" : "fas fa-chevron-down"}></i>
                                 }
                             </div>           
-                        }
-                        {
-                            // email === modal && <div className="recipient__modal">Open Modal</div>
-                        }
-                        
+                        }      
                     </div>
                     )
                 }

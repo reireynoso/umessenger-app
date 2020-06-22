@@ -60,16 +60,16 @@
 .recipient__modal {
     // display: none;
     visibility: hidden;
-    transform: scale(0.1);
+    // transform: scale(0.1);
     position: absolute;
     // bottom: -30px;
     // left: 1rem;
     // top: 8rem;
     z-index: 300;
     border: 1px solid $dark-white;
-    width: 300px;
-    height: 300px;
-    transition: 0.3s;
+    width: 250px;
+    height: 250px;
+    // transition: 0.3s;
     transform-origin: 0 0 0;
     border-radius: 10px;
     border-top-left-radius: 0;
@@ -79,5 +79,5 @@
 .modal-active {
     // display: block;
     visibility: visible;
-    transform: scale(1);
+    // transform: scale(1);
 }
