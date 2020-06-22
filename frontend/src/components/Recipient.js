@@ -15,6 +15,7 @@ export default forwardRef((props,ref) => {
     const [modal, setModal] = useState("")
 
     const emailRef = useRef(null)
+    const modalRef = useRef(null)
 
     useEffect(() => {
         if(ref.current){
@@ -45,6 +46,31 @@ export default forwardRef((props,ref) => {
             documentObj.removeEventListener('click', closeModal)
         }
     }, [modal])
+
+    // useEffect(() => {
+    //     console.log(modalRef)
+    // }, [window.innerWidth])
+
+    useEffect(() => {
+        const windowObj = window
+        windowObj.addEventListener('resize', modalOrientation)
+
+        return () => {
+            windowObj.removeEventListener('resize', modalOrientation)
+        }
+    }, [])
+
+    const modalOrientation = () => {
+        // console.log(modalRef.current.getBoundingClientRect())
+        // if(modalRef.current.getBoundingClientRect().right === window.innerWidth){
+        //     console.log('hey')
+            // modalRef.current.style.right = 200 + "px"
+            // modalRef.current.style.right = 0 + "px"
+        //     modalRef.current.style.right = null
+        //     modalRef.current.style.left = "0px"
+        // }
+        setModal("")
+    }
 
     //check whether a conversation is selected.
     //if not selected, able to remove and add recipients
@@ -85,12 +111,26 @@ export default forwardRef((props,ref) => {
         setRecipient(e.target.value)
     }
 
-    const handleModal = (email) => {
+    const handleModal = (email, e) => {
+        e.persist()
+        const posY = e.clientY
+        const posX = e.clientX
         if(modal === email){
             setModal("")
         }
         else{
             setModal(email)
+            modalRef.current.style.top = (posY + 20) + "px";
+            //270 accounts for the width of the segment
+            const width = posX- 270
+            //300 accounts for the width of the modal element
+            if((width + 300) > (window.innerWidth - 270)){
+                modalRef.current.style.right = "0px"
+                modalRef.current.style.left = null
+            }
+            else{
+                modalRef.current.style.left = width + "px"
+            }
         }
     }
 
@@ -111,7 +151,7 @@ export default forwardRef((props,ref) => {
                         { 
                             <div className="recipient__dropdown-icon" 
                                 onClick={
-                                    noSelectedConversation() ? () => dispatch(removeEmail(email)) : () => handleModal(email)
+                                    noSelectedConversation() ? () => dispatch(removeEmail(email)) : (e) => handleModal(email, e)
                                 }
                                 >
                                 {
@@ -120,13 +160,13 @@ export default forwardRef((props,ref) => {
                             </div>           
                         }
                         {
-                            email === modal && <div className="recipient__modal">Open Modal</div>
+                            // email === modal && <div className="recipient__modal">Open Modal</div>
                         }
                         
                     </div>
                     )
-                
                 }
+                <div ref={modalRef} className={`recipient__modal ${modal && "modal-active"}`}>Open Modal</div>
                 {
                     noSelectedConversation() && <input ref={myRef} type="email" className="recipient__email-input" value={recipient} onKeyPress={handleKeyPress} onChange={handleEmailChange} placeholder={emails.length === 0 ? "No recipients": "Add recipient"}/>
                 }
