@@ -27,28 +27,17 @@ export default forwardRef((props,ref) => {
         emptyConversationError()
     }, [selectedConversation])
 
-    const scrollToRef = () => {
-        if(myRef.current){
-            return myRef.current.scrollIntoView({ behavior: "smooth", block: 'end' })
-        }
-    }
-
     useEffect(() => {
             scrollToRef()
     }, [emails.length])
 
-    useLayoutEffect(() => {
+    useEffect(() => {
         const documentObj = document
         documentObj.addEventListener('click', closeModal)
-        // debugger
         return () => {
             documentObj.removeEventListener('click', closeModal)
         }
     }, [modal])
-
-    // useEffect(() => {
-    //     console.log(modalRef)
-    // }, [window.innerWidth])
 
     useEffect(() => {
         const windowObj = window
@@ -58,6 +47,12 @@ export default forwardRef((props,ref) => {
             windowObj.removeEventListener('resize', modalOrientation)
         }
     }, [])
+
+    const scrollToRef = () => {
+        if(myRef.current){
+            return myRef.current.scrollIntoView({ behavior: "smooth", block: 'end' })
+        }
+    }
 
     const modalOrientation = () => {
         // console.log(modalRef.current.getBoundingClientRect())
@@ -140,9 +135,9 @@ export default forwardRef((props,ref) => {
     }
 
     return (
-        <div ref={ref} className="recipient">
+        <div className="recipient">
             <div className="recipient__errors-list">{conversationError}</div>
-            <div className="recipient__email-list">
+            <div ref={ref} className="recipient__email-list">
                 <p>To:</p>
                 {
                     emails.map(email => <div className={`recipient__email ${modal === email ? "active-email" : ""}`} key={email}>
@@ -163,19 +158,43 @@ export default forwardRef((props,ref) => {
                 }
                 <div ref={modalRef} className={`recipient__modal ${modal && "modal-active"}`}>
                     <div className="recipient__modal-header">
-                        <div>
-                            <img/>
+                        <div className="image">
+                            <img src="https://www.w3schools.com/howto/img_avatar.png"/>
                         </div>
-                        <h1>Rei Rey</h1>
+                        <h1>Rei Rey;</h1>
                     </div>
 
                     <div className="recipient__modal-information">
-                        <p>email cool@email.com</p>
-                        <p>mobile 201-693-9999</p>
+                        <p>
+                            <i className="far fa-envelope"></i>
+                            &nbsp;cool@email.com
+                        </p>
+                        <p>
+                            <i className="fas fa-phone"></i>
+                            &nbsp;201-693-9999
+                        </p>
                     </div>
 
-                    <div>
-                        Video Chat Modal Call
+                    <div className="recipient__modal-icons">
+                        <div className="message__icon-container">
+                            <div className="message__icon-icon">
+                                <i className="fas fa-comment-dots"></i>
+                            </div>
+
+                            <div className="message__icon-name">
+                                Message
+                            </div>
+                        </div>
+
+                        <div className="video__icon-container">
+                            <div className="message__icon-icon">
+                                <i className="fas fa-video"></i>
+                            </div> 
+
+                            <div className="message__icon-name">
+                                Video Chat
+                            </div>
+                        </div>
                     </div>
                 </div>
                 {
