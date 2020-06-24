@@ -24,12 +24,15 @@ const conversation = (state = {
             if(removeOld.length !== state.conversations){
                 return {
                     ...state,
+                    //if selectedConversation is empty, automatically redirect to the new
+                    // selectedConversation: (Object.keys(state.selectedConversation).length === 0 ? payload : state.selectedConversation),
                     conversations: updatedConversations,
                     emails: previousSelectedConversation.users.map(user => user.email)
                 }
             }
             return {
                 ...state,
+                // selectedConversation: (Object.keys(state.selectedConversation).length === 0 ? payload : state.selectedConversation),
                 conversations: updatedConversations,
                 emails: previousSelectedConversation.users.map(user => user.email)
             }

@@ -145,10 +145,10 @@ export default forwardRef((props,ref) => {
             <div className="recipient__email-list">
                 <p>To:</p>
                 {
-                    emails.map(email => <div className="recipient__email" key={email}>
+                    emails.map(email => <div className={`recipient__email ${modal === email ? "active-email" : ""}`} key={email}>
                         <div>{email}</div>
                         { 
-                            <div className="recipient__dropdown-icon" 
+                            <div className={`recipient__dropdown-icon`}
                                 onClick={
                                     noSelectedConversation() ? () => dispatch(removeEmail(email)) : (e) => handleModal(email, e)
                                 }
@@ -161,7 +161,23 @@ export default forwardRef((props,ref) => {
                     </div>
                     )
                 }
-                <div ref={modalRef} className={`recipient__modal ${modal && "modal-active"}`}>Open Modal</div>
+                <div ref={modalRef} className={`recipient__modal ${modal && "modal-active"}`}>
+                    <div className="recipient__modal-header">
+                        <div>
+                            <img/>
+                        </div>
+                        <h1>Rei Rey</h1>
+                    </div>
+
+                    <div className="recipient__modal-information">
+                        <p>email cool@email.com</p>
+                        <p>mobile 201-693-9999</p>
+                    </div>
+
+                    <div>
+                        Video Chat Modal Call
+                    </div>
+                </div>
                 {
                     noSelectedConversation() && <input ref={myRef} type="email" className="recipient__email-input" value={recipient} onKeyPress={handleKeyPress} onChange={handleEmailChange} placeholder={emails.length === 0 ? "No recipients": "Add recipient"}/>
                 }

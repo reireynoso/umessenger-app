@@ -44,7 +44,7 @@
     padding: 0 0.5rem;
     border-radius: 5px;
     transition: background 0.1s ease-in;
-    &:hover{
+    &:hover,  &.active-email{
         background: rgb(111, 159, 182);
         .recipient__dropdown-icon{
             color: $dark-white;
@@ -60,7 +60,7 @@
 .recipient__modal {
     // display: none;
     visibility: hidden;
-    // transform: scale(0.1);
+    padding: 10px;
     position: absolute;
     // bottom: -30px;
     // left: 1rem;
@@ -74,6 +74,15 @@
     border-radius: 10px;
     border-top-left-radius: 0;
     background: $light-grey;
+
+    > h1 {
+        margin: 0;
+        font-size: 90%;
+    }
+
+    > p {
+        font-size: 70%;
+    }
 }
 
 .modal-active {

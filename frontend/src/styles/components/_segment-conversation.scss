@@ -2,7 +2,7 @@
     display: flex;
     padding: 1rem 0 0 0;
     cursor: pointer;
-    transition: 0.5s;
+    transition: 0.7s;
     // height: 8rem;
     // border-bottom: 1px solid white;
 }
@@ -84,5 +84,6 @@
 
 .active {
     background: rgb(111, 159, 182);
-    border-bottom: 0;
+    // border-bottom: 0;
+    color: $dark-white;
 }
