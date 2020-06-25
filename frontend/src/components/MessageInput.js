@@ -16,6 +16,7 @@ export default forwardRef(({setmessageInputHeight},ref) => {
     const pickerRef = useRef()
 
     const [content, setContent] = useState("")
+
     const audio = useRef(new Audio('/audio/sent_message.mp3'))
 
     const socket = useSelector(state => state.socket)
@@ -27,6 +28,7 @@ export default forwardRef(({setmessageInputHeight},ref) => {
             ref.current.height = ref.current.offsetHeight
             setmessageInputHeight(ref.current.height)
         }
+
     }, [textArea.current ? textArea.current.offsetHeight : null])
 
     useEffect(() => {

@@ -4,7 +4,7 @@ import {addEmail,removeEmail} from '../actions/conversation'
 import {setConversationError, emptyConversationError} from '../actions/errors'
 
 export default forwardRef((props,ref) => {
-    const myRef = useRef(null)
+    const inputRef = useRef(null)
     const dispatch = useDispatch()
     const selectedConversation = useSelector(state => state.conversation.selectedConversation)
     const user = useSelector(state => state.user)
@@ -13,15 +13,16 @@ export default forwardRef((props,ref) => {
     
     const [recipient, setRecipient] = useState("")
     const [modal, setModal] = useState("")
+    const [screen, setScreen] = useState(0)
 
     const modalRef = useRef(null)
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         if(ref.current){
             ref.current.height = ref.current.offsetHeight
             props.setrecipientHeight(ref.current.height)
         }
-    }, [myRef.current ? myRef.current.offsetHeight : null])
+    }, [emails.length, screen])
 
     useEffect(() => {
         emptyConversationError()
@@ -49,12 +50,12 @@ export default forwardRef((props,ref) => {
     }, [])
 
     const scrollToRef = () => {
-        if(myRef.current){
-            return myRef.current.scrollIntoView({ behavior: "smooth", block: 'end' })
+        if(inputRef.current){
+            return inputRef.current.scrollIntoView({ behavior: "smooth", block: 'end' })
         }
     }
 
-    const modalOrientation = () => {
+    const modalOrientation = (e) => {
         // console.log(modalRef.current.getBoundingClientRect())
         // if(modalRef.current.getBoundingClientRect().right === window.innerWidth){
         //     console.log('hey')
@@ -63,6 +64,7 @@ export default forwardRef((props,ref) => {
         //     modalRef.current.style.right = null
         //     modalRef.current.style.left = "0px"
         // }
+        setScreen(e.target.innerWidth)
         setModal("")
     }
 
@@ -135,9 +137,9 @@ export default forwardRef((props,ref) => {
     }
 
     return (
-        <div className="recipient">
+        <div ref={ref} className="recipient">
             <div className="recipient__errors-list">{conversationError}</div>
-            <div ref={ref} className="recipient__email-list">
+            <div className="recipient__email-list">
                 <p>To:</p>
                 {
                     emails.map(email => <div className={`recipient__email ${modal === email ? "active-email" : ""}`} key={email}>
@@ -198,7 +200,7 @@ export default forwardRef((props,ref) => {
                     </div>
                 </div>
                 {
-                    noSelectedConversation() && <input ref={myRef} type="email" className="recipient__email-input" value={recipient} onKeyPress={handleKeyPress} onChange={handleEmailChange} placeholder={emails.length === 0 ? "No recipients": "Add recipient"}/>
+                    noSelectedConversation() && <input ref={inputRef} type="email" className="recipient__email-input" value={recipient} onKeyPress={handleKeyPress} onChange={handleEmailChange} placeholder={emails.length === 0 ? "No recipients": "Add recipient"}/>
                 }
             </div>
         </div>
