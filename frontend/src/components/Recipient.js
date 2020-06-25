@@ -3,6 +3,8 @@ import {useSelector, useDispatch} from 'react-redux'
 import {addEmail,removeEmail} from '../actions/conversation'
 import {setConversationError, emptyConversationError} from '../actions/errors'
 
+import RecipientModal from './RecipientModal'
+
 export default forwardRef((props,ref) => {
     const inputRef = useRef(null)
     const dispatch = useDispatch()
@@ -158,47 +160,7 @@ export default forwardRef((props,ref) => {
                     </div>
                     )
                 }
-                <div ref={modalRef} className={`recipient__modal ${modal && "modal-active"}`}>
-                    <div className="recipient__modal-header">
-                        <div className="image">
-                            <img src="https://www.w3schools.com/howto/img_avatar.png"/>
-                        </div>
-                        <h1>Rei Rey;</h1>
-                    </div>
-
-                    <div className="recipient__modal-information">
-                        <p>
-                            <i className="far fa-envelope"></i>
-                            &nbsp;cool@email.com
-                        </p>
-                        <p>
-                            <i className="fas fa-phone"></i>
-                            &nbsp;201-693-9999
-                        </p>
-                    </div>
-
-                    <div className="recipient__modal-icons">
-                        <div className="message__icon-container">
-                            <div className="message__icon-icon">
-                                <i className="fas fa-comment-dots"></i>
-                            </div>
-
-                            <div className="message__icon-name">
-                                Message
-                            </div>
-                        </div>
-
-                        <div className="video__icon-container">
-                            <div className="message__icon-icon">
-                                <i className="fas fa-video"></i>
-                            </div> 
-
-                            <div className="message__icon-name">
-                                Video Chat
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <RecipientModal ref={modalRef} modal={modal}/>
                 {
                     noSelectedConversation() && <input ref={inputRef} type="email" className="recipient__email-input" value={recipient} onKeyPress={handleKeyPress} onChange={handleEmailChange} placeholder={emails.length === 0 ? "No recipients": "Add recipient"}/>
                 }
