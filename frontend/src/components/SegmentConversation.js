@@ -4,6 +4,7 @@ import {useDispatch, useSelector} from 'react-redux'
 import moment from 'moment'
 
 import {selectedConversation as selectConversationAction} from '../actions/conversation'
+import {truncateString} from '../selectors/conversation'
 
 export default ({conversations,socket, conversation, conversation: {messages, users, updatedAt}}) => {
     const dispatch = useDispatch()
@@ -66,17 +67,6 @@ export default ({conversations,socket, conversation, conversation: {messages, us
         }
     }
 
-    const refactoredTruncate = (infoToTrunc) => {
-        //function truncates the names and message contents
-        const condition = (infoToTrunc === "message")
-        const info = condition ? messages[messages.length-1].content : users.map(user => user.name).join(', ')
-        let shortenedInfo = info.slice(0,(condition ? 20 : 12)) 
-        if(info.length > (condition ? 20 : 12)){
-            return shortenedInfo + '...'
-        }
-        return shortenedInfo
-    }
-
     const userImage = (image) => {
         return image ? image : '/image/no-image.gif'
     }
@@ -98,14 +88,14 @@ export default ({conversations,socket, conversation, conversation: {messages, us
                 }
                 <div className="segment__details">
                     <div className="segment__details-top">
-                        <h3>{refactoredTruncate()}</h3>
+                        <h3>{truncateString(users.map(user => user.name).join(', '),15)}</h3>
                         <p>{checkTime()}</p>
                     </div>
                     {
                         typing ? 
                         <img alt="typing-gif" className="segment__typing" src={'/image/typing_dots.gif'}/>
                         :
-                        <p>{refactoredTruncate("message")}</p>
+                        <p>{truncateString(messages[messages.length-1].content, 24)}</p>
                     }
                 </div>
             </div>

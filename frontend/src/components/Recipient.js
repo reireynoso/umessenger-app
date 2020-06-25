@@ -14,7 +14,8 @@ export default forwardRef((props,ref) => {
     const conversationError = useSelector(state => state.errors.conversationError)
     
     const [recipient, setRecipient] = useState("")
-    const [modal, setModal] = useState("")
+    const [userInfo, setUserInfo] = useState({})
+    // const [modal, setModal] = useState("")
     const [screen, setScreen] = useState(0)
 
     const modalRef = useRef(null)
@@ -40,7 +41,7 @@ export default forwardRef((props,ref) => {
         return () => {
             documentObj.removeEventListener('click', closeModal)
         }
-    }, [modal])
+    }, [userInfo.email])
 
     useEffect(() => {
         const windowObj = window
@@ -67,7 +68,8 @@ export default forwardRef((props,ref) => {
         //     modalRef.current.style.left = "0px"
         // }
         setScreen(e.target.innerWidth)
-        setModal("")
+        // setModal("")
+        setUserInfo({})
     }
 
     //check whether a conversation is selected.
@@ -113,11 +115,14 @@ export default forwardRef((props,ref) => {
         e.persist()
         const posY = e.clientY
         const posX = e.clientX
-        if(modal === email){
-            setModal("")
+        if(userInfo.email === email){
+            // setModal("")
+            setUserInfo({})
         }
         else{
-            setModal(email)
+            // setModal(email)
+            // console.log('different')
+            setUserInfo(userInformation(email))
             modalRef.current.style.top = posY + "px";
             //270 accounts for the width of the segment
             const width = posX - 270
@@ -133,10 +138,16 @@ export default forwardRef((props,ref) => {
     }
 
     const closeModal = (e) => {
-        if(modal && !modalRef.current.contains(e.target)){
-            setModal("")
+        if(e.target.className === "fas fa-chevron-down" || e.target.className === "recipient__dropdown-icon"){
+            return 
+        }
+        else if(userInfo.email && !modalRef.current.contains(e.target)){
+            // setModal("")
+            setUserInfo({})
         }
     }
+
+    const userInformation = (email) => selectedConversation.users.find(user => user.email === email)
 
     return (
         <div ref={ref} className="recipient">
@@ -144,7 +155,7 @@ export default forwardRef((props,ref) => {
             <div className="recipient__email-list">
                 <p>To:</p>
                 {
-                    emails.map(email => <div className={`recipient__email ${modal === email ? "active-email" : ""}`} key={email}>
+                    emails.map(email => <div className={`recipient__email ${userInfo.email === email ? "active-email" : ""}`} key={email}>
                         <div>{email}</div>
                         { 
                             <div className={`recipient__dropdown-icon`}
@@ -160,7 +171,10 @@ export default forwardRef((props,ref) => {
                     </div>
                     )
                 }
-                <RecipientModal ref={modalRef} modal={modal}/>
+                <RecipientModal 
+                    ref={modalRef} 
+                    userInfo={userInfo}
+                />
                 {
                     noSelectedConversation() && <input ref={inputRef} type="email" className="recipient__email-input" value={recipient} onKeyPress={handleKeyPress} onChange={handleEmailChange} placeholder={emails.length === 0 ? "No recipients": "Add recipient"}/>
                 }

@@ -1,28 +1,37 @@
 import React, {forwardRef} from 'react'
 
-export default forwardRef(({modal}, ref) => {
+import {truncateString} from '../selectors/conversation'
+
+export default forwardRef(({userInfo: {email,phone,name, image_url}}, ref) => {
+
+    const check = (string="", value=10) => {
+        if(string){
+            return truncateString(string,value)
+        }
+    }
+
     return (
-        <div ref={ref} className={`recipient__modal ${modal && "modal-active"}`}>
+        <div ref={ref} className={`recipient__modal ${email && "modal-active"}`}>
             <div className="recipient__modal-header">
                 <div className="image">
-                    <img src="https://www.w3schools.com/howto/img_avatar.png"/>
+                    <img src={image_url ? image_url : "/image/no-image.gif"}/>
                 </div>
-                <h1>Rei Rey;</h1>
+                <h1>{check(name, 80)}</h1>
             </div>
 
             <div className="recipient__modal-information">
                 <p>
                     <i className="far fa-envelope"></i>
-                    &nbsp;cool@email.com
+                    &nbsp;{check(email, 24)}
                 </p>
                 <p>
                     <i className="fas fa-phone"></i>
-                    &nbsp;201-693-9999
+                    &nbsp;{phone}
                 </p>
             </div>
 
             <div className="recipient__modal-icons">
-                <div className="message__icon-container">
+                <div className="icon-container">
                     <div className="message__icon-icon">
                         <i className="fas fa-comment-dots"></i>
                     </div>
@@ -32,7 +41,7 @@ export default forwardRef(({modal}, ref) => {
                     </div>
                 </div>
 
-                <div className="video__icon-container">
+                <div className="icon-container">
                     <div className="message__icon-icon">
                         <i className="fas fa-video"></i>
                     </div> 

@@ -1,6 +1,6 @@
-# uMessage App
+# uMessage App 📱
 
-This is a chat application using React, Redux, Hooks, Node JS, Express, Mongoose, MongoDB, and SocketIO.
+uMessage is a full-stack chat application that allows you to send messages to other users by email address. Previous conversations that be filtered out by name. The design of the application is inspired by iMessage and Slack. 
 
 # Setup
 
@@ -12,3 +12,24 @@ In progress...
 
 # Known Bugs/Issues
 * When inputting email recipient, if it's too long it will expand the width. 
+* Sending a new message through a new conversation does not redirect to the conversation without redirecting for everyone.
+
+# Tech Stack
+
+* React.js
+* Redux
+* Express
+* Mongoose
+* MongoDB
+* HTML/SCSS
+* Socket.io
+
+In progress...
+
+# Tools
+
+* Moment.js
+* Emoji-Mart 
+* React-Router
+* BCrypt
+In progress...

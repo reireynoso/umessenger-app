@@ -33,3 +33,10 @@ export const matchConversations = (conversations, searchTerm="") => {
     const filteredConversations = conversations.filter(conversation => (conversation.users.some(user => user.name.toLowerCase().includes(searchTerm.toLowerCase()))))
     return filteredConversations
 }
+
+export const truncateString = (string, limit) => {
+    if(string.length > limit){
+        return string.slice(0, (limit-3)) + "..."
+    }
+    return string.slice(0, limit)
+}
