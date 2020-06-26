@@ -1,12 +1,23 @@
-import React, {forwardRef} from 'react'
-import {useDispatch} from 'react-redux'
+import React, {forwardRef, useEffect} from 'react'
+import {useDispatch, useSelector} from 'react-redux'
 
 import {truncateString} from '../selectors/conversation'
 import {removeSelectedConversation} from '../actions/conversation'
+import {closeRecipientModal} from '../actions/modal'
+import {openVideoModal} from '../actions/modal'
 
-export default forwardRef(({userInfo: {email,phone,name, image_url}}, ref) => {
+export default forwardRef((props, ref) => {
 
+    const {recipientModal, userInformation: {email,phone,name,image_url}} = useSelector(state => state.modal)
     const dispatch = useDispatch()
+
+    useEffect(() => {
+        const documentObj = document
+        documentObj.addEventListener('click', closeModal)
+        return () => {
+            documentObj.removeEventListener('click', closeModal)
+        }
+    }, [recipientModal])
 
     const check = (string="", value=10) => {
         if(string){
@@ -14,8 +25,20 @@ export default forwardRef(({userInfo: {email,phone,name, image_url}}, ref) => {
         }
     }
 
+    const closeModal = (e) => {
+        if(e.target.className === "fas fa-chevron-down" || e.target.className === "recipient__dropdown-icon"){
+            return 
+        }
+        else if(email && !ref.current.contains(e.target)){
+            // setModal("")
+            // setUserInfo({})
+            
+            dispatch(closeRecipientModal())
+        }
+    }
+
     return (
-        <div ref={ref} className={`recipient__modal ${email && "modal-active"}`}>
+        <div ref={ref} className={`recipient__modal ${recipientModal ? "modal-active" : ""}`}>
             <div className="recipient__modal-header">
                 <div className="image">
                     <img src={image_url ? image_url : "/image/no-image.gif"}/>
@@ -36,7 +59,10 @@ export default forwardRef(({userInfo: {email,phone,name, image_url}}, ref) => {
 
             <div className="recipient__modal-icons">
                 <div className="icon-container">
-                    <div className="message__icon-icon" onClick={() => dispatch(removeSelectedConversation(email))}>
+                    <div className="message__icon-icon" onClick={() => {
+                        dispatch(closeRecipientModal())
+                        dispatch(removeSelectedConversation(email))
+                    }}>
                         <i className="fas fa-comment-dots"></i>
                     </div>
 
@@ -45,7 +71,7 @@ export default forwardRef(({userInfo: {email,phone,name, image_url}}, ref) => {
                     </div>
                 </div>
 
-                <div className="icon-container">
+                <div className="icon-container" onClick={() => dispatch(openVideoModal())}>
                     <div className="message__icon-icon">
                         <i className="fas fa-video"></i>
                     </div> 

@@ -12,10 +12,12 @@ export default () => {
     return (
         <div className="conversation">
             <Recipient ref={recipientRef} setrecipientHeight={setrecipientHeight}/>
-            <MessagesContainer 
+            
+                <MessagesContainer 
                 recipientHeight={recipientHeight}
                 messageInputHeight={messageInputHeight}
             />
+            
             <MessageInput ref={messageInputRef} setmessageInputHeight={setmessageInputHeight}/>  
         </div>
     )

@@ -7,9 +7,7 @@ export default ({component: Component, ...rest}) => {
     // console.log()
     return <Route {...rest} component={(props) => (
         user.loggedIn ? ( 
-        <div>
             <Component {...props}/>
-        </div>
         ) 
         :
         (

@@ -1,6 +1,7 @@
 import React, {useState, useRef, useEffect, forwardRef, useLayoutEffect} from 'react'
 import {useSelector, useDispatch} from 'react-redux'
 import {addEmail,removeEmail} from '../actions/conversation'
+import {openRecipientModal,closeRecipientModal} from '../actions/modal'
 import {setConversationError, emptyConversationError} from '../actions/errors'
 
 import RecipientModal from './RecipientModal'
@@ -8,13 +9,14 @@ import RecipientModal from './RecipientModal'
 export default forwardRef((props,ref) => {
     const inputRef = useRef(null)
     const dispatch = useDispatch()
+    const {recipientModal, userInformation} = useSelector(state => state.modal)
     const selectedConversation = useSelector(state => state.conversation.selectedConversation)
     const user = useSelector(state => state.user)
     const emails = useSelector(state => state.conversation.emails)
     const conversationError = useSelector(state => state.errors.conversationError)
     
     const [recipient, setRecipient] = useState("")
-    const [userInfo, setUserInfo] = useState({})
+    // const [userInfo, setUserInfo] = useState({})
     // const [modal, setModal] = useState("")
     const [screen, setScreen] = useState(0)
 
@@ -35,13 +37,13 @@ export default forwardRef((props,ref) => {
             scrollToRef()
     }, [emails.length])
 
-    useEffect(() => {
-        const documentObj = document
-        documentObj.addEventListener('click', closeModal)
-        return () => {
-            documentObj.removeEventListener('click', closeModal)
-        }
-    }, [userInfo.email])
+    // useEffect(() => {
+    //     const documentObj = document
+    //     documentObj.addEventListener('click', closeModal)
+    //     return () => {
+    //         documentObj.removeEventListener('click', closeModal)
+    //     }
+    // }, [userInfo.email])
 
     useEffect(() => {
         const windowObj = window
@@ -69,7 +71,8 @@ export default forwardRef((props,ref) => {
         // }
         setScreen(e.target.innerWidth)
         // setModal("")
-        setUserInfo({})
+        // setUserInfo({})
+        dispatch(closeRecipientModal())
     }
 
     //check whether a conversation is selected.
@@ -115,14 +118,17 @@ export default forwardRef((props,ref) => {
         e.persist()
         const posY = e.clientY
         const posX = e.clientX
-        if(userInfo.email === email){
+        if(userInformation.email === email){
             // setModal("")
-            setUserInfo({})
+            // setUserInfo({})
+            dispatch(closeRecipientModal())
         }
         else{
             // setModal(email)
             // console.log('different')
-            setUserInfo(userInformation(email))
+            // setUserInfo(userInformation(email))
+            dispatch(openRecipientModal(findUserInformation(email)))
+            // console.log('hit')
             modalRef.current.style.top = posY + "px";
             //270 accounts for the width of the segment
             const width = posX - 270
@@ -137,17 +143,18 @@ export default forwardRef((props,ref) => {
         }
     }
 
-    const closeModal = (e) => {
-        if(e.target.className === "fas fa-chevron-down" || e.target.className === "recipient__dropdown-icon"){
-            return 
-        }
-        else if(userInfo.email && !modalRef.current.contains(e.target)){
-            // setModal("")
-            setUserInfo({})
-        }
-    }
+    // const closeModal = (e) => {
+    //     if(e.target.className === "fas fa-chevron-down" || e.target.className === "recipient__dropdown-icon"){
+    //         return 
+    //     }
+    //     else if(userInfo.email && !modalRef.current.contains(e.target)){
+    //         // setModal("")
+    //         // setUserInfo({})
+    //         closeRecipientModal()
+    //     }
+    // }
 
-    const userInformation = (email) => selectedConversation.users.find(user => user.email === email)
+    const findUserInformation = (email) => selectedConversation.users.find(user => user.email === email)
 
     return (
         <div ref={ref} className="recipient">
@@ -155,7 +162,7 @@ export default forwardRef((props,ref) => {
             <div className="recipient__email-list">
                 <p>To:</p>
                 {
-                    emails.map(email => <div className={`recipient__email ${userInfo.email === email ? "active-email" : ""}`} key={email}>
+                    emails.map(email => <div className={`recipient__email ${userInformation.email === email ? "active-email" : ""}`} key={email}>
                         <div>{email}</div>
                         { 
                             <div className={`recipient__dropdown-icon`}
@@ -173,7 +180,8 @@ export default forwardRef((props,ref) => {
                 }
                 <RecipientModal 
                     ref={modalRef} 
-                    userInfo={userInfo}
+                    // setUserInfo={}
+                    // userInfo={userInfo}
                 />
                 {
                     noSelectedConversation() && <input ref={inputRef} type="email" className="recipient__email-input" value={recipient} onKeyPress={handleKeyPress} onChange={handleEmailChange} placeholder={emails.length === 0 ? "No recipients": "Add recipient"}/>
