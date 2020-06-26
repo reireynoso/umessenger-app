@@ -48,7 +48,7 @@ const conversation = (state = {
                 ...state,
                 selectedConversation: {},
                 //check if there's a previous selected convo, if not, keep the emails to avoid retyping
-                emails: !!state.selectedConversation.users ? [] : [...state.emails],
+                emails: !!state.selectedConversation.users ? (payload ? [payload] : []) : [...state.emails],
             }
         case "RESET_CONVERSATIONS":
             return {

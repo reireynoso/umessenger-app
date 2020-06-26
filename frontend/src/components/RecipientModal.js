@@ -1,8 +1,12 @@
 import React, {forwardRef} from 'react'
+import {useDispatch} from 'react-redux'
 
 import {truncateString} from '../selectors/conversation'
+import {removeSelectedConversation} from '../actions/conversation'
 
 export default forwardRef(({userInfo: {email,phone,name, image_url}}, ref) => {
+
+    const dispatch = useDispatch()
 
     const check = (string="", value=10) => {
         if(string){
@@ -32,7 +36,7 @@ export default forwardRef(({userInfo: {email,phone,name, image_url}}, ref) => {
 
             <div className="recipient__modal-icons">
                 <div className="icon-container">
-                    <div className="message__icon-icon">
+                    <div className="message__icon-icon" onClick={() => dispatch(removeSelectedConversation(email))}>
                         <i className="fas fa-comment-dots"></i>
                     </div>
 

@@ -30,8 +30,9 @@ export const selectedConversation = (conversation) => {
     }
 }
 
-export const removeSelectedConversation = () => ({
-    type: "REMOVE_SELECTED_CONVERSATION"
+export const removeSelectedConversation = (email) => ({
+    type: "REMOVE_SELECTED_CONVERSATION",
+    payload: email
 })
 
 export const resetConversations = () => ({
@@ -64,6 +65,8 @@ export const sendMessageToConversation = (emails,content,user) => dispatch => {
             return data.errors
         }
         // console.log(removeLoggedInUserFromConversation(data.conversation,user))
-        dispatch(addOrUpdateConversation(removeLoggedInUserFromConversation(data.conversation,user)))
+        const formattedConversation = removeLoggedInUserFromConversation(data.conversation,user)
+        dispatch(addOrUpdateConversation(formattedConversation))
+        dispatch(selectedConversation(formattedConversation))
     })
 }

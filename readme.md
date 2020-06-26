@@ -12,7 +12,7 @@ In progress...
 
 # Known Bugs/Issues
 * When inputting email recipient, if it's too long it will expand the width. 
-* Sending a new message through a new conversation does not redirect to the conversation without redirecting for everyone.
+* ~~Sending a new message through a new conversation does not redirect to the conversation without redirecting for everyone.~~ (implemented a fix by adding another dispatch on sendMessageToConversation fetch request. But still needs to test.)
 
 # Tech Stack
 
