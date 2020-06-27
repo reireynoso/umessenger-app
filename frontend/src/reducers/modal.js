@@ -8,12 +8,13 @@ const modal = (state = {
             return {
                 ...state,
                 recipientModal: false,
-                userInformation: {},
+                // userInformation: {},
                 videoModal: true
             }
         case "CLOSE_VIDEO_MODAL":
             return {
                 ...state,
+                userInformation: {},
                 videoModal: false
             }
         case "OPEN_RECIPIENT_MODAL":
@@ -26,7 +27,7 @@ const modal = (state = {
             return {
                 ...state,
                 recipientModal: false,
-                userInformation: {}
+                // userInformation: {}
             }
         default: return state
     }

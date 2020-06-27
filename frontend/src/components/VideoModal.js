@@ -4,8 +4,10 @@ import {closeVideoModal} from '../actions/modal'
 
 export default () => {
     const videoModal = useSelector(state => state.modal.videoModal)
+    const user = useSelector(state => state.user)
+    const modalUser = useSelector(state => state.modal.userInformation)
     const dispatch = useDispatch()
-
+    
     return (
         <div className={`video-modal__container ${videoModal ? "open" : ""}`}>
             <div className="video-modal__top-bar">
@@ -13,7 +15,7 @@ export default () => {
                 <div className="video-modal__my-video-container">
                     <div className="video">
                         
-                        <span className="name">Rei Rey</span>
+                        <span className="name">{user.name}</span>
                     </div>
                 </div>
             </div>
@@ -21,13 +23,13 @@ export default () => {
             <div className="video-modal__main-bar">
                 <div className="video">
                     
-                    <div className="name">Rei Rey</div>
+                    <div className="name">{modalUser.name}</div>
                 </div>
             </div>
 
             <div className="video-modal__bottom-bar">
                 <div className="leave">
-                    Leave
+                <i className="fas fa-phone-slash"></i> &nbsp;End Call
                 </div>
             </div>
         </div>

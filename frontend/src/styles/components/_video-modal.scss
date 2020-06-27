@@ -4,7 +4,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    min-width: 600px;
+    // min-width: 600px;
     z-index: 5000;
     background-color: rgba($color: $light-grey, $alpha: 0.9);
     visibility: hidden;
@@ -27,30 +27,24 @@
         padding: 5px;
         border-radius: 5px;
         color: $dark-white;
-        transition: 0.3s;
     }
 
     > .close:hover{
         cursor: pointer;
         background: $grey;
+        transition: 0.3s;
     }
 }
 
 .video-modal__my-video-container {
     padding: 5px;
     > .video {
-        position: relative;
+
         height: 130px;
         width: 130px;
-        border: 1px solid $dark-grey;
 
         > .name {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            color: $dark-white;
-            padding: 5px 10px;
-            background: $grey;
+            font-size: 40%;
         }
     }
 }
@@ -63,21 +57,24 @@
     align-items: center;
 
     > .video {
-        position: relative;
         height: 80%;
         width: 50%;
-        // min-height: 250px;
-        // min-width: 250px;
-        border: 1px solid $dark-grey;
+    }
+}
 
-        > .name {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            color: $dark-white;
-            background: $grey;
-            padding: 5px 10px;
-        }
+.video {
+    position: relative;
+    border: 2px solid $dark-grey;
+    border-radius: 10px;
+
+    > .name {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        color: $dark-white;
+        padding: 5px 10px;
+        background: $grey;
+        border-bottom-left-radius: 10px;
     }
 }
 
