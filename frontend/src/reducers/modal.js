@@ -8,7 +8,7 @@ const modal = (state = {
             return {
                 ...state,
                 recipientModal: false,
-                // userInformation: {},
+                userInformation: payload ? payload : {...state.userInformation},
                 videoModal: true
             }
         case "CLOSE_VIDEO_MODAL":

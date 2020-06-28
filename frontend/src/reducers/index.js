@@ -4,6 +4,7 @@ import conversation from './conversation'
 import socket from './socket'
 import errors from './errors'
 import modal from './modal'
+import videoChat from './video-chat'
 
 
 const root = combineReducers({
@@ -11,7 +12,8 @@ const root = combineReducers({
     conversation,
     socket,
     errors,
-    modal
+    modal,
+    videoChat
 })
 
 export default root

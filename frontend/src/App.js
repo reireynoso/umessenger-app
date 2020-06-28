@@ -8,12 +8,10 @@ import {fetchAutoLogin} from './actions/user'
 
 import UserForm from './components/UserForm'
 import MainComponent from './components/MainComponent'
-import VideoModal from './components/VideoModal'
 
 import PrivateRoute from './routers/PrivateRoute'
 
 const App = () => {
-
   const dispatch = useDispatch()
   
   useEffect(() => {
@@ -25,7 +23,6 @@ const App = () => {
   
   return (
     <div className="App">
-        <VideoModal/>
         <Switch>
           <Route path="/signup" component={UserForm}/>
           <Route path="/login" component={UserForm}/>

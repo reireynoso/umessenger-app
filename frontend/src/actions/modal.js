@@ -1,5 +1,6 @@
-export const openVideoModal = () => ({
-    type: "OPEN_VIDEO_MODAL"
+export const openVideoModal = (payload) => ({
+    type: "OPEN_VIDEO_MODAL",
+    payload
 })
 
 export const closeVideoModal = () => ({
