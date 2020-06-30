@@ -41,18 +41,21 @@ io.on('connection', (socket) => {
     })
 
     socket.on("callUser", (data) => {
-        if(onlineUsers[data.userToCall]){
-            // console.log(data)
+        if(onlineUsers[data.userToCall]){  
             io.to(onlineUsers[data.userToCall]).emit('calling', {signal: data.signalData, from: data.from})
         }
         else{
-            io.to(onlineUsers[data.from.user.email]).emit('notOnline', {notOnline: true})
+            io.to(onlineUsers[data.from.email]).emit('notOnline', {notOnline: true})
         }
     })
 
     socket.on("acceptCall", (data) => {
-        // console.log(data)
         io.to(onlineUsers[data.to]).emit('callAccepted', data.signal)
+    })
+
+    socket.on("declineCall", (caller) => {
+        console.log(caller)
+        // io.to(onlineUsers[data.to]).emit('callAccepted', data.signal)
     })
     
     socket.on('subscribeToConversation', (conversation) => {

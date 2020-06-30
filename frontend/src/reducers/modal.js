@@ -27,7 +27,7 @@ const modal = (state = {
             return {
                 ...state,
                 recipientModal: false,
-                // userInformation: {}
+                userInformation: {}
             }
         default: return state
     }

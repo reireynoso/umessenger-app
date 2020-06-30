@@ -10,10 +10,12 @@ import apiUrl from '../utils/apiUrl'
 
 import VideoModal from './VideoModal'
 
-import {setReceivingCall,setCaller,setCallAccepted, unsetReceivingCall,declineCallAction} from '../actions/video-chat'
+import {setCaller ,declineCallAction} from '../actions/video-chat'
 import {openVideoModal} from '../actions/modal'
 
+
 export default () => {
+    
     const dispatch = useDispatch()
     const user = useSelector(state => state.user)
     const videoModal = useSelector(state => state.modal.videoModal)
@@ -22,15 +24,12 @@ export default () => {
 
     const {receivingCall, caller} = useSelector(state => state.videoChat)
 
-    // const [caller, setCaller] = useState("")
-    // const [recievingCall,setRecievingCall] = useState(false)
-    // const [callerSignal, setCallerSignal] = useState()
-    // const [callAccepted, setCallAccepted] = useState()
-
     const music = useRef(null)
     // const ENDPOINT = 'localhost:4000'
     // console.log(process.env.NODE_ENV)
     const ENDPOINT = apiUrl
+    //moved established socket here
+    const establishSocket = io(ENDPOINT)
 
     const notification = (conversation) => {
         const messages = conversation.messages
@@ -49,7 +48,7 @@ export default () => {
     }, [playing])
 
     useEffect(() => {
-        const establishSocket = io(ENDPOINT)
+        // const establishSocket = io(ENDPOINT)
         establishSocket.emit("online", user)
         establishSocket.on('newConversation', (newConversation) => {
             notification(newConversation)
@@ -62,13 +61,9 @@ export default () => {
 
         //being called functionality
         establishSocket.on('calling', (data) => {
-        //    console.log(data)
-           dispatch(setReceivingCall())
+
            dispatch(setCaller(data))
           
-        //    setRecievingCall(true)
-        //    setCaller(data.from.name)
-        //    setCallerSignal(data.signal)
         })
         dispatch(setSocket(establishSocket))
         return () => {
@@ -81,18 +76,18 @@ export default () => {
 
     const acceptCall = () => {
         // setCallAccepted(true)
-        dispatch(setCallAccepted())
+        // dispatch(setCallAccepted())
         dispatch(openVideoModal(caller))
-        // dispatch(unsetReceivingCall())
-        // const peer = new peer({
-        //     initiator: false,
-        //     trickle: false,
-        //     // stream: stream
-        // })
+
     }
 
     const declineCall = () => {
-        console.log('something')
+        // console.log('something')
+        // emit an listener to the server for "declineCall"
+        console.log(caller)
+        establishSocket.emit("declineCall", {
+            caller
+        })
         dispatch(declineCallAction())
     }
 

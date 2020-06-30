@@ -1,8 +1,9 @@
-import React, {useEffect, useState, useRef} from 'react'
+import React, {useEffect, useRef} from 'react'
 import {useDispatch, useSelector} from 'react-redux'
 import {closeVideoModal} from '../actions/modal'
 
-import {receivingCall, unsetReceivingCall,setCaller,setCallAccepted} from '../actions/video-chat'
+// import {receivingCall, unsetReceivingCall,setCaller,setCallAccepted} from '../actions/video-chat'
+import {declineCallAction} from '../actions/video-chat'
 
 import Peer from 'simple-peer'
 
@@ -13,15 +14,10 @@ export default () => {
     const socket = useSelector(state => state.socket)
     const dispatch = useDispatch()
 
-    const {receivingCall, callAccepted, caller, callerSignal} = useSelector(state => state.videoChat)
-
-    const [stream, setStream] = useState()
-    // const [callAccepted, setCallAccepted] = useState(false)
+    const {receivingCall, caller, callerSignal} = useSelector(state => state.videoChat)
 
     const userVideo = useRef()
     const partnerVideo = useRef()
-
-    // console.log(socket)
     
     useEffect(() => {
         let currentStream;
@@ -32,7 +28,6 @@ export default () => {
             })
             .then(stream => {
                 currentStream = stream
-                // setStream(stream)
                 if(userVideo.current){
                     userVideo.current.srcObject = stream
                     
@@ -46,40 +41,41 @@ export default () => {
         }
 
         return () => {
-            // debugger
             console.log('unmount')
             if(currentStream){
                 //returns active media
                 currentStream.getTracks().forEach((track) => {
                     // console.log(track)
                     //stops each active media
-                    if(track.readyState == 'live'){
+                    if(track.readyState === 'live'){
                         track.stop();
                     }
                 })
             }
-            dispatch(unsetReceivingCall())
+            dispatch(declineCallAction())
+            // dispatch(unsetReceivingCall())
             // console.log(userVideo)
+            socket.off("notOnline")
+            socket.off("callAccepted")
+            socket.off("callDeclined")
         }
     }, [])
 
-    const acceptCall = (currstream) => {
+    const acceptCall = (stream) => {
         // setCallAccepted(true)
-        // console.log(stream)
         const peer = new Peer({
             initiator: false,
             trickle: false,
-            stream: currstream,
+            stream: stream,
           });
           peer.on("signal", data => {
             socket.emit("acceptCall", { signal: data, to: caller.email })
           })
       
           peer.on("stream", stream => {
-              console.log(stream)
             partnerVideo.current.srcObject = stream;
           });
-        //   console.log(callerSignal)
+          
           peer.signal(callerSignal);
     }
 
@@ -110,9 +106,15 @@ export default () => {
         })
 
         socket.on("callAccepted", signal => {
-            // console.log(signal)
-            // setCallAccepted(true)
             peer.signal(signal)
+        })
+
+        socket.on("notOnline", () => {
+            console.log('not online')
+        })
+
+        socket.on("callDeclined", () => {
+            console.log('call declined')
         })
     }
     
@@ -137,8 +139,8 @@ export default () => {
             </div>
 
             <div className="video-modal__bottom-bar">
-                <div className="leave">
-                <i className="fas fa-phone-slash"></i> &nbsp;End Call
+                <div onClick={() => console.log(callerSignal)} className="leave">
+                    <i className="fas fa-phone-slash"></i> &nbsp;End Call
                 </div>
             </div>
         </div>
