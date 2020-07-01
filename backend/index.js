@@ -41,6 +41,11 @@ io.on('connection', (socket) => {
     })
 
     socket.on("callUser", (data) => {
+        // {
+        //     userToCall: modalUser.email, 
+        //     signalData: data, 
+        //     from: user
+        // }
         if(onlineUsers[data.userToCall]){  
             io.to(onlineUsers[data.userToCall]).emit('calling', {signal: data.signalData, from: data.from})
         }
@@ -50,12 +55,23 @@ io.on('connection', (socket) => {
     })
 
     socket.on("acceptCall", (data) => {
+        //incoming data structure from client
+        // { signal: data, to: caller.email }
         io.to(onlineUsers[data.to]).emit('callAccepted', data.signal)
     })
 
     socket.on("declineCall", (caller) => {
-        console.log(caller)
-        // io.to(onlineUsers[data.to]).emit('callAccepted', data.signal)
+        // sample caller
+        //{
+        //   loggedIn: true,
+        //   name: 'sample',
+        //   email: 'sample@test.com',
+        //   phone: 5555555555,
+        //   image_url: 'https://cdn0.iconfinder.com/data/icons/professional-avatar-5/48/manager_male_avatar_men_character_professions-512.png',
+        //   __v: 0
+        // }
+        // passing in caller may not be necessary
+        io.to(onlineUsers[caller.email]).emit('callDeclined', caller)
     })
     
     socket.on('subscribeToConversation', (conversation) => {

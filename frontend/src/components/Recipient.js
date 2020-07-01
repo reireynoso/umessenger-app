@@ -162,7 +162,7 @@ export default forwardRef((props,ref) => {
             <div className="recipient__email-list">
                 <p>To:</p>
                 {
-                    emails.map(email => <div className={`recipient__email ${userInformation.email === email ? "active-email" : ""}`} key={email}>
+                    emails.map(email => <div className={`recipient__email ${(recipientModal && userInformation.email === email) ? "active-email" : ""}`} key={email}>
                         <div>{email}</div>
                         { 
                             <div className={`recipient__dropdown-icon`}

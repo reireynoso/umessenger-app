@@ -2,7 +2,6 @@ import React, {useEffect, useRef} from 'react'
 import {useDispatch, useSelector} from 'react-redux'
 import {closeVideoModal} from '../actions/modal'
 
-// import {receivingCall, unsetReceivingCall,setCaller,setCallAccepted} from '../actions/video-chat'
 import {declineCallAction} from '../actions/video-chat'
 
 import Peer from 'simple-peer'
@@ -18,9 +17,11 @@ export default () => {
 
     const userVideo = useRef()
     const partnerVideo = useRef()
+
+    let currentStream;
     
     useEffect(() => {
-        let currentStream;
+        // let currentStream;
         if(videoModal){
             navigator.mediaDevices.getUserMedia({
                 video: true,
@@ -62,7 +63,6 @@ export default () => {
     }, [])
 
     const acceptCall = (stream) => {
-        // setCallAccepted(true)
         const peer = new Peer({
             initiator: false,
             trickle: false,
@@ -75,7 +75,7 @@ export default () => {
           peer.on("stream", stream => {
             partnerVideo.current.srcObject = stream;
           });
-          
+
           peer.signal(callerSignal);
     }
 
@@ -111,6 +111,7 @@ export default () => {
 
         socket.on("notOnline", () => {
             console.log('not online')
+            
         })
 
         socket.on("callDeclined", () => {

@@ -84,10 +84,8 @@ export default () => {
     const declineCall = () => {
         // console.log('something')
         // emit an listener to the server for "declineCall"
-        console.log(caller)
-        establishSocket.emit("declineCall", {
-            caller
-        })
+        // console.log(caller)
+        establishSocket.emit("declineCall", caller)
         dispatch(declineCallAction())
     }
 
