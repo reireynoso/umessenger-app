@@ -7,9 +7,8 @@ import {declineCallAction} from '../actions/video-chat'
 import Peer from 'simple-peer'
 
 export default () => {
-    const videoModal = useSelector(state => state.modal.videoModal)
+    const {videoModal, callerInformation} = useSelector(state => state.modal)
     const user = useSelector(state => state.user)
-    const modalUser = useSelector(state => state.modal.userInformation)
     const socket = useSelector(state => state.socket)
     const dispatch = useDispatch()
 
@@ -18,8 +17,9 @@ export default () => {
     const userVideo = useRef()
     const partnerVideo = useRef()
 
+
     let currentStream;
-    
+
     useEffect(() => {
         // let currentStream;
         if(videoModal){
@@ -91,19 +91,26 @@ export default () => {
 
         //sending out signal to other peer. Other peer will accept or deny signal. Creating handshake
         peer.on("signal", data => {
+            // console.log('hey')
             socket.emit("callUser", {
-                userToCall: modalUser.email, 
+                userToCall: callerInformation.email, 
                 signalData: data, 
                 from: user
             })
         })
 
         peer.on("stream", stream => {
-            // console.log(stream)
+            // console.log(partnerVideo.current)
+  
             if(partnerVideo.current){
                 partnerVideo.current.srcObject = stream;
             }
         })
+
+        peer.on('connection', function(dataConnection){
+            console.log('connected')
+        })
+
 
         socket.on("callAccepted", signal => {
             peer.signal(signal)
@@ -135,7 +142,7 @@ export default () => {
             <div className="video-modal__main-bar">
                 <div className="video">
                     <video muted playsInline ref={partnerVideo} autoPlay/>
-                    <span className="name">{modalUser.name}</span>
+                    <span className="name">{callerInformation.name}</span>
                 </div>
             </div>
 

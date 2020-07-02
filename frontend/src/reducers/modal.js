@@ -1,20 +1,23 @@
 const modal = (state = {
     videoModal: false,
     recipientModal: false,
-    userInformation: {}
+    userInformation: {},
+    callerInformation: {}
 }, {type, payload}) => {
     switch(type){    
         case "OPEN_VIDEO_MODAL":
             return {
                 ...state,
                 recipientModal: false,
-                userInformation: payload ? payload : {...state.userInformation},
+                callerInformation: payload ? payload : {...state.userInformation},
+                userInformation: {},
                 videoModal: true
             }
         case "CLOSE_VIDEO_MODAL":
             return {
                 ...state,
-                userInformation: {},
+                callerInformation: {},
+                // userInformation: {},
                 videoModal: false
             }
         case "OPEN_RECIPIENT_MODAL":
@@ -27,7 +30,7 @@ const modal = (state = {
             return {
                 ...state,
                 recipientModal: false,
-                // userInformation: {}
+                userInformation: {}
             }
         default: return state
     }

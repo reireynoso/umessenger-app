@@ -61,7 +61,7 @@ export default () => {
 
         //being called functionality
         establishSocket.on('calling', (data) => {
-
+            //if caller, emit back saying it's on call and reject. 
            dispatch(setCaller(data))
           
         })

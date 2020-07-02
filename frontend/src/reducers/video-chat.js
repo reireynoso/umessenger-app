@@ -18,14 +18,14 @@ const videoChat = (state = {
         //     }
         case "SET_CALLER":
             return {
-                ...state,
+                // ...state,
                 caller: payload.from,
                 callerSignal: payload.signal,
                 receivingCall:true
             }
         case "DECLINE_CALL":
             return {
-                ...state,
+                // ...state,
                 caller: {},
                 callerSignal: null,
                 receivingCall: false,

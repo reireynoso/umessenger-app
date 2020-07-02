@@ -57,6 +57,7 @@
 }
 
 .video-modal__main-bar {
+    // position: relative;
     height: calc(100% - (150px + 50px));
     border-bottom: 2px solid $dark-grey;
     display: flex;
@@ -64,16 +65,26 @@
     align-items: center;
 
     > video{
-        display: block;
-        width: 100%;
-        height: 100%;
+        // display: block;
+        // width: 100%;
+        // height: 100%;
         // border: 2px solid $dark-grey;
+        // position: absolute;
+        // right: 0;
+        // bottom: 0;
+        // min-width: 40%;
+        // min-height: 10%;
+        // width: auto;
+        // height: auto;
+        object-fit: fill;
+        // background-size: cover;
     }
 
     > .video {
-        overflow: hidden;
-        width: 480px;
-        height: 320px;
+        position: relative
+        // overflow: hidden;
+        // width: 480px;
+        // height: 320px;
     }
 }
 

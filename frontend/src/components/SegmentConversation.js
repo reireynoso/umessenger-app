@@ -88,7 +88,7 @@ export default ({conversations,socket, conversation, conversation: {messages, us
                 }
                 <div className="segment__details">
                     <div className="segment__details-top">
-                        <h3>{truncateString(users.map(user => user.name).join(', '),15)}</h3>
+                        <h3>{truncateString(users.map(user => user.name).join(', '),14)}</h3>
                         <p>{checkTime()}</p>
                     </div>
                     {

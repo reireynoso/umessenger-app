@@ -119,6 +119,7 @@ export default forwardRef((props,ref) => {
         const posY = e.clientY
         const posX = e.clientX
         if(userInformation.email === email){
+        // if(recipientModal){
             // setModal("")
             // setUserInfo({})
             dispatch(closeRecipientModal())

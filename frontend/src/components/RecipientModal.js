@@ -27,17 +27,17 @@ export default forwardRef((props, ref) => {
 
     const closeModal = (e) => {
         // Good react practice?
-        const videoModal = e.target.closest(".video-modal__container")
+        // const videoModal = e.target.closest(".video-modal__container")
         if(e.target.className === "fas fa-chevron-down" || e.target.className === "recipient__dropdown-icon" ){
             return 
         }
         // avoids clearing out userInformation when clicking on the Video Modal component
-        else if(videoModal && videoModal.className === "video-modal__container"){
-            // if(e.target.className === "fas fa-phone-slash" || e.target.className === "leave" || e.target.className === "close"){
-            //     return
-            // }
-            return
-        }
+        // else if(videoModal && videoModal.className === "video-modal__container"){
+        //     // if(e.target.className === "fas fa-phone-slash" || e.target.className === "leave" || e.target.className === "close"){
+        //     //     return
+        //     // }
+        //     return
+        // }
         else if(email && !ref.current.contains(e.target)){
             // setModal("")
             // setUserInfo({})
