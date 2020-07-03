@@ -17,7 +17,6 @@ export default () => {
     const userVideo = useRef()
     const partnerVideo = useRef()
 
-    let calling = useRef(false);
     let currentStream = useRef(null);
 
     useEffect(() => {
@@ -98,7 +97,7 @@ export default () => {
     }
 
     const callPeer = (stream) => {
-        calling = true
+        let calling = true
         // wrapper around the RTC technology which takes 3 arguments
         const peer = new Peer({
             // whether this person is the initiator of the call
@@ -147,8 +146,7 @@ export default () => {
     const endCall = (stream) => {
         if(stream){
             const tracks = stream.getTracks() 
-            tracks.forEach((track) => {
-                
+            tracks.forEach((track) => {           
                 //stops each active media
                 if(track.readyState === 'live'){
                     track.stop();
@@ -163,8 +161,7 @@ export default () => {
                 <span onClick={() => dispatch(closeVideoModal())} className="close">X</span>
                 <div className="video-modal__my-video-container">
                     <div className="video">
-                        <video muted playsInline ref={userVideo} autoPlay/>
-                        
+                        <video muted playsInline ref={userVideo} autoPlay/>         
                         <span className="name">{user.name}</span>
                     </div>
                 </div>
