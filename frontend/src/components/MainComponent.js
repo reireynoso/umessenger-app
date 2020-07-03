@@ -10,15 +10,15 @@ import apiUrl from '../utils/apiUrl'
 
 import VideoModal from './VideoModal'
 
-import {setCaller ,declineCallAction} from '../actions/video-chat'
-import {openVideoModal} from '../actions/modal'
+import {setCaller ,declineCallAction, unsetReceivingCall} from '../actions/video-chat'
+import {openVideoModal, setCallerInformation} from '../actions/modal'
 
 
 export default () => {
     
     const dispatch = useDispatch()
     const user = useSelector(state => state.user)
-    const videoModal = useSelector(state => state.modal.videoModal)
+    const {videoModal, callerInformation} = useSelector(state => state.modal)
     const [audio] = useState(new Audio('/audio/iphone-ding-sound.mp3'))
     const [playing, setPlaying] = useState(false)
 
@@ -62,9 +62,11 @@ export default () => {
         //being called functionality
         establishSocket.on('calling', (data) => {
             //if caller, emit back saying it's on call and reject. 
-           dispatch(setCaller(data))
-          
+            // dispatch(setCallerInformation(data.from))
+            dispatch(setCaller(data))
+         
         })
+
         dispatch(setSocket(establishSocket))
         return () => {
             console.log('dipped')
@@ -77,15 +79,13 @@ export default () => {
     const acceptCall = () => {
         // setCallAccepted(true)
         // dispatch(setCallAccepted())
+        // dispatch(setCallerInformation(data.from))
         dispatch(openVideoModal(caller))
-
     }
 
     const declineCall = () => {
-        // console.log('something')
         // emit an listener to the server for "declineCall"
-        // console.log(caller)
-        establishSocket.emit("declineCall", caller)
+        establishSocket.emit("declineCall", callerInformation)
         dispatch(declineCallAction())
     }
 

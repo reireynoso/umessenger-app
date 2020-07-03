@@ -15,3 +15,8 @@ export const openRecipientModal = (userInfo) => ({
 export const closeRecipientModal = () => ({
     type: "CLOSE_RECIPIENT_MODAL"
 })
+
+export const setCallerInformation = (payload) => ({
+    type: "SET_CALLER_INFORMATION",
+    payload
+})

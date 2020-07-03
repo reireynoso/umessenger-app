@@ -2,26 +2,32 @@ import React, {useEffect, useRef} from 'react'
 import {useDispatch, useSelector} from 'react-redux'
 import {closeVideoModal} from '../actions/modal'
 
-import {declineCallAction} from '../actions/video-chat'
+import {declineCallAction, unsetReceivingCall} from '../actions/video-chat'
 
 import Peer from 'simple-peer'
 
 export default () => {
-    const {videoModal, callerInformation} = useSelector(state => state.modal)
-    const user = useSelector(state => state.user)
-    const socket = useSelector(state => state.socket)
     const dispatch = useDispatch()
 
-    const {receivingCall, caller, callerSignal} = useSelector(state => state.videoChat)
+    const {videoModal, callerInformation} = useSelector(state => state.modal)
+    const {receivingCall, callerSignal} = useSelector(state => state.videoChat)
+    const user = useSelector(state => state.user)
+    const socket = useSelector(state => state.socket)
 
     const userVideo = useRef()
     const partnerVideo = useRef()
 
-
-    let currentStream;
+    let calling = useRef(false);
+    let currentStream = useRef(null);
 
     useEffect(() => {
         // let currentStream;
+        socket.on('callEnded', () => {
+            const stream = partnerVideo.current.srcObject
+            endCall(stream)
+            partnerVideo.current.srcObject = null
+        })
+
         if(videoModal){
             navigator.mediaDevices.getUserMedia({
                 video: true,
@@ -39,23 +45,29 @@ export default () => {
                     return acceptCall(currentStream)
                 }
             })
+            .catch((e) => {
+                console.log(e)
+            })
         }
 
         return () => {
             console.log('unmount')
             if(currentStream){
                 //returns active media
-                currentStream.getTracks().forEach((track) => {
+                endCall(currentStream)
+                // currentStream.getTracks().forEach((track) => {
                     // console.log(track)
                     //stops each active media
-                    if(track.readyState === 'live'){
-                        track.stop();
-                    }
-                })
+                //     if(track.readyState === 'live'){
+                //         track.stop();
+                //     }
+                // })
             }
-            dispatch(declineCallAction())
-            // dispatch(unsetReceivingCall())
-            // console.log(userVideo)
+
+            socket.emit("callEnd", callerInformation)
+            // dispatch(declineCallAction())
+        
+            socket.off("callEnded")
             socket.off("notOnline")
             socket.off("callAccepted")
             socket.off("callDeclined")
@@ -67,19 +79,26 @@ export default () => {
             initiator: false,
             trickle: false,
             stream: stream,
-          });
-          peer.on("signal", data => {
-            socket.emit("acceptCall", { signal: data, to: caller.email })
-          })
-      
-          peer.on("stream", stream => {
-            partnerVideo.current.srcObject = stream;
-          });
+        });
 
-          peer.signal(callerSignal);
+        peer.on("signal", data => {
+        //   console.log(data)
+        socket.emit("acceptCall", { signal: data, to: callerInformation.email })
+        })
+    
+        peer.on("stream", stream => {
+            console.log(stream)
+        partnerVideo.current.srcObject = stream;
+        });
+
+        peer.signal(callerSignal);
+        
+        // dispatch(unsetReceivingCall())
+        dispatch(declineCallAction())
     }
 
     const callPeer = (stream) => {
+        calling = true
         // wrapper around the RTC technology which takes 3 arguments
         const peer = new Peer({
             // whether this person is the initiator of the call
@@ -91,26 +110,24 @@ export default () => {
 
         //sending out signal to other peer. Other peer will accept or deny signal. Creating handshake
         peer.on("signal", data => {
-            // console.log('hey')
-            socket.emit("callUser", {
-                userToCall: callerInformation.email, 
-                signalData: data, 
-                from: user
-            })
+            // console.log('calling')
+            // console.log(data)
+            if(calling){
+                socket.emit("callUser", {
+                    userToCall: callerInformation.email, 
+                    signalData: data, 
+                    from: user
+                })
+            }
+            // janky solution to prevent emitting another callUser event
+            calling = false
         })
 
         peer.on("stream", stream => {
-            // console.log(partnerVideo.current)
-  
             if(partnerVideo.current){
                 partnerVideo.current.srcObject = stream;
             }
         })
-
-        peer.on('connection', function(dataConnection){
-            console.log('connected')
-        })
-
 
         socket.on("callAccepted", signal => {
             peer.signal(signal)
@@ -123,7 +140,21 @@ export default () => {
 
         socket.on("callDeclined", () => {
             console.log('call declined')
+            // dispatch(closeVideoModal())
         })
+    }
+
+    const endCall = (stream) => {
+        if(stream){
+            const tracks = stream.getTracks() 
+            tracks.forEach((track) => {
+                
+                //stops each active media
+                if(track.readyState === 'live'){
+                    track.stop();
+                }
+            })
+        }
     }
     
     return (
@@ -141,7 +172,7 @@ export default () => {
 
             <div className="video-modal__main-bar">
                 <div className="video">
-                    <video muted playsInline ref={partnerVideo} autoPlay/>
+                    <video controls muted poster="https://assets.zoom.us/images/en-us/desktop/generic/video-not-working.PNG" playsInline ref={partnerVideo} autoPlay/>
                     <span className="name">{callerInformation.name}</span>
                 </div>
             </div>

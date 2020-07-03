@@ -11,11 +11,11 @@ const videoChat = (state = {
         //         ...state,
         //         stream: payload
         //     }
-        // case "UNSET_RECEIVING_CALL":
-        //     return {
-        //         ...state,
-        //         receivingCall:false
-        //     }
+        case "UNSET_RECEIVING_CALL":
+            return {
+                ...state,
+                receivingCall:false
+            }
         case "SET_CALLER":
             return {
                 // ...state,

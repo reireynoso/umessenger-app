@@ -73,6 +73,10 @@ io.on('connection', (socket) => {
         // passing in caller may not be necessary
         io.to(onlineUsers[caller.email]).emit('callDeclined', caller)
     })
+
+    socket.on('callEnd', (caller) => {
+        io.to(onlineUsers[caller.email]).emit('callEnded', caller)
+    })
     
     socket.on('subscribeToConversation', (conversation) => {
         // io.sockets.emit('typing', input)
