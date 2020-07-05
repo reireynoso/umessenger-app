@@ -1,4 +1,4 @@
-import React, {useEffect, useRef} from 'react'
+import React, {useEffect, useRef, useState} from 'react'
 import {useDispatch, useSelector} from 'react-redux'
 import {closeVideoModal} from '../actions/modal'
 
@@ -14,6 +14,8 @@ export default () => {
     const user = useSelector(state => state.user)
     const socket = useSelector(state => state.socket)
 
+    const [waitUser, setWaitUser] = useState("Waiting on recipient...") 
+
     const userVideo = useRef()
     const partnerVideo = useRef()
 
@@ -25,6 +27,7 @@ export default () => {
             const stream = partnerVideo.current.srcObject
             endCall(stream)
             partnerVideo.current.srcObject = null
+            setWaitUser(`${callerInformation.name} has ended the call`)
         })
 
         if(videoModal){
@@ -86,7 +89,8 @@ export default () => {
         })
     
         peer.on("stream", stream => {
-            console.log(stream)
+            // console.log(stream)
+        setWaitUser(`${callerInformation.name} is online`)
         partnerVideo.current.srcObject = stream;
         });
 
@@ -123,6 +127,7 @@ export default () => {
         })
 
         peer.on("stream", stream => {
+            setWaitUser(`${callerInformation.name} is online`)
             if(partnerVideo.current){
                 partnerVideo.current.srcObject = stream;
             }
@@ -134,12 +139,13 @@ export default () => {
 
         socket.on("notOnline", () => {
             console.log('not online')
-            
+            setWaitUser('Recepient is not online')
         })
 
         socket.on("callDeclined", () => {
             console.log('call declined')
             // dispatch(closeVideoModal())
+            setWaitUser('Recepient declined the video chat...')
         })
     }
 
@@ -154,11 +160,19 @@ export default () => {
             })
         }
     }
+
+    const hangup = () => {
+        socket.emit("callUser", {
+            userToCall: callerInformation.email,
+            from: user
+        })
+        dispatch(closeVideoModal())
+    }
     
     return (
         <div className={`video-modal__container`}>
             <div className="video-modal__top-bar">
-                <span onClick={() => dispatch(closeVideoModal())} className="close">X</span>
+                <span onClick={hangup} className="close">X</span>
                 <div className="video-modal__my-video-container">
                     <div className="video">
                         <video muted playsInline ref={userVideo} autoPlay/>         
@@ -168,6 +182,7 @@ export default () => {
             </div>
 
             <div className="video-modal__main-bar">
+                <h1>{waitUser}</h1>
                 <div className="video">
                     <video controls muted poster="https://assets.zoom.us/images/en-us/desktop/generic/video-not-working.PNG" playsInline ref={partnerVideo} autoPlay/>
                     <span className="name">{callerInformation.name}</span>
@@ -175,7 +190,7 @@ export default () => {
             </div>
 
             <div className="video-modal__bottom-bar">
-                <div onClick={() => console.log(callerSignal)} className="leave">
+                <div onClick={hangup} className="leave">
                     <i className="fas fa-phone-slash"></i> &nbsp;End Call
                 </div>
             </div>

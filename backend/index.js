@@ -71,6 +71,7 @@ io.on('connection', (socket) => {
         //   __v: 0
         // }
         // passing in caller may not be necessary
+        // console.log('back', caller)
         io.to(onlineUsers[caller.email]).emit('callDeclined', caller)
     })
 

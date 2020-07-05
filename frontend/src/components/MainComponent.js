@@ -63,8 +63,10 @@ export default () => {
         establishSocket.on('calling', (data) => {
             //if caller, emit back saying it's on call and reject. 
             // dispatch(setCallerInformation(data.from))
-            dispatch(setCaller(data))
-         
+            if(data.signal){
+                return dispatch(setCaller(data))
+            }
+            return dispatch(declineCallAction())
         })
 
         dispatch(setSocket(establishSocket))
@@ -84,8 +86,9 @@ export default () => {
     }
 
     const declineCall = () => {
+        // console.log('decline')
         // emit an listener to the server for "declineCall"
-        establishSocket.emit("declineCall", callerInformation)
+        establishSocket.emit("declineCall", caller)
         dispatch(declineCallAction())
     }
 
