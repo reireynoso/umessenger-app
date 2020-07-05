@@ -32,11 +32,11 @@ const modal = (state = {
                 recipientModal: false,
                 userInformation: {}
             }
-        case "SET_CALLER_INFORMATION":
-        return {
-            ...state,
-            callerInformation: payload
-        }
+        // case "SET_CALLER_INFORMATION":
+        // return {
+        //     ...state,
+        //     callerInformation: payload
+        // }
         default: return state
     }
 }

@@ -10,8 +10,8 @@ import apiUrl from '../utils/apiUrl'
 
 import VideoModal from './VideoModal'
 
-import {setCaller ,declineCallAction, unsetReceivingCall} from '../actions/video-chat'
-import {openVideoModal, setCallerInformation} from '../actions/modal'
+import {setCaller ,declineCallAction} from '../actions/video-chat'
+import {openVideoModal} from '../actions/modal'
 
 
 export default () => {

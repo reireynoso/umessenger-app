@@ -16,7 +16,7 @@ export const closeRecipientModal = () => ({
     type: "CLOSE_RECIPIENT_MODAL"
 })
 
-export const setCallerInformation = (payload) => ({
-    type: "SET_CALLER_INFORMATION",
-    payload
-})
+// export const setCallerInformation = (payload) => ({
+//     type: "SET_CALLER_INFORMATION",
+//     payload
+// })

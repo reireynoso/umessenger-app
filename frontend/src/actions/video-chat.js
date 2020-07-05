@@ -24,6 +24,6 @@ export const declineCallAction = () => ({
     type: "DECLINE_CALL"
 })
 
-export const unsetReceivingCall = () => ({
-    type: "UNSET_RECEIVING_CALL"
-})
+// export const unsetReceivingCall = () => ({
+//     type: "UNSET_RECEIVING_CALL"
+// })

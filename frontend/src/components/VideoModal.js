@@ -2,7 +2,7 @@ import React, {useEffect, useRef, useState} from 'react'
 import {useDispatch, useSelector} from 'react-redux'
 import {closeVideoModal} from '../actions/modal'
 
-import {declineCallAction, unsetReceivingCall} from '../actions/video-chat'
+import {declineCallAction} from '../actions/video-chat'
 
 import Peer from 'simple-peer'
 
@@ -14,7 +14,7 @@ export default () => {
     const user = useSelector(state => state.user)
     const socket = useSelector(state => state.socket)
 
-    const [waitUser, setWaitUser] = useState("Waiting on recipient...") 
+    const [waitUser, setWaitUser] = useState("") 
 
     const userVideo = useRef()
     const partnerVideo = useRef()
@@ -27,8 +27,10 @@ export default () => {
             const stream = partnerVideo.current.srcObject
             endCall(stream)
             partnerVideo.current.srcObject = null
-            setWaitUser(`${callerInformation.name} has ended the call`)
+            setWaitUser(`${callerInformation.name} ended the call`)
         })
+
+        setWaitUser(`Waiting on ${callerInformation.name}`)
 
         if(videoModal){
             navigator.mediaDevices.getUserMedia({
@@ -139,13 +141,13 @@ export default () => {
 
         socket.on("notOnline", () => {
             console.log('not online')
-            setWaitUser('Recepient is not online')
+            setWaitUser(`${callerInformation.name} is not online`)
         })
 
         socket.on("callDeclined", () => {
             console.log('call declined')
             // dispatch(closeVideoModal())
-            setWaitUser('Recepient declined the video chat...')
+            setWaitUser(`${callerInformation.name} declined...`)
         })
     }
 
@@ -182,7 +184,7 @@ export default () => {
             </div>
 
             <div className="video-modal__main-bar">
-                <h1>{waitUser}</h1>
+                <h1 className="video-modal__recepient">{waitUser}</h1>
                 <div className="video">
                     <video controls muted poster="https://assets.zoom.us/images/en-us/desktop/generic/video-not-working.PNG" playsInline ref={partnerVideo} autoPlay/>
                     <span className="name">{callerInformation.name}</span>

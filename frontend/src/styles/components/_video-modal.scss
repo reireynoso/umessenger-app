@@ -65,6 +65,11 @@
     align-items: center;
     flex-direction: column;
 
+    > .video-modal__recepient{
+        margin: 0;
+        color: $dark-white;
+    }
+
     > video{
         // display: block;
         // width: 100%;
