@@ -75,6 +75,10 @@ io.on('connection', (socket) => {
         io.to(onlineUsers[caller.email]).emit('callDeclined', caller)
     })
 
+    socket.on('busy', (caller) => {
+        io.to(onlineUsers[caller.email]).emit('recepientBusy', caller)
+    })
+
     socket.on('callEnd', (caller) => {
         io.to(onlineUsers[caller.email]).emit('callEnded', caller)
     })

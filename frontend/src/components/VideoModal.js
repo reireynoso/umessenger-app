@@ -15,11 +15,15 @@ export default () => {
     const socket = useSelector(state => state.socket)
 
     const [waitUser, setWaitUser] = useState("") 
+    const [busy, setBusy] = useState(false) 
 
     const userVideo = useRef()
     const partnerVideo = useRef()
+    // let busy;
 
     let currentStream = useRef(null);
+
+    // console.log(busy)
 
     useEffect(() => {
         // let currentStream;
@@ -27,10 +31,20 @@ export default () => {
             const stream = partnerVideo.current.srcObject
             endCall(stream)
             partnerVideo.current.srcObject = null
-            setWaitUser(`${callerInformation.name} ended the call`)
+            // setWaitUser(`${callerInformation.name} ended the call`)
+            determine('callEnded')
         })
 
-        setWaitUser(`Waiting on ${callerInformation.name}`)
+        socket.on('recepientBusy', () => {
+            // const stream = partnerVideo.current.srcObject
+            // endCall(stream)
+            // partnerVideo.current.srcObject = null
+            // setWaitUser(`${callerInformation.name} is busy.`)
+            determine('busy')
+        })
+
+        // setWaitUser(`Waiting on ${callerInformation.name}`)
+        determine()
 
         if(videoModal){
             navigator.mediaDevices.getUserMedia({
@@ -70,7 +84,7 @@ export default () => {
 
             socket.emit("callEnd", callerInformation)
             // dispatch(declineCallAction())
-        
+            socket.off('recepientBusy')
             socket.off("callEnded")
             socket.off("notOnline")
             socket.off("callAccepted")
@@ -87,13 +101,13 @@ export default () => {
 
         peer.on("signal", data => {
         //   console.log(data)
-        socket.emit("acceptCall", { signal: data, to: callerInformation.email })
+            socket.emit("acceptCall", { signal: data, to: callerInformation.email })
         })
     
         peer.on("stream", stream => {
             // console.log(stream)
-        setWaitUser(`${callerInformation.name} is online`)
-        partnerVideo.current.srcObject = stream;
+            setWaitUser(`${callerInformation.name} is online`)
+            partnerVideo.current.srcObject = stream;
         });
 
         peer.signal(callerSignal);
@@ -129,7 +143,8 @@ export default () => {
         })
 
         peer.on("stream", stream => {
-            setWaitUser(`${callerInformation.name} is online`)
+            // setWaitUser(`${callerInformation.name} is online`)
+            determine("accepted")
             if(partnerVideo.current){
                 partnerVideo.current.srcObject = stream;
             }
@@ -140,14 +155,16 @@ export default () => {
         })
 
         socket.on("notOnline", () => {
-            console.log('not online')
-            setWaitUser(`${callerInformation.name} is not online`)
+            // console.log('not online')
+            determine("notOnline")
+            // setWaitUser(`${callerInformation.name} is not online`)
         })
 
         socket.on("callDeclined", () => {
-            console.log('call declined')
+            // console.log('call declined')
+            determine("declined")
             // dispatch(closeVideoModal())
-            setWaitUser(`${callerInformation.name} declined...`)
+            // setWaitUser(`${callerInformation.name} declined...`)
         })
     }
 
@@ -163,11 +180,36 @@ export default () => {
         }
     }
 
+    const determine = (result) => {
+        switch(result){
+            case "accepted":
+                return setWaitUser(`${callerInformation.name} is online`)
+            case "declined":
+                return setWaitUser(`${callerInformation.name} declined...`)
+            case "notOnline":
+                return setWaitUser(`${callerInformation.name} is not online`)
+            case "busy":
+                return handleBusy()
+            case "callEnded":
+                return setWaitUser(`${callerInformation.name} ended the call`)
+            default: 
+                return setWaitUser(`Waiting on ${callerInformation.name}`)
+        }
+    }
+
+    const handleBusy = () => {
+        setBusy(true)
+        setWaitUser(`${callerInformation.name} is busy.`)
+    }
+
     const hangup = () => {
-        socket.emit("callUser", {
-            userToCall: callerInformation.email,
-            from: user
-        })
+        // if user attempts to call another busy user, it will just clear their video modal but not emit a callUser event which will clear the other user's receiving call.
+        if(!busy){
+            socket.emit("callUser", {
+                userToCall: callerInformation.email,
+                from: user
+            })
+        }
         dispatch(closeVideoModal())
     }
     

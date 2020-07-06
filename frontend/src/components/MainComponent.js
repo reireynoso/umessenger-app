@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useRef} from 'react'
+import React, {useEffect, useState, useRef, useLayoutEffect} from 'react'
 import {useDispatch,useSelector} from 'react-redux'
 import io from 'socket.io-client'
 import ConversationContainer from './ConversationContainer'
@@ -18,6 +18,7 @@ export default () => {
     
     const dispatch = useDispatch()
     const user = useSelector(state => state.user)
+    const socket = useSelector(state => state.socket)
     const {videoModal, callerInformation} = useSelector(state => state.modal)
     const [audio] = useState(new Audio('/audio/iphone-ding-sound.mp3'))
     const [playing, setPlaying] = useState(false)
@@ -59,15 +60,15 @@ export default () => {
             dispatch(addOrUpdateConversation(removeLoggedInUserFromConversation(existingConversation,user)))
         })
 
-        //being called functionality
-        establishSocket.on('calling', (data) => {
-            //if caller, emit back saying it's on call and reject. 
-            // dispatch(setCallerInformation(data.from))
-            if(data.signal){
-                return dispatch(setCaller(data))
-            }
-            return dispatch(declineCallAction())
-        })
+        // //being called functionality
+        // establishSocket.on('calling', (data) => {
+        //     //if caller, emit back saying it's on call and reject. 
+        //     // dispatch(setCallerInformation(data.from))
+        //     if(data.signal){
+        //         return dispatch(setCaller(data))
+        //     }
+        //     return dispatch(declineCallAction())
+        // })
 
         dispatch(setSocket(establishSocket))
         return () => {
@@ -78,15 +79,43 @@ export default () => {
         }
     }, [ENDPOINT])
 
+    // not too sure why socket from store works but not original socket created (establishSocket)
+    useEffect(() => {
+        //being called functionality
+        if(socket.on){
+            socket.on('calling', (data) => {
+                // console.log(caller)
+                //if caller, emit back saying it's on call and reject. 
+                // dispatch(setCallerInformation(data.from))
+                if(data.signal){
+                    // console.log(currentCaller)
+                    if(receivingCall){
+                        // console.log(data)
+                        return socket.emit("busy", data.from)
+                    }
+                    // console.log(receivingCall)
+                    return dispatch(setCaller(data))
+                }
+                return dispatch(declineCallAction())
+            })
+        }
+
+        return () => {
+            if(socket.on){
+                socket.off('calling')
+            }
+            // console.log('left')
+        }
+    }, [receivingCall,socket])
+
+
     const acceptCall = () => {
-        // setCallAccepted(true)
         // dispatch(setCallAccepted())
         // dispatch(setCallerInformation(data.from))
         dispatch(openVideoModal(caller))
     }
 
     const declineCall = () => {
-        // console.log('decline')
         // emit an listener to the server for "declineCall"
         establishSocket.emit("declineCall", caller)
         dispatch(declineCallAction())
