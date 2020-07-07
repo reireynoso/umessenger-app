@@ -177,6 +177,11 @@ export default () => {
                     track.stop();
                 }
             })
+
+            // turn off window after hang up
+            setTimeout(() => {
+                dispatch(closeVideoModal())
+            }, 2500)
         }
     }
 
