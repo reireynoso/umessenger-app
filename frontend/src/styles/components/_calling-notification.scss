@@ -1,0 +1,42 @@
+.calling {
+    position: absolute;
+    background: $dark-white;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border: 2px solid white;
+    width: 90%;
+    min-width: 250px;
+    height: 200px;
+    z-index: 3000;
+    padding: 10px;
+    text-align: center;
+}
+
+.calling__notification {
+    word-wrap: break-word;
+}
+
+.button-accept {
+    background: $cool-green;
+    margin-right: 5px;
+    transition: 0.3s;
+    border: 1px solid rgb(5, 215, 5);
+}
+
+.button-accept:hover{
+    background: lighten($color: $cool-green, $amount: 20);
+}
+
+.button-decline {
+    position: relative;
+    bottom: 0;
+    background: $cool-red;
+    margin-left: 5px;
+    transition: 0.3s;
+    border: 1px solid rgb(223, 2, 2);
+}
+
+.button-decline:hover{
+    background: lighten($color: $cool-red, $amount: 20);
+}

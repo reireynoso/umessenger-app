@@ -7,6 +7,7 @@ import {addOrUpdateConversation} from '../actions/conversation'
 import {removeLoggedInUserFromConversation} from '../selectors/conversation'
 import {setSocket} from '../actions/socket'
 import apiUrl from '../utils/apiUrl'
+import {truncateString} from '../selectors/conversation'
 
 import VideoModal from './VideoModal'
 
@@ -132,10 +133,10 @@ export default () => {
             <ConversationContainer/>
         
             {
-                receivingCall && <div className="test">
-                    <h1>{caller.name} is calling you</h1>
-                    <button onClick={acceptCall}>Accept</button>
-                    <button onClick={declineCall}>Decline</button>
+                receivingCall && <div className="calling">
+                    <h1 className="calling__notification">{truncateString(caller.name, 20)} is calling you</h1>
+                    <button className="button button-accept" onClick={acceptCall}><i className="fas fa-phone"></i>&nbsp;Accept</button>
+                    <button className="button button-decline" onClick={declineCall}><i className="fas fa-phone-slash"></i>&nbsp;Decline</button>    
                 </div>
             }
         </div>
