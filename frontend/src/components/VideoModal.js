@@ -1,8 +1,10 @@
 import React, {useEffect, useRef, useState} from 'react'
 import {useDispatch, useSelector} from 'react-redux'
-import {closeVideoModal} from '../actions/modal'
 
+import {closeVideoModal} from '../actions/modal'
 import {declineCallAction} from '../actions/video-chat'
+import {truncateString} from '../selectors/conversation'
+
 
 import Peer from 'simple-peer'
 
@@ -188,23 +190,25 @@ export default () => {
     const determine = (result) => {
         switch(result){
             case "accepted":
-                return setWaitUser(`${callerInformation.name} is online`)
+                return setWaitUser(`${shortenCallerName()} is online`)
             case "declined":
-                return setWaitUser(`${callerInformation.name} declined...`)
+                return setWaitUser(`${shortenCallerName()} declined...`)
             case "notOnline":
-                return setWaitUser(`${callerInformation.name} is not online`)
+                return setWaitUser(`${shortenCallerName()} is not online`)
             case "busy":
                 return handleBusy()
             case "callEnded":
-                return setWaitUser(`${callerInformation.name} ended the call`)
+                return setWaitUser(`${shortenCallerName()} ended the call`)
             default: 
-                return setWaitUser(`Waiting on ${callerInformation.name}`)
+                return setWaitUser(`Waiting on ${shortenCallerName()}`)
         }
     }
 
+    const shortenCallerName = () => truncateString(callerInformation.name, 20)
+
     const handleBusy = () => {
         setBusy(true)
-        setWaitUser(`${callerInformation.name} is busy.`)
+        setWaitUser(`${shortenCallerName()} is busy.`)
     }
 
     const hangup = () => {
@@ -225,7 +229,7 @@ export default () => {
                 <div className="video-modal__my-video-container">
                     <div className="video">
                         <video muted playsInline ref={userVideo} autoPlay/>         
-                        <span className="name">{user.name}</span>
+                        <span className="name">{truncateString(user.name, 10)}</span>
                     </div>
                 </div>
             </div>
@@ -234,7 +238,7 @@ export default () => {
                 <h1 className="video-modal__recepient">{waitUser}</h1>
                 <div className="video">
                     <video controls muted poster="https://assets.zoom.us/images/en-us/desktop/generic/video-not-working.PNG" playsInline ref={partnerVideo} autoPlay/>
-                    <span className="name">{callerInformation.name}</span>
+                    <span className="name">{truncateString(callerInformation.name, 30)}</span>
                 </div>
             </div>
 
