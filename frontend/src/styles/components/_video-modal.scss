@@ -87,10 +87,11 @@
     }
 
     > .video {
-        position: relative
+        // position: relative
         // overflow: hidden;
         // width: 480px;
         // height: 320px;
+        background: $dark-grey;
     }
 }
 

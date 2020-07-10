@@ -237,7 +237,7 @@ export default () => {
             <div className="video-modal__main-bar">
                 <h1 className="video-modal__recepient">{waitUser}</h1>
                 <div className="video">
-                    <video controls muted poster="https://assets.zoom.us/images/en-us/desktop/generic/video-not-working.PNG" playsInline ref={partnerVideo} autoPlay/>
+                    <video height="360" width="480" controls muted poster="https://assets.zoom.us/images/en-us/desktop/generic/video-not-working.PNG" playsInline ref={partnerVideo} autoPlay/>
                     <span className="name">{truncateString(callerInformation.name, 30)}</span>
                 </div>
             </div>
