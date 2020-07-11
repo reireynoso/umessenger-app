@@ -7,9 +7,18 @@
 }
 
 .side-bar__header {
+    position: relative;
     border-bottom: 1px solid $dark-white;
     padding: 1rem 0 1rem 1rem;
     height: 10rem;
+}
+
+.side-bar__info {
+    display: inline-block;
+    position: absolute;
+    right: 0;
+    margin: 4px 7px 0 0;
+    // margin-right: 5px;
 }
 
 .side-bar__action {

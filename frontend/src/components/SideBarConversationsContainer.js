@@ -5,6 +5,7 @@ import SegmentConversation from './SegmentConversation'
 import {matchConversations} from '../selectors/conversation'
 import {removeSelectedConversation, resetConversations, setSearchConversation} from '../actions/conversation'
 import {logOutUser} from '../actions/user'
+import {truncateString} from '../selectors/conversation'
 
 export default () => {
     const dispatch = useDispatch()
@@ -26,7 +27,10 @@ export default () => {
     return (
         <div className="side-bar">
             <div className="side-bar__header">
+                
                 <button className="button button__log-out" onClick={handleLogOut}>Log Out</button>
+                <div className="side-bar__info">Hello👋🏼 , {truncateString(user.name, 13)}</div>
+                
                 <div className="side-bar__action">
                     <input className="text_input" placeholder="Search for names..." type="text" onChange={(e) => dispatch(setSearchConversation(e.target.value))}/>
                     <button className="button button__primary" onClick={() => dispatch(removeSelectedConversation())}>New</button>
