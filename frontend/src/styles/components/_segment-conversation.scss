@@ -10,7 +10,7 @@
 .segment__info {
     display: flex;
     border-bottom: 1px solid $dark-white;
-    padding-bottom: 1rem;
+    padding-bottom: 0.6rem;
 }
 
 .segment__image {
@@ -47,7 +47,7 @@
 }
 
 .segment__details{
-    padding: 0 1rem 0 0.2rem;
+    padding: 0 0.7rem 0 0.2rem;
     width: 20rem;
     h3, p{
         margin: 0;

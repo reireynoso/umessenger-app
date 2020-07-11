@@ -2,6 +2,8 @@
 
 uMessage is a full-stack chat application that allows you to send messages to other users by email address as well as video chat. Previous conversations that can be filtered out by name. The design of the application is inspired by iMessage and Slack. 
 
+* [Deployed Version](https://umessenger-frontend.herokuapp.com/)
+
 ## Message Interface Sample
 
 ![Image of Message](frontend/public/sample-image/message-sample.png)
