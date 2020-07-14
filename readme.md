@@ -14,7 +14,7 @@ uMessage is a full-stack chat application that allows you to send messages to ot
 
 # Setup
 
-Refer to the respective stack for instructions on setting up. (still in progress...)
+Refer to the respective stack's README for instructions on setting up.
 
 # Current Features
 
@@ -33,6 +33,8 @@ Refer to the respective stack for instructions on setting up. (still in progress
 * When inputting email recipient, if it's too long it will expand the width. 
 * ~~Sending a new message through a new conversation does not redirect to the conversation without redirecting for everyone.~~ (implemented a fix by adding another dispatch on sendMessageToConversation fetch request. But still needs to test.)
 * Some issues with conversation container and HTML body width. (fix was to use position fixed for the whole body but it eliminates responsiveness)
+* Minor bug involving who's typing. At some point, if the user keeps typing, the user's own name is included in the list of typing (which it shouldn't) and is not removed even after they're not typing anymore
+* Leak issue when logging out and adjusting screen orientation (possible from conversationComponent)
 
 
 # Tech Stack
@@ -44,8 +46,6 @@ Refer to the respective stack for instructions on setting up. (still in progress
 * Mongoose
 * MongoDB
 * HTML/SCSS
-
-In progress...
 
 # Tools
 
@@ -60,8 +60,6 @@ In progress...
 * CORS
 * Multer (photo upload)
 * Sharp (photo resizing)
-
-In progress...
 
 # Authors
 Reinald Reynoso

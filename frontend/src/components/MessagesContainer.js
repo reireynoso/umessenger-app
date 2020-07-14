@@ -45,7 +45,13 @@ export default ({messageInputHeight, recipientHeight}) => {
     // dynamically changes the components height 
     useLayoutEffect(() => {
         // console.log(messageInputHeight + recipientHeight)
+        if(window.innerWidth === 540){
+            // approximate solution for when the width reaches the limit
+             messageRef.current.style.height = (670 - (messageInputHeight + recipientHeight)) + 'px' 
+             return;
+        }    
         messageRef.current.style.height = (window.innerHeight - (messageInputHeight + recipientHeight)) + 'px'
+        
     }, [messageInputHeight, recipientHeight, screen])
     
     const setScreenOrientation = (e) => {
