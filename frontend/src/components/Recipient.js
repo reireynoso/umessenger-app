@@ -128,7 +128,7 @@ export default forwardRef((props,ref) => {
             // setModal(email)
             // console.log('different')
             // setUserInfo(userInformation(email))
-            dispatch(openRecipientModal(findUserInformation(email)))
+            // dispatch(openRecipientModal(findUserInformation(email)))
             // console.log('hit')
             modalRef.current.style.top = posY + "px";
             //270 accounts for the width of the segment
@@ -141,6 +141,7 @@ export default forwardRef((props,ref) => {
             else{
                 modalRef.current.style.left = width + "px"
             }
+            dispatch(openRecipientModal(findUserInformation(email)))
         }
     }
 

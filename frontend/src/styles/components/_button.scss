@@ -12,8 +12,18 @@
 
 .button__log-out {
     background: $cool-red;
+    transition: 0.3s;
+}
+
+.button__log-out:hover{
+    background: lighten($color: $cool-red, $amount: 20%);
 }
 
 .button__primary {
     background: rgb(142, 142, 147);
+    transition: 0.3s;
+}
+
+.button__primary:hover {
+    background: darken($color: rgb(142, 142, 147), $amount: 10%);
 }

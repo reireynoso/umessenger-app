@@ -61,16 +61,6 @@ export default () => {
             dispatch(addOrUpdateConversation(removeLoggedInUserFromConversation(existingConversation,user)))
         })
 
-        // //being called functionality
-        // establishSocket.on('calling', (data) => {
-        //     //if caller, emit back saying it's on call and reject. 
-        //     // dispatch(setCallerInformation(data.from))
-        //     if(data.signal){
-        //         return dispatch(setCaller(data))
-        //     }
-        //     return dispatch(declineCallAction())
-        // })
-
         dispatch(setSocket(establishSocket))
         return () => {
             console.log('dipped')
