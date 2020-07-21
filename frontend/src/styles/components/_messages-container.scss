@@ -5,12 +5,13 @@
     height: calc(100vh - 14rem);
     max-height: calc(100vh - 14rem);
     // background: $dark-grey;
-    // position: relative;
+    // position: relative
 }
 
 .messages-container__inner {
     width: 100%;
     height: 100%;
+    // filter: blur(3px);
     // padding: 0 1.5rem;
 }
 
@@ -30,4 +31,13 @@
     padding: 0 1.5rem;
     position: sticky;
     bottom: 0;
+}
+
+.blurred > .message_and_calendar > *:not(.no-blurred) {
+    filter: blur(3px);
+}
+
+.no-blurred {
+    // filter: blur(0);
+    // backdrop-filter: blur(3px);
 }

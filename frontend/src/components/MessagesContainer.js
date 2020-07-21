@@ -36,6 +36,8 @@ export default ({messageInputHeight, recipientHeight}) => {
     // any errors, switch back to typersInfo object and change references below
     const typersInfo = useRef({})
 
+    const [blurred, setBlurred] = useState(null) 
+
     //these three methods are responsible for adjusting the height of the component
     //add an event listener on the window anytime it is resized accounting for the toggle device.
     useEffect(() => {
@@ -279,10 +281,15 @@ export default ({messageInputHeight, recipientHeight}) => {
         // })
     }
 
+    const blurOutComponent = (id) => {
+        console.log(id)
+        setBlurred(id)
+    }
+
     return (
         <div ref={messageRef} className="messages-container">
             <div className="messages-container__inner">
-                <div className="messages-container__message">  
+                <div className={`messages-container__message ${blurred ? "blurred" : ""}`}>  
                     {
                        // selectConversation.messages && selectConversation.messages.map((message,index) => <Message key={message._id} message={message} users={selectConversation.users} prevConversation = {(index - 1) > -1 ? selectConversation.messages[index-1] : null}/>)
                        selectConversation.messages && Object.keys(sortedMessagesByTime.current).map(key => 
@@ -299,7 +306,7 @@ export default ({messageInputHeight, recipientHeight}) => {
                                 })}
                             </div>
                             {
-                                sortedMessagesByTime.current[key].map(message => <Message key={message._id} users={selectConversation.users} message={message}/>)
+                                sortedMessagesByTime.current[key].map(message => <Message blurred={blurred} blurOutComponent={blurOutComponent} key={message._id} users={selectConversation.users} message={message}/>)
                             }
                         </div>
                        ) 
