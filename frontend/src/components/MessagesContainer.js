@@ -221,6 +221,7 @@ export default ({messageInputHeight, recipientHeight}) => {
 
         return () => {
             //empties out typers if conversation is switched
+            setBlurred(null)
             sortedMessagesByTime.current = {}
             setTypers([])
             if(socket.io){
@@ -282,14 +283,18 @@ export default ({messageInputHeight, recipientHeight}) => {
     }
 
     const blurOutComponent = (id) => {
-        console.log(id)
         setBlurred(id)
+    }
+
+    const handleUnblur = () => {
+        setBlurred(null)
     }
 
     return (
         <div ref={messageRef} className="messages-container">
             <div className="messages-container__inner">
-                <div className={`messages-container__message ${blurred ? "blurred" : ""}`}>  
+                <div onClick={handleUnblur} className={`blur ${blurred ? "blurred" : ""}`}></div>
+                <div className={`messages-container__message`}>  
                     {
                        // selectConversation.messages && selectConversation.messages.map((message,index) => <Message key={message._id} message={message} users={selectConversation.users} prevConversation = {(index - 1) > -1 ? selectConversation.messages[index-1] : null}/>)
                        selectConversation.messages && Object.keys(sortedMessagesByTime.current).map(key => 

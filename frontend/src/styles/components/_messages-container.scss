@@ -13,6 +13,7 @@
     height: 100%;
     // filter: blur(3px);
     // padding: 0 1.5rem;
+    position: relative;
 }
 
 .messages-container__message {
@@ -33,11 +34,30 @@
     bottom: 0;
 }
 
-.blurred > .message_and_calendar > *:not(.no-blurred) {
-    filter: blur(3px);
+// .blurred > .message_and_calendar > .message-container > *:not(.no-blurred) {
+//     filter: blur(3px);
+// }
+
+.blur {
+    display: none;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: $dark-grey;
+    z-index: 200;
+    opacity: 0.8;
+}
+
+.blurred {
+    display: block;
 }
 
 .no-blurred {
-    // filter: blur(0);
-    // backdrop-filter: blur(3px);
+    position: relative;
+    z-index: 300;
+    filter: brightness(1.5);
+}
+
+.no-blurred::after{
+    filter: brightness(0.65);
 }

@@ -32,7 +32,7 @@ export default ({users=[], message: {_id,content, user, createdAt, nextMessageUs
     const checkIfMineAndLast = () => `${checkIfMineOrOther()} ${checkIfLastMessage()}`
 
     return (
-        <div className={`message-container ${blurred === _id ? "no-blurred" : ""}`}
+        <div className={`message-container`}
             onMouseDown={() => setStartLongPress(true)}
             onMouseUp={() => setStartLongPress(false)}
             onMouseLeave={() => setStartLongPress(false)}
@@ -42,7 +42,7 @@ export default ({users=[], message: {_id,content, user, createdAt, nextMessageUs
                     {user.name}
                 </div>  
             }
-            <div className={`message ${checkIfMineAndLast()}`}>
+            <div className={`message ${blurred === _id ? "no-blurred" : ""} ${checkIfMineAndLast()}`}>
                 {!user ? <img alt="typing-gif" className="segment__typing" src="/image/typing_dots.gif"/> : content}
                 <div className={`message__tooltip ${checkIfMineOrOther()}`}>{moment(createdAt).format('MMMM Do YYYY, h:mm:ss a')}</div>
             </div>
