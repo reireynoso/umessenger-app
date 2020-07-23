@@ -34,10 +34,6 @@
     bottom: 0;
 }
 
-// .blurred > .message_and_calendar > .message-container > *:not(.no-blurred) {
-//     filter: blur(3px);
-// }
-
 .blur {
     display: none;
     position: absolute;
@@ -46,6 +42,47 @@
     background: $dark-grey;
     z-index: 200;
     opacity: 0.8;
+}
+
+.popup {
+    display: none;
+    position: absolute;
+    top: -40px;
+    z-index: 300;
+    border: 1px solid white;
+    color: $grey;
+    width: 150px;
+    padding: 5px;
+    border-radius: 10px;
+}
+
+.message__reaction-container {
+    display: flex;
+    justify-content: space-around;
+}
+.message__reaction-container > span{
+    display: block;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.message__reaction-container > span:hover{
+    color: lighten($color: $grey, $amount: 10%);
+}
+
+.popup.mine {
+    right: 0;
+    background: $dark-white;
+}
+
+.popup.other{
+    left: 0;
+    background: $dark-white;
+}
+
+.show-popup {
+    display: block;
+    filter: brightness(1.5);
 }
 
 .blurred {

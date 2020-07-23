@@ -293,7 +293,9 @@ export default ({messageInputHeight, recipientHeight}) => {
     return (
         <div ref={messageRef} className="messages-container">
             <div className="messages-container__inner">
-                <div onClick={handleUnblur} className={`blur ${blurred ? "blurred" : ""}`}></div>
+                <div onClick={handleUnblur} className={`blur ${blurred ? "blurred" : ""}`}>
+                   
+                </div>
                 <div className={`messages-container__message`}>  
                     {
                        // selectConversation.messages && selectConversation.messages.map((message,index) => <Message key={message._id} message={message} users={selectConversation.users} prevConversation = {(index - 1) > -1 ? selectConversation.messages[index-1] : null}/>)
