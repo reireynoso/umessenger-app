@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react'
 import moment from 'moment'
 import {useSelector} from 'react-redux'
+import apiUrl from '../utils/apiUrl'
 
 export default ({users=[], message: {_id,content, user, createdAt, nextMessageUser}, blurOutComponent, blurred}) => {
     const loggedUser = useSelector(state => state.user)
@@ -26,8 +27,31 @@ export default ({users=[], message: {_id,content, user, createdAt, nextMessageUs
     const giveReaction = (reaction) => {
         //handle fetch to express to create reaction
         //consider creating array property on message object instead of model
-        console.log("conversation", selectConversation)
-        console.log("message id in conversation", _id)
+        // console.log("conversation", selectConversation)
+        // console.log("message id in conversation", _id)
+        console.log(loggedUser)
+        const reactionRequest = {
+            conversation_id: selectConversation._id,
+            message_id: _id,
+            reaction
+        }
+
+        console.log(reactionRequest)
+
+        const token = localStorage.getItem("token")
+        return fetch(`${apiUrl}/reactions`, {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': "application/json",
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify(reactionRequest)
+        })
+        // .then(res => res.json())
+        // .then(data => {
+            
+        // })
     }
 
     const checkIfMineOrOther = () => loggedUser.email === user.email ? "mine" : "other"

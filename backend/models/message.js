@@ -9,7 +9,11 @@ const messageSchema = mongoose.Schema({
     content: {
         type: String,
         require: true
-    }
+    },
+    reactions: {
+        type: Array,
+        default: []
+    },
 }, {
     timestamps: true
 })

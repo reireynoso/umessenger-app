@@ -4,6 +4,7 @@ const router = new express.Router()
 const auth = require('../middleware/auth')
 const User = require('../models/user')
 const Conversation = require('../models/conversation')
+const {Message} = require('../models/message')
 
 router.post("/conversations", auth, async(req,res) => {
     try{
@@ -107,6 +108,69 @@ router.post("/conversations", auth, async(req,res) => {
         // res.send({errors: ["An email provided is invalid."]})
         res.send({errors: [e]})
     }
+})
+
+router.post("/reactions", auth, async(req,res) => {
+    const _id = req.body.message_id
+    const user = req.user.email
+    const reaction = req.body.reaction
+    // console.log(Messages.reactions )
+    // Messages.reactions.push(req.body.reaction)
+    // Messages.reactions = []
+    // await Messages.save()
+    const associatedConversation = await Conversation.findById(req.body.conversation_id)
+    const message = associatedConversation.messages.find(message => _id == message._id)
+    let foundReaction = message.reactions.find(reaction => reaction.user === user)
+    console.log(foundReaction)
+    console.log(reaction)
+    if(!foundReaction){
+        message.reactions.push({
+            user,
+            reaction
+        })
+        foundReaction = {
+            user,
+            reaction
+        }
+    }
+    else if(foundReaction.user === user && foundReaction.reaction !== reaction) {
+        console.log('exists')
+        // console.log(foundReaction.reaction)
+        // console.log(reaction)
+            const newArr = message.reactions.map(react => {
+                if(react.user === user){
+                    react.reaction = reaction
+                //     return reaction
+                // console.log(react)
+                // console.log(reaction)
+                }
+                return react
+            })
+    //     console.log(foundReaction.reaction !== reaction)
+    //     const index = message.reactions.findIndex(reaction => reaction.user === user)
+    //     // console.log((message.reactions[index].reaction = reaction))
+    //     // console.log(message.reactions[index].reaction)
+    //     message.reactions[index].reaction = reaction 
+            message.reactions = newArr
+            // console.log(message.reactions)
+    //     // for(let i = 0; i < message.reactions.length; i++){
+    //     //     if(message.reactions[i].user === req.user.email){
+    //     //         message.reactions[i].reaction = reaction
+    //     //     }
+    //     // }
+    //     foundReaction.reaction = reaction
+    }
+    else if(foundReaction.reaction === req.body.reaction){
+        // foundReaction.reaction = reaction
+        message.reactions = message.reactions.filter(reaction => reaction.user !== req.user.email)
+        // console.log("dashdilaushdasn", foundReaction)
+    }
+    // message.reactions = []
+    await associatedConversation.save()
+    // const Messages = await Message.findOne({_id})
+    // console.log(Messages)
+    // console.log(message)
+    res.send(associatedConversation)
 })
 
 module.exports = router

@@ -44,6 +44,10 @@
     opacity: 0.8;
 }
 
+.popup.last.other {
+    border-bottom-left-radius: 0;
+}
+
 .popup {
     display: none;
     position: absolute;
@@ -53,7 +57,7 @@
     color: $grey;
     width: 150px;
     padding: 5px;
-    border-radius: 10px;
+    border-radius: 20px !important;
 }
 
 .message__reaction-container {
