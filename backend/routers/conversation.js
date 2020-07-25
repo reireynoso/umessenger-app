@@ -4,7 +4,6 @@ const router = new express.Router()
 const auth = require('../middleware/auth')
 const User = require('../models/user')
 const Conversation = require('../models/conversation')
-const {Message} = require('../models/message')
 
 router.post("/conversations", auth, async(req,res) => {
     try{
@@ -111,66 +110,83 @@ router.post("/conversations", auth, async(req,res) => {
 })
 
 router.post("/reactions", auth, async(req,res) => {
-    const _id = req.body.message_id
+    const {conversation_id, message_id, reaction} = req.body
     const user = req.user.email
-    const reaction = req.body.reaction
-    // console.log(Messages.reactions )
-    // Messages.reactions.push(req.body.reaction)
-    // Messages.reactions = []
-    // await Messages.save()
-    const associatedConversation = await Conversation.findById(req.body.conversation_id)
-    const message = associatedConversation.messages.find(message => _id == message._id)
-    let foundReaction = message.reactions.find(reaction => reaction.user === user)
-    console.log(foundReaction)
-    console.log(reaction)
-    if(!foundReaction){
-        message.reactions.push({
-            user,
-            reaction
-        })
-        foundReaction = {
-            user,
-            reaction
+    const reactionObj = {
+        user,
+        reaction
+    }
+
+    try{
+
+        const associatedConversation = await Conversation.findById(conversation_id)
+        const message = associatedConversation.messages.find(message => message_id == message._id)
+        // console.log(message)
+        const foundReaction = message.reactions.find(reaction => reaction.user === user)
+        // console.log('before', associatedConversation.messages[0])
+    
+        // checks if user already made a reaction on this message
+        if(!foundReaction){
+            message.reactions.push(reactionObj)
         }
+        // if(foundReaction && foundReaction.reaction === req.body.reaction){
+        //     message.reactions = message.reactions.filter(reaction => reaction.user !== req.user.email)
+        // }
+
+        // if(foundReaction && foundReaction.user === user && foundReaction.reaction !== reaction) {
+        //     console.log('exists')
+        //         const newArr = message.reactions.map(react => {
+        //             if(react.user === user){
+        //                 react.reaction = reaction
+        //             }
+        //             return react
+        //         })
+
+        //         message.reactions = newArr
+
+        //         //not reassigning as we hope
+        //         // message.reactions = newArr
+        //         // console.log('new', newArr)
+        // }
+        else {
+            // check if the user passed in same reaction to "unlike"
+            if(foundReaction.reaction === req.body.reaction){
+                message.reactions = message.reactions.filter(reaction => reaction.user !== user)
+            }
+
+            // user can only have one reaction. if already has one, "update" the reaction
+            if(foundReaction.user === user && foundReaction.reaction !== reaction) {
+                    // why doesn't this approach work? I.e save to the database?
+                    // const newArr = message.reactions.map(react => {
+                    //     if(react.user === user){
+                    //         react.reaction = reaction
+                    //     }
+                    //     return react
+                    // })
+
+                    // Why does these approach work?
+
+                    // remove existing user's array and then push in new reaction
+                    // message.reactions = message.reactions.filter(reaction => reaction.user !== req.user.email)
+                    // message.reactions.push({
+                    //     user,
+                    //     reaction
+                    // })
+
+                    // find index of existing user's reaction in array and replace it with new passed in
+                    const findIndex = message.reactions.findIndex(react =>  react.user === user)
+                    message.reactions.splice(findIndex, 1, reactionObj)
+
+            }
+        }
+        // message.reactions = []
+        await associatedConversation.save()
+        // console.log('after', associatedConversation.messages[0])
+        res.status(201).send(associatedConversation)
+    }catch(e){
+        res.status(400).send({errors: [e]})
     }
-    else if(foundReaction.user === user && foundReaction.reaction !== reaction) {
-        console.log('exists')
-        // console.log(foundReaction.reaction)
-        // console.log(reaction)
-            const newArr = message.reactions.map(react => {
-                if(react.user === user){
-                    react.reaction = reaction
-                //     return reaction
-                // console.log(react)
-                // console.log(reaction)
-                }
-                return react
-            })
-    //     console.log(foundReaction.reaction !== reaction)
-    //     const index = message.reactions.findIndex(reaction => reaction.user === user)
-    //     // console.log((message.reactions[index].reaction = reaction))
-    //     // console.log(message.reactions[index].reaction)
-    //     message.reactions[index].reaction = reaction 
-            message.reactions = newArr
-            // console.log(message.reactions)
-    //     // for(let i = 0; i < message.reactions.length; i++){
-    //     //     if(message.reactions[i].user === req.user.email){
-    //     //         message.reactions[i].reaction = reaction
-    //     //     }
-    //     // }
-    //     foundReaction.reaction = reaction
-    }
-    else if(foundReaction.reaction === req.body.reaction){
-        // foundReaction.reaction = reaction
-        message.reactions = message.reactions.filter(reaction => reaction.user !== req.user.email)
-        // console.log("dashdilaushdasn", foundReaction)
-    }
-    // message.reactions = []
-    await associatedConversation.save()
-    // const Messages = await Message.findOne({_id})
-    // console.log(Messages)
-    // console.log(message)
-    res.send(associatedConversation)
+
 })
 
 module.exports = router

@@ -27,16 +27,13 @@ export default ({users=[], message: {_id,content, user, createdAt, nextMessageUs
     const giveReaction = (reaction) => {
         //handle fetch to express to create reaction
         //consider creating array property on message object instead of model
-        // console.log("conversation", selectConversation)
-        // console.log("message id in conversation", _id)
-        console.log(loggedUser)
+        // console.log(loggedUser)
+        
         const reactionRequest = {
             conversation_id: selectConversation._id,
             message_id: _id,
             reaction
         }
-
-        console.log(reactionRequest)
 
         const token = localStorage.getItem("token")
         return fetch(`${apiUrl}/reactions`, {
@@ -48,10 +45,17 @@ export default ({users=[], message: {_id,content, user, createdAt, nextMessageUs
             },
             body: JSON.stringify(reactionRequest)
         })
-        // .then(res => res.json())
-        // .then(data => {
-            
-        // })
+        .then(res => {
+            if(res.status === 400){
+                return console.log('error')
+            }
+            return res.json()
+        })
+        .then(data => {
+            if(data){
+                console.log(data)   
+            }
+        })
     }
 
     const checkIfMineOrOther = () => loggedUser.email === user.email ? "mine" : "other"
