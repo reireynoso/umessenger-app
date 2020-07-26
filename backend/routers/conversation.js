@@ -119,7 +119,7 @@ router.post("/reactions", auth, async(req,res) => {
 
     try{
 
-        const associatedConversation = await Conversation.findById(conversation_id)
+        const associatedConversation = await Conversation.findById(conversation_id).populate('messages.user')
         const message = associatedConversation.messages.find(message => message_id == message._id)
         // console.log(message)
         const foundReaction = message.reactions.find(reaction => reaction.user === user)
@@ -182,8 +182,9 @@ router.post("/reactions", auth, async(req,res) => {
         // message.reactions = []
         await associatedConversation.save()
         // console.log('after', associatedConversation.messages[0])
-        res.status(201).send(associatedConversation)
+        res.status(201).send({conversation: associatedConversation})
     }catch(e){
+        console.log(e)
         res.status(400).send({errors: [e]})
     }
 

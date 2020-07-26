@@ -44,6 +44,11 @@ export const setSearchConversation = (searchTerm) => ({
     payload: searchTerm
 })
 
+export const setReaction = (updatedConversation) => ({
+    type: "SET_REACTION",
+    payload: updatedConversation
+})
+
 export const sendMessageToConversation = (emails,content,user) => dispatch => {
     const token = localStorage.getItem("token")
     return fetch(`${apiUrl}/conversations`, {
@@ -68,5 +73,31 @@ export const sendMessageToConversation = (emails,content,user) => dispatch => {
         const formattedConversation = removeLoggedInUserFromConversation(data.conversation,user)
         dispatch(addOrUpdateConversation(formattedConversation))
         dispatch(selectedConversation(formattedConversation))
+    })
+}
+
+export const sendReactionRequest = (reactionObj, user) => dispatch => {
+    const token = localStorage.getItem("token")
+    return fetch(`${apiUrl}/reactions`, {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': "application/json",
+            'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(reactionObj)
+    })
+    .then(res => {
+        if(res.status === 400){
+            return console.log('error')
+        }
+        return res.json()
+    })
+    .then(data => {
+        if(data){
+            // console.log(data.conversation)
+            const formattedConversation = removeLoggedInUserFromConversation(data.conversation,user)
+            dispatch(setReaction(formattedConversation)) 
+        }
     })
 }

@@ -72,6 +72,19 @@ const conversation = (state = {
                 ...state,
                 searchTerm: payload
             }
+        case "SET_REACTION" :
+            const updatedConversationsReactions = state.conversations.map(conversation => {
+                if(conversation._id === payload._id){
+                    return payload
+                }
+                return conversation
+            })
+            return {
+                ...state,
+                selectedConversation: payload._id !== state.selectedConversation._id ? state.selectedConversation : payload,
+                conversations: updatedConversationsReactions,
+
+            }
         default: return state
     }
 }

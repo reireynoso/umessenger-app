@@ -1,12 +1,17 @@
 import React, {useState, useEffect} from 'react'
 import moment from 'moment'
-import {useSelector} from 'react-redux'
-import apiUrl from '../utils/apiUrl'
+import {useSelector, useDispatch} from 'react-redux'
+// import apiUrl from '../utils/apiUrl'
+import {sendReactionRequest} from '../actions/conversation'
 
-export default ({users=[], message: {_id,content, user, createdAt, nextMessageUser}, blurOutComponent, blurred}) => {
+export default ({users=[], message: {_id,content, reactions, user, createdAt, nextMessageUser}, blurOutComponent, blurred}) => {
+    const dispatch = useDispatch()
     const loggedUser = useSelector(state => state.user)
     const selectConversation = useSelector(state => state.conversation.selectedConversation)
+    
     const [startLongPress, setStartLongPress] = useState(false)
+
+    console.log(reactions)
 
     useEffect(() => {
         let timerId;
@@ -29,33 +34,35 @@ export default ({users=[], message: {_id,content, user, createdAt, nextMessageUs
         //consider creating array property on message object instead of model
         // console.log(loggedUser)
         
-        const reactionRequest = {
+        const reactionObj = {
             conversation_id: selectConversation._id,
             message_id: _id,
             reaction
         }
 
-        const token = localStorage.getItem("token")
-        return fetch(`${apiUrl}/reactions`, {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': "application/json",
-                'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify(reactionRequest)
-        })
-        .then(res => {
-            if(res.status === 400){
-                return console.log('error')
-            }
-            return res.json()
-        })
-        .then(data => {
-            if(data){
-                console.log(data)   
-            }
-        })
+        dispatch(sendReactionRequest(reactionObj, loggedUser))
+
+        // const token = localStorage.getItem("token")
+        // return fetch(`${apiUrl}/reactions`, {
+        //     method: "POST",
+        //     headers: {
+        //         'Content-Type': 'application/json',
+        //         'Accept': "application/json",
+        //         'Authorization': `Bearer ${token}`
+        //     },
+        //     body: JSON.stringify(reactionRequest)
+        // })
+        // .then(res => {
+        //     if(res.status === 400){
+        //         return console.log('error')
+        //     }
+        //     return res.json()
+        // })
+        // .then(data => {
+        //     if(data){
+        //         console.log(data)   
+        //     }
+        // })
     }
 
     const checkIfMineOrOther = () => loggedUser.email === user.email ? "mine" : "other"
