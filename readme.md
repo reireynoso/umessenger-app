@@ -29,6 +29,10 @@ Refer to the respective stack's README for instructions on setting up.
 * A user can video chat another user. (only one user at the moment)
 * The user on the receiving end can choose to accept or decline the video chat call.
 
+# Features in progress
+
+* Reacting on a specific message. Data needs to be structured on the server. Rendering reactions on the frontend in progress.
+
 # Known Bugs/Issues
 * When inputting email recipient, if it's too long it will expand the width. 
 * ~~Sending a new message through a new conversation does not redirect to the conversation without redirecting for everyone.~~ (implemented a fix by adding another dispatch on sendMessageToConversation fetch request. But still needs to test.)

@@ -110,76 +110,116 @@ router.post("/conversations", auth, async(req,res) => {
 })
 
 router.post("/reactions", auth, async(req,res) => {
+    // const {conversation_id, message_id, reaction} = req.body
+    // const user = req.user.email
+    // const reactionObj = {
+    //     user,
+    //     reaction
+    // }
+
     const {conversation_id, message_id, reaction} = req.body
     const user = req.user.email
-    const reactionObj = {
-        user,
-        reaction
-    }
+    // const reactionObj = {
+    //     user,
+    //     reaction
+    // }
 
     try{
+        // const associatedConversation = await Conversation.findById(conversation_id).populate('messages.user')
+        // const message = associatedConversation.messages.find(message => message_id == message._id)
+        // // console.log(message)
+        // const foundReaction = message.reactions.find(reaction => reaction.user === user)
+        // // console.log('before', associatedConversation.messages[0])
+    
+        // // checks if user already made a reaction on this message
+        // if(!foundReaction){
+        //     message.reactions.push(reactionObj)
+        // }
+        // // if(foundReaction && foundReaction.reaction === req.body.reaction){
+        // //     message.reactions = message.reactions.filter(reaction => reaction.user !== req.user.email)
+        // // }
+
+        // // if(foundReaction && foundReaction.user === user && foundReaction.reaction !== reaction) {
+        // //     console.log('exists')
+        // //         const newArr = message.reactions.map(react => {
+        // //             if(react.user === user){
+        // //                 react.reaction = reaction
+        // //             }
+        // //             return react
+        // //         })
+
+        // //         message.reactions = newArr
+
+        // //         //not reassigning as we hope
+        // //         // message.reactions = newArr
+        // //         // console.log('new', newArr)
+        // // }
+        // else {
+        //     // check if the user passed in same reaction to "unlike"
+        //     if(foundReaction.reaction === req.body.reaction){
+        //         message.reactions = message.reactions.filter(reaction => reaction.user !== user)
+        //     }
+
+        //     // user can only have one reaction. if already has one, "update" the reaction
+        //     if(foundReaction.user === user && foundReaction.reaction !== reaction) {
+        //             // why doesn't this approach work? I.e save to the database?
+        //             // const newArr = message.reactions.map(react => {
+        //             //     if(react.user === user){
+        //             //         react.reaction = reaction
+        //             //     }
+        //             //     return react
+        //             // })
+
+        //             // Why does these approach work?
+
+        //             // remove existing user's array and then push in new reaction
+        //             // message.reactions = message.reactions.filter(reaction => reaction.user !== req.user.email)
+        //             // message.reactions.push({
+        //             //     user,
+        //             //     reaction
+        //             // })
+
+        //             // find index of existing user's reaction in array and replace it with new passed in
+        //             const findIndex = message.reactions.findIndex(react =>  react.user === user)
+        //             message.reactions.splice(findIndex, 1, reactionObj)
+
+        //     }
+        // }
 
         const associatedConversation = await Conversation.findById(conversation_id).populate('messages.user')
         const message = associatedConversation.messages.find(message => message_id == message._id)
-        // console.log(message)
-        const foundReaction = message.reactions.find(reaction => reaction.user === user)
-        // console.log('before', associatedConversation.messages[0])
+        const foundReaction = message.reactions
+
+        // checks if a reaction has been made already.
+        if(foundReaction[reaction]){
+            // check if a user made the reaction already
+            const found = foundReaction[reaction].find(userObj => userObj === user)
+            // if none found, add them to the array
+            if(!found){
+                foundReaction[reaction].push(user)
+            }
+            // if found, they're unliking the reaction
+            else{
+                const remove = foundReaction[reaction].filter(userObj => userObj !== user)
+                // if the filtered array is not empty, filter out the specific user that unliked
+                if(remove.length !== 0){
+                    foundReaction[reaction] = remove
+                }
+                // if empty array, remove the key of reaction
+                else{
+                    delete foundReaction[reaction]
+                }
+            }
+            // console.log('who',foundReaction)
+        }
     
         // checks if user already made a reaction on this message
-        if(!foundReaction){
-            message.reactions.push(reactionObj)
+        else{
+            foundReaction[reaction] = [user]
+            // console.log('why',foundReaction)
         }
-        // if(foundReaction && foundReaction.reaction === req.body.reaction){
-        //     message.reactions = message.reactions.filter(reaction => reaction.user !== req.user.email)
-        // }
-
-        // if(foundReaction && foundReaction.user === user && foundReaction.reaction !== reaction) {
-        //     console.log('exists')
-        //         const newArr = message.reactions.map(react => {
-        //             if(react.user === user){
-        //                 react.reaction = reaction
-        //             }
-        //             return react
-        //         })
-
-        //         message.reactions = newArr
-
-        //         //not reassigning as we hope
-        //         // message.reactions = newArr
-        //         // console.log('new', newArr)
-        // }
-        else {
-            // check if the user passed in same reaction to "unlike"
-            if(foundReaction.reaction === req.body.reaction){
-                message.reactions = message.reactions.filter(reaction => reaction.user !== user)
-            }
-
-            // user can only have one reaction. if already has one, "update" the reaction
-            if(foundReaction.user === user && foundReaction.reaction !== reaction) {
-                    // why doesn't this approach work? I.e save to the database?
-                    // const newArr = message.reactions.map(react => {
-                    //     if(react.user === user){
-                    //         react.reaction = reaction
-                    //     }
-                    //     return react
-                    // })
-
-                    // Why does these approach work?
-
-                    // remove existing user's array and then push in new reaction
-                    // message.reactions = message.reactions.filter(reaction => reaction.user !== req.user.email)
-                    // message.reactions.push({
-                    //     user,
-                    //     reaction
-                    // })
-
-                    // find index of existing user's reaction in array and replace it with new passed in
-                    const findIndex = message.reactions.findIndex(react =>  react.user === user)
-                    message.reactions.splice(findIndex, 1, reactionObj)
-
-            }
-        }
-        // message.reactions = []
+        // message.reactions = {}
+        associatedConversation.markModified('messages')
         await associatedConversation.save()
         // console.log('after', associatedConversation.messages[0])
         res.status(201).send({conversation: associatedConversation})
