@@ -163,12 +163,12 @@ router.post("/reactions", auth, async(req,res) => {
         //     // user can only have one reaction. if already has one, "update" the reaction
         //     if(foundReaction.user === user && foundReaction.reaction !== reaction) {
         //             // why doesn't this approach work? I.e save to the database?
-        //             // const newArr = message.reactions.map(react => {
-        //             //     if(react.user === user){
-        //             //         react.reaction = reaction
-        //             //     }
-        //             //     return react
-        //             // })
+        //             message.reactions = message.reactions.map(react => {
+        //                 if(react.user === user){
+        //                     react.reaction = reaction
+        //                 }
+        //                 return react
+        //             })
 
         //             // Why does these approach work?
 
@@ -180,8 +180,8 @@ router.post("/reactions", auth, async(req,res) => {
         //             // })
 
         //             // find index of existing user's reaction in array and replace it with new passed in
-        //             const findIndex = message.reactions.findIndex(react =>  react.user === user)
-        //             message.reactions.splice(findIndex, 1, reactionObj)
+        //             // const findIndex = message.reactions.findIndex(react =>  react.user === user)
+        //             // message.reactions.splice(findIndex, 1, reactionObj)
 
         //     }
         // }
@@ -212,13 +212,31 @@ router.post("/reactions", auth, async(req,res) => {
             }
             // console.log('who',foundReaction)
         }
-    
         // checks if user already made a reaction on this message
         else{
+            const reactionKeys = Object.keys(message.reactions)
+            // goes through each reaction key and iterates through the array to remove previous reactions made by the user
+            if(reactionKeys.length){
+                for(let i = 0; i < reactionKeys.length; i++){
+                    // check if the value array contains the name. If it does, remove the user from the array
+                    if(foundReaction[reactionKeys[i]].includes(user)){
+                        const remove = foundReaction[reactionKeys[i]].filter(userObj => userObj !== user)
+                        
+                        if(remove.length !== 0){
+                            foundReaction[reactionKeys[i]] = remove
+                        }
+                        // if empty array, remove the key of reaction
+                        else{
+                            delete foundReaction[reactionKeys[i]]
+                        }
+                    }
+                }
+            }
             foundReaction[reaction] = [user]
             // console.log('why',foundReaction)
         }
         // message.reactions = {}
+        // this notifies MongoDB that the property has changed to save
         associatedConversation.markModified('messages')
         await associatedConversation.save()
         // console.log('after', associatedConversation.messages[0])

@@ -11,8 +11,6 @@ export default ({users=[], message: {_id,content, reactions, user, createdAt, ne
     
     const [startLongPress, setStartLongPress] = useState(false)
 
-    console.log(reactions)
-
     useEffect(() => {
         let timerId;
         if(startLongPress){
@@ -28,6 +26,10 @@ export default ({users=[], message: {_id,content, reactions, user, createdAt, ne
             clearTimeout(timerId)
         }
     }, [startLongPress])
+
+    useEffect(() => {
+        console.log(reactions)
+    }, [blurred])
 
     const giveReaction = (reaction) => {
         //handle fetch to express to create reaction
