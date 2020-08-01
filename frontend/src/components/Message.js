@@ -70,11 +70,19 @@ export default ({users=[], message: {_id,content, reactions, user, createdAt, ne
     }
 
     const generateReactionElement = () => {
-        // if(reactions){
-            return <div className={`message-reaction ${checkIfMineOrOther()}`}>
-            <i className="fas fa-thumbs-up fa-lg"></i>
-            </div>
-        // }
+        if(reactions){
+            return <div className={`message-reaction__container ${checkIfMineOrOther()}`}>
+                <div className="reaction-container">
+                    <div className={`message-reaction reaction-first ${checkIfMineOrOther()}`}>
+                        <i className="fas fa-thumbs-up fa-lg"></i>
+                    </div>
+
+                    <div className={`message-reaction reaction-second ${checkIfMineOrOther()}`}>
+                        <i className="fas fa-thumbs-up fa-lg"></i>
+                    </div>
+                </div>
+            </div> 
+        }
     }
 
     const checkIfMineOrOther = () => loggedUser.email === user.email ? "mine" : "other"

@@ -152,44 +152,122 @@ hr{
     width: 100%;
 }
 
-.message-reaction.other {
-    color: $cool-blue;
+.message-reaction__container.other, .message-reaction__container.mine {
+    background: none;
     position: absolute;
-    right: -20px;
-    top: -20px;
-    background: $dark-white;
-    padding: 6px;
-    border-radius: 20px;
+    top: -30px;
+    height: 35px;
+    width: 50px;
 }
 
-.message-reaction.other:before {
+.message-reaction__container.mine {
+    left: -30px;
+}
+
+.message-reaction__container.other {
+    right: -30px;
+}
+
+.message-reaction__container.other:before, .message-reaction__container.mine:before  {
     content: "";
     position: absolute;
-    bottom: -4px;
-    right: -8px;
+    bottom: -18px;
     height: 10px;
     width: 10px;
     background: $dark-white;
     border-radius: 10px;
 }
 
-.message-reaction.mine {
-    color: $cool-blue;
+.message-reaction__container.mine:before {
+    left: 15px;
+}
+
+.message-reaction__container.other:before {
+    right: 15px;
+}
+
+.reaction-container {
+    display: flex;
+    position: relative;
+}
+
+.message-reaction.reaction-first.mine, .message-reaction.reaction-first.other {
     position: absolute;
-    left: -20px;
-    top: -20px;
+    color: $cool-blue;
     background: $dark-white;
     padding: 6px;
     border-radius: 20px;
+    z-index: 10;
+    border: 1px solid $light-grey;
 }
 
-.message-reaction.mine:before {
-    content: "";
-    position: absolute;
-    bottom: -4px;
-    left: -8px;
-    height: 10px;
-    width: 10px;
-    background: $dark-white;
-    border-radius: 10px;
+.message-reaction.reaction-first.mine {
+    top: 0;
+    right: 0;
 }
+
+.message-reaction.reaction-first.other {
+    top: 0;
+    left: 0;
+}
+
+.message-reaction.reaction-second.mine, .message-reaction.reaction-second.other{
+    color: $cool-blue;
+    position: absolute;
+    background: $dark-white;
+    padding: 6px;
+    border-radius: 20px;
+    border: 1px solid $light-grey;
+}
+
+.message-reaction.reaction-second.mine {
+    left: -5px;
+    top: 5px;
+}
+
+.message-reaction.reaction-second.other {
+    right: -5px;
+    top: 5px;
+}
+
+// .message-reaction.other {
+//     color: $cool-blue;
+//     position: absolute;
+//     right: -20px;
+//     top: -20px;
+//     background: $dark-white;
+//     padding: 6px;
+//     border-radius: 20px;
+// }
+
+// .message-reaction.other:before {
+//     content: "";
+//     position: absolute;
+//     bottom: -4px;
+//     right: -8px;
+//     height: 10px;
+//     width: 10px;
+//     background: $dark-white;
+//     border-radius: 10px;
+// }
+
+// .message-reaction.mine {
+//     color: $cool-blue;
+//     position: absolute;
+//     left: -20px;
+//     top: -20px;
+//     background: $dark-white;
+//     padding: 6px;
+//     border-radius: 20px;
+// }
+
+// .message-reaction.mine:before {
+//     content: "";
+//     position: absolute;
+//     bottom: -4px;
+//     left: -8px;
+//     height: 10px;
+//     width: 10px;
+//     background: $dark-white;
+//     border-radius: 10px;
+// }
