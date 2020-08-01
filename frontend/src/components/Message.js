@@ -28,7 +28,9 @@ export default ({users=[], message: {_id,content, reactions, user, createdAt, ne
     }, [startLongPress])
 
     useEffect(() => {
-        console.log(reactions)
+        if(reactions){
+            console.log(content, Object.keys(reactions))
+        }
     }, [blurred])
 
     const giveReaction = (reaction) => {
@@ -67,6 +69,14 @@ export default ({users=[], message: {_id,content, reactions, user, createdAt, ne
         // })
     }
 
+    const generateReactionElement = () => {
+        // if(reactions){
+            return <div className={`message-reaction ${checkIfMineOrOther()}`}>
+            <i className="fas fa-thumbs-up fa-lg"></i>
+            </div>
+        // }
+    }
+
     const checkIfMineOrOther = () => loggedUser.email === user.email ? "mine" : "other"
 
     const checkIfLastMessage = () => lastMessage() ? "last" : ""
@@ -87,6 +97,9 @@ export default ({users=[], message: {_id,content, reactions, user, createdAt, ne
                 </div>  
             }
             <div className={`message ${blurred === _id ? "no-blurred" : ""} ${checkIfMineAndLast()}`}>
+                {
+                    generateReactionElement()
+                }    
                 <div className={`popup ${checkIfMineAndLast()} ${blurred === _id ? "show-popup" : ""}`}>
                     <div className="message__reaction-container">
                         <span onClick={() => giveReaction("thumbs-up")}><i className="fas fa-thumbs-up fa-lg"></i></span>

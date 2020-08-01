@@ -151,3 +151,45 @@ hr{
     top: 6px;
     width: 100%;
 }
+
+.message-reaction.other {
+    color: $cool-blue;
+    position: absolute;
+    right: -20px;
+    top: -20px;
+    background: $dark-white;
+    padding: 6px;
+    border-radius: 20px;
+}
+
+.message-reaction.other:before {
+    content: "";
+    position: absolute;
+    bottom: -4px;
+    right: -8px;
+    height: 10px;
+    width: 10px;
+    background: $dark-white;
+    border-radius: 10px;
+}
+
+.message-reaction.mine {
+    color: $cool-blue;
+    position: absolute;
+    left: -20px;
+    top: -20px;
+    background: $dark-white;
+    padding: 6px;
+    border-radius: 20px;
+}
+
+.message-reaction.mine:before {
+    content: "";
+    position: absolute;
+    bottom: -4px;
+    left: -8px;
+    height: 10px;
+    width: 10px;
+    background: $dark-white;
+    border-radius: 10px;
+}
