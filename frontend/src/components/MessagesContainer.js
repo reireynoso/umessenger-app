@@ -42,6 +42,10 @@ export default ({messageInputHeight, recipientHeight}) => {
     //add an event listener on the window anytime it is resized accounting for the toggle device.
     useEffect(() => {
         window.addEventListener('resize', setScreenOrientation)
+
+        return () => {
+            window.removeEventListener('resize', setScreenOrientation)
+        }
     }, [])
 
     // dynamically changes the components height 

@@ -69,17 +69,48 @@ export default ({users=[], message: {_id,content, reactions, user, createdAt, ne
         // })
     }
 
+    const determineReactionsToRender = () => {
+        const reactionKeys = Object.keys(reactions)
+        console.log(reactions[reactionKeys])
+        // Handles exactly ONE reaction from ONE user.
+        if(reactionKeys.length === 1 && reactions[reactionKeys].length === 1){
+            const onlyReactionUser = reactions[reactionKeys][0]
+            return <div className={`message-reaction reaction-second ${checkIfMineOrOther()} ${onlyReactionUser === loggedUser.email ? "myReaction" : null}`}>
+                <i className="fas fa-thumbs-up fa-lg"></i>
+            </div>
+        }
+        else{
+            return <React.Fragment>
+        
+            <div className={`message-reaction reaction-second ${checkIfMineOrOther()}`}>
+                <i className="fas fa-thumbs-up fa-lg"></i>
+            </div>
+    
+            <div className={`message-reaction reaction-first ${checkIfMineOrOther()}`}>
+                <i className="fas fa-thumbs-up fa-lg"></i>
+            </div>
+            </React.Fragment>
+        }
+
+       
+    }
+
     const generateReactionElement = () => {
         if(reactions){
             return <div className={`message-reaction__container ${checkIfMineOrOther()}`}>
                 <div className="reaction-container">
-                    <div className={`message-reaction reaction-first ${checkIfMineOrOther()}`}>
-                        <i className="fas fa-thumbs-up fa-lg"></i>
-                    </div>
+                    {
+                        determineReactionsToRender()
+                    }
+            
+                    {/*<div className={`message-reaction reaction-second ${checkIfMineOrOther()}`}>
+                    <i className="fas fa-thumbs-up fa-lg"></i>
+                </div>
+        
+                <div className={`message-reaction reaction-first ${checkIfMineOrOther()}`}>
+                    <i className="fas fa-thumbs-up fa-lg"></i>
+                </div>*/}
 
-                    <div className={`message-reaction reaction-second ${checkIfMineOrOther()}`}>
-                        <i className="fas fa-thumbs-up fa-lg"></i>
-                    </div>
                 </div>
             </div> 
         }

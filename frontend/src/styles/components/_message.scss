@@ -19,7 +19,7 @@
     color: $dark-white;
     position: absolute;
     z-index: 20;
-    opacity: 0;
+    visibility: hidden;
     border-radius: 10px;
     text-align: center;
     padding: 5px;
@@ -42,7 +42,7 @@
 }
 
 .message:hover .message__tooltip{
-    opacity: 1;
+    visibility: visible;
 }
 
 .message__nametag {
@@ -193,12 +193,19 @@ hr{
 
 .message-reaction.reaction-first.mine, .message-reaction.reaction-first.other {
     position: absolute;
-    color: $cool-blue;
+    color: $light-grey;
     background: $dark-white;
     padding: 6px;
     border-radius: 20px;
     z-index: 10;
     border: 1px solid $light-grey;
+}
+
+.message-reaction.reaction-first.mine.myReaction, 
+.message-reaction.reaction-first.other.myReaction, 
+.message-reaction.reaction-second.mine.myReaction, 
+.message-reaction.reaction-second.other.myReaction{
+    color: $cool-blue;
 }
 
 .message-reaction.reaction-first.mine {
@@ -212,7 +219,7 @@ hr{
 }
 
 .message-reaction.reaction-second.mine, .message-reaction.reaction-second.other{
-    color: $cool-blue;
+    color: $light-grey;
     position: absolute;
     background: $dark-white;
     padding: 6px;
