@@ -1,7 +1,6 @@
 import React, {useState, useEffect} from 'react'
 import moment from 'moment'
 import {useSelector, useDispatch} from 'react-redux'
-// import apiUrl from '../utils/apiUrl'
 import {sendReactionRequest} from '../actions/conversation'
 
 export default ({users=[], message: {_id,content, reactions, user, createdAt, nextMessageUser}, blurOutComponent, blurred}) => {
@@ -27,16 +26,15 @@ export default ({users=[], message: {_id,content, reactions, user, createdAt, ne
         }
     }, [startLongPress])
 
-    useEffect(() => {
-        if(reactions){
-            console.log(content, Object.keys(reactions))
-        }
-    }, [blurred])
+    // useEffect(() => {
+    //     if(reactions){
+    //         console.log(content, Object.keys(reactions))
+    //     }
+    // }, [blurred])
 
     const giveReaction = (reaction) => {
         //handle fetch to express to create reaction
         //consider creating array property on message object instead of model
-        // console.log(loggedUser)
         
         const reactionObj = {
             conversation_id: selectConversation._id,
@@ -45,54 +43,93 @@ export default ({users=[], message: {_id,content, reactions, user, createdAt, ne
         }
 
         dispatch(sendReactionRequest(reactionObj, loggedUser))
+    }
 
-        // const token = localStorage.getItem("token")
-        // return fetch(`${apiUrl}/reactions`, {
-        //     method: "POST",
-        //     headers: {
-        //         'Content-Type': 'application/json',
-        //         'Accept': "application/json",
-        //         'Authorization': `Bearer ${token}`
-        //     },
-        //     body: JSON.stringify(reactionRequest)
-        // })
-        // .then(res => {
-        //     if(res.status === 400){
-        //         return console.log('error')
-        //     }
-        //     return res.json()
-        // })
-        // .then(data => {
-        //     if(data){
-        //         console.log(data)   
-        //     }
-        // })
+    const whichReaction = (reaction) => {
+        // function determines which reaction icon to return
+        switch(reaction){
+            case "thumbs-up":
+                return <i className="fas fa-thumbs-up fa-lg"></i>
+            case "thumbs-down":
+                return <i className="fas fa-thumbs-down fa-lg"></i>
+            case "exclamation":
+                return <i className="fas fa-exclamation fa-lg"></i>
+            case "question":
+                return <i className="fas fa-question fa-lg"></i>
+        }
+    }
+
+    const sortThroughReactions = () => {
+        const reactionKeys = Object.keys(reactions)
+        // set initial reaction to undefined. These will be set to the appropriate element
+        let firstReaction;
+        let secondReaction;
+
+        //iterate through all the reaction keys
+        for(let i = 0; i< reactionKeys.length; i++){
+            // MAP may not be used efficiently
+            // goal is to iterate through the users of reaction keys.
+            reactions[reactionKeys[i]].map(user => {
+                // console.log(reactionKeys[i])
+                //set secondReaction to the first user that isn't the logged in user
+                if(!secondReaction && user !== loggedUser.email){
+                    secondReaction = <div className={`message-reaction reaction-second ${checkIfMineOrOther()}`}>
+                        {whichReaction(reactionKeys[i])}
+                    </div>
+                }
+                //set firstReaction to a matching logged in user
+                if(user === loggedUser.email){
+                    firstReaction = <div className={`message-reaction reaction-first ${checkIfMineOrOther()} myReaction`}>
+                        {whichReaction(reactionKeys[i])}
+                    </div>
+                }
+                //set firstReaction to the last user if no logged in user reaction is found
+                if((i + 1 === reactionKeys.lenth) && !firstReaction){
+                    firstReaction = <div className={`message-reaction reaction-first ${checkIfMineOrOther()}`}>
+                        {whichReaction(reactionKeys[i])}
+                    </div>
+                }
+            })
+        }
+
+        return <React.Fragment>
+            {
+                firstReaction
+            }
+            {
+                secondReaction
+            }
+        </React.Fragment>
     }
 
     const determineReactionsToRender = () => {
         const reactionKeys = Object.keys(reactions)
-        console.log(reactions[reactionKeys])
         // Handles exactly ONE reaction from ONE user.
+        // checks if there's one Reaction key. Also checks if only one user is in that list
         if(reactionKeys.length === 1 && reactions[reactionKeys].length === 1){
             const onlyReactionUser = reactions[reactionKeys][0]
             return <div className={`message-reaction reaction-second ${checkIfMineOrOther()} ${onlyReactionUser === loggedUser.email ? "myReaction" : null}`}>
-                <i className="fas fa-thumbs-up fa-lg"></i>
+                {whichReaction(reactionKeys[0])}
             </div>
         }
         else{
+            
             return <React.Fragment>
+            {
+                sortThroughReactions()
+            }
         
-            <div className={`message-reaction reaction-second ${checkIfMineOrOther()}`}>
+            {/*
+                <div className={`message-reaction reaction-second ${checkIfMineOrOther()}`}>
                 <i className="fas fa-thumbs-up fa-lg"></i>
             </div>
     
             <div className={`message-reaction reaction-first ${checkIfMineOrOther()}`}>
                 <i className="fas fa-thumbs-up fa-lg"></i>
             </div>
+            */}
             </React.Fragment>
         }
-
-       
     }
 
     const generateReactionElement = () => {

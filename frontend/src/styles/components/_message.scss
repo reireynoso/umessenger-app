@@ -191,15 +191,38 @@ hr{
     position: relative;
 }
 
-.message-reaction.reaction-first.mine, .message-reaction.reaction-first.other {
+
+.message-reaction.reaction-first.mine, 
+.message-reaction.reaction-first.other,
+.message-reaction.reaction-second.mine, 
+.message-reaction.reaction-second.other {
     position: absolute;
     color: $light-grey;
     background: $dark-white;
     padding: 6px;
     border-radius: 20px;
-    z-index: 10;
     border: 1px solid $light-grey;
+    width: 36px;
+    height: 36px;
+    text-align: center;
 }
+
+.message-reaction.reaction-first.mine, .message-reaction.reaction-first.other {
+    z-index: 10;
+}
+
+// .message-reaction.reaction-second.mine, .message-reaction.reaction-second.other{
+    // color: $light-grey;
+    // position: absolute;
+    // background: $dark-white;
+    // padding: 6px;
+    // border-radius: 20px;
+    // border: 1px solid $light-grey;
+    // width: 36px;
+    // height: 36px;
+    // text-align: center;
+// }
+
 
 .message-reaction.reaction-first.mine.myReaction, 
 .message-reaction.reaction-first.other.myReaction, 
@@ -216,15 +239,6 @@ hr{
 .message-reaction.reaction-first.other {
     top: 0;
     left: 0;
-}
-
-.message-reaction.reaction-second.mine, .message-reaction.reaction-second.other{
-    color: $light-grey;
-    position: absolute;
-    background: $dark-white;
-    padding: 6px;
-    border-radius: 20px;
-    border: 1px solid $light-grey;
 }
 
 .message-reaction.reaction-second.mine {
