@@ -1,18 +1,19 @@
-import React, {useEffect, useState, useRef, useLayoutEffect} from 'react'
+import React, {useEffect, useState, useRef} from 'react'
 import {useDispatch,useSelector} from 'react-redux'
 import io from 'socket.io-client'
-import ConversationContainer from './ConversationContainer'
-import SideBarConversationsContainer from './SideBarConversationsContainer'
-import {addOrUpdateConversation} from '../actions/conversation'
-import {removeLoggedInUserFromConversation} from '../selectors/conversation'
+
+import {removeLoggedInUserFromConversation, truncateString} from '../selectors/conversation'
 import {setSocket} from '../actions/socket'
 import apiUrl from '../utils/apiUrl'
-import {truncateString} from '../selectors/conversation'
+// import {truncateString} from '../selectors/conversation'
 
 import VideoModal from './VideoModal'
+import ConversationContainer from './ConversationContainer'
+import SideBarConversationsContainer from './SideBarConversationsContainer'
 
 import {setCaller ,declineCallAction} from '../actions/video-chat'
 import {openVideoModal} from '../actions/modal'
+import {addOrUpdateConversation, setReaction} from '../actions/conversation'
 
 
 export default () => {
@@ -61,7 +62,10 @@ export default () => {
             dispatch(addOrUpdateConversation(removeLoggedInUserFromConversation(existingConversation,user)))
         })
 
+        establishSocket.on('reactionUpdated', (existingConversation) => dispatch(setReaction(removeLoggedInUserFromConversation(existingConversation,user))))
+        
         dispatch(setSocket(establishSocket))
+
         return () => {
             console.log('dipped')
             establishSocket.disconnect()

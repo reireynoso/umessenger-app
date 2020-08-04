@@ -76,7 +76,8 @@ export const sendMessageToConversation = (emails,content,user) => dispatch => {
     })
 }
 
-export const sendReactionRequest = (reactionObj, user) => dispatch => {
+export const sendReactionRequest = (reactionObj) => {
+// export const sendReactionRequest = (reactionObj, user) => dispatch => {
     const token = localStorage.getItem("token")
     return fetch(`${apiUrl}/reactions`, {
         method: "POST",
@@ -91,13 +92,13 @@ export const sendReactionRequest = (reactionObj, user) => dispatch => {
         if(res.status === 400){
             return console.log('error')
         }
-        return res.json()
+        // return res.json()
     })
-    .then(data => {
-        if(data){
+    // .then(data => {
+        // if(data){
             // console.log(data.conversation)
-            const formattedConversation = removeLoggedInUserFromConversation(data.conversation,user)
-            dispatch(setReaction(formattedConversation)) 
-        }
-    })
+            // const formattedConversation = removeLoggedInUserFromConversation(data.conversation,user)
+            // dispatch(setReaction(formattedConversation)) 
+        // }
+    // })
 }

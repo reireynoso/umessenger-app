@@ -35,14 +35,15 @@ export default ({users=[], message: {_id,content, reactions, user, createdAt, ne
     const giveReaction = (reaction) => {
         //handle fetch to express to create reaction
         //consider creating array property on message object instead of model
-        
         const reactionObj = {
             conversation_id: selectConversation._id,
             message_id: _id,
             reaction
         }
 
-        dispatch(sendReactionRequest(reactionObj, loggedUser))
+        sendReactionRequest(reactionObj)
+
+        // dispatch(sendReactionRequest(reactionObj, loggedUser))
     }
 
     const whichReaction = (reaction) => {

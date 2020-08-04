@@ -31,11 +31,12 @@ Refer to the respective stack's README for instructions on setting up.
 
 # Features in progress
 
-* Reacting on a specific message. Data needs to be structured on the server. Rendering reactions on the frontend in progress.
+* Reacting on a specific message. Mostly implemented. Fix styling.
 
 # Known Bugs/Issues
 * When inputting email recipient, if it's too long it will expand the width. 
 * Minor bug involving who's typing. At some point, if the user keeps typing, the user's own name is included in the list of typing (which it shouldn't) and is not removed even after they're not typing anymore
+* Adjust fetch request for sending new message. Make use of sockets.
 
 # Tech Stack
 

@@ -190,57 +190,65 @@ router.post("/reactions", auth, async(req,res) => {
         const message = associatedConversation.messages.find(message => message_id == message._id)
         const foundReaction = message.reactions
 
-        // checks if a reaction has been made already.
-        if(foundReaction[reaction]){
-            // check if a user made the reaction already
-            const found = foundReaction[reaction].find(userObj => userObj === user)
-            // if none found, add them to the array
-            if(!found){
-                foundReaction[reaction].push(user)
-            }
-            // if found, they're unliking the reaction
-            else{
-                const remove = foundReaction[reaction].filter(userObj => userObj !== user)
-                // if the filtered array is not empty, filter out the specific user that unliked
-                if(remove.length !== 0){
-                    foundReaction[reaction] = remove
-                }
-                // if empty array, remove the key of reaction
-                else{
-                    delete foundReaction[reaction]
-                }
-            }
-            // console.log('who',foundReaction)
-        }
-        // checks if user already made a reaction on this message
-        else{
-            const reactionKeys = Object.keys(message.reactions)
+        let sameReaction;
+
+        const reactionKeys = Object.keys(message.reactions)
             // goes through each reaction key and iterates through the array to remove previous reactions made by the user
-            if(reactionKeys.length){
-                for(let i = 0; i < reactionKeys.length; i++){
-                    // check if the value array contains the name. If it does, remove the user from the array
-                    if(foundReaction[reactionKeys[i]].includes(user)){
-                        const remove = foundReaction[reactionKeys[i]].filter(userObj => userObj !== user)
-                        
-                        if(remove.length !== 0){
-                            foundReaction[reactionKeys[i]] = remove
-                        }
-                        // if empty array, remove the key of reaction
-                        else{
-                            delete foundReaction[reactionKeys[i]]
-                        }
+        if(reactionKeys.length){
+            for(let i = 0; i < reactionKeys.length; i++){
+                // check if the value array contains the name. If it does, remove the user from the array
+                if(foundReaction[reactionKeys[i]].includes(user)){
+                    // console.log('yo',reactionKeys[i])
+                    sameReaction = reactionKeys[i]
+                    const remove = foundReaction[reactionKeys[i]].filter(userObj => userObj !== user)
+                    
+                    if(remove.length !== 0){
+                        foundReaction[reactionKeys[i]] = remove
+                    }
+                    // if empty array, remove the key of reaction
+                    else{
+                        delete foundReaction[reactionKeys[i]]
                     }
                 }
             }
-            foundReaction[reaction] = [user]
-            // console.log('why',foundReaction)
+        }
+
+        // as long as the reaction isn't the same the previous made before
+        if(reaction !== sameReaction){
+            // checks if a reaction has been made already.
+            if(foundReaction[reaction]){
+                // check if a user made the reaction already
+                // const found = foundReaction[reaction].find(userObj => userObj === user)
+                // if none found, add them to the array
+                // if(!found){
+                    foundReaction[reaction].push(user)
+                // }
+                // if found, they're unliking the reaction
+                // else{
+                    // const remove = foundReaction[reaction].filter(userObj => userObj !== user)
+                    // if the filtered array is not empty, filter out the specific user that unliked
+                    // if(remove.length !== 0){
+                        // foundReaction[reaction] = remove
+                    // }
+                    // if empty array, remove the key of reaction
+                    // else{
+                        // delete foundReaction[reaction]
+                    // }
+                // }
+            }
+            // checks if user already made a reaction on this message
+            else{
+                foundReaction[reaction] = [user]
+            }
         }
         // message.reactions = {}
         // this notifies MongoDB that the property has changed to save
         associatedConversation.markModified('messages')
         await associatedConversation.save()
         // console.log('after', associatedConversation.messages[0])
-        res.status(201).send({conversation: associatedConversation})
+        req.app.io.to(conversation_id).emit('reactionUpdated', associatedConversation)
+        // res.status(201).send({conversation: associatedConversation})
+        res.status(201).send()
     }catch(e){
         console.log(e)
         res.status(400).send({errors: [e]})
