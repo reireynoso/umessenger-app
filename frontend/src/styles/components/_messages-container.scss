@@ -93,11 +93,16 @@
     display: block;
 }
 
-.no-blurred {
-    position: relative;
-    z-index: 300;
-    filter: brightness(1.5);
+.no-blurred > .message-reaction__container{
+    z-index: inherit;
+    filter: brightness(0.35);
 }
+
+.no-blurred {
+    z-index: 300;
+    filter: brightness(1.2);
+}
+
 
 .no-blurred::after{
     filter: brightness(0.65);

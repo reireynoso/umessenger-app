@@ -145,11 +145,11 @@ export default ({users=[], message: {_id,content, reactions, user, createdAt, ne
                     {user.name}
                 </div>  
             }
-            <div className={`message ${blurred === _id ? "no-blurred" : ""} ${checkIfMineAndLast()}`}>
+            <div className={`message ${blurred === _id ? "no-blurred" : ""} ${checkIfMineAndLast()} ${reactions ? "has-reactions" : ""}`}>
                 {
                     generateReactionElement()
                 }    
-                <div className={`popup ${checkIfMineAndLast()} ${blurred === _id ? "show-popup" : ""}`}>
+                <div className={`popup ${checkIfMineAndLast()} ${ (_id && blurred === _id) ? "show-popup" : ""}`}>
                     <div className="message__reaction-container">
                         <span onClick={() => giveReaction("thumbs-up")}><i className="fas fa-thumbs-up fa-lg"></i></span>
                         <span onClick={() => giveReaction("thumbs-down")}><i className="fas fa-thumbs-down fa-lg"></i></span>

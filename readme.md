@@ -28,15 +28,16 @@ Refer to the respective stack's README for instructions on setting up.
 * The recipient and message input dynamically increase to an extent while adjusting the components. 
 * A user can video chat another user. (only one user at the moment)
 * The user on the receiving end can choose to accept or decline the video chat call.
+* A user can react on a message. They can also un-react.
 
 # Features in progress
 
-* Reacting on a specific message. Mostly implemented. Fix styling.
+* Reacting on a specific message. (add styling)
 
 # Known Bugs/Issues
 * When inputting email recipient, if it's too long it will expand the width. 
-* Minor bug involving who's typing. At some point, if the user keeps typing, the user's own name is included in the list of typing (which it shouldn't) and is not removed even after they're not typing anymore
-* Adjust fetch request for sending new message. Make use of sockets.
+* Minor bug involving who's typing. At some point, if the user keeps typing, the user's own name is included in the list of typing (which it shouldn't) and is not removed even after they're not typing anymore. (consider refactoring or restructuring typing feature)
+* Refactor code
 
 # Tech Stack
 
@@ -61,6 +62,7 @@ Refer to the respective stack's README for instructions on setting up.
 * CORS
 * Multer (photo upload)
 * Sharp (photo resizing)
+* Font Awesome (icons)
 
 # Authors
 Reinald Reynoso

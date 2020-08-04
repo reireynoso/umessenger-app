@@ -50,7 +50,7 @@ export default forwardRef((props, ref) => {
         <div ref={ref} className={`recipient__modal ${recipientModal ? "modal-active" : ""}`}>
             <div className="recipient__modal-header">
                 <div className="image">
-                    <img src={image_url ? image_url : "/image/no-image.gif"}/>
+                    <img alt="" src={image_url ? image_url : "/image/no-image.gif"}/>
                 </div>
                 <h1>{check(name, 80)}</h1>
             </div>

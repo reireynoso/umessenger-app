@@ -55,7 +55,8 @@ export const setReaction = (updatedConversation) => ({
     payload: updatedConversation
 })
 
-export const sendMessageToConversation = (emails,content,user) => dispatch => {
+// export const sendMessageToConversation = (emails,content,user) => dispatch => {
+export const sendMessageToConversation = (emails,content)  => {
     const token = localStorage.getItem("token")
     return fetch(`${apiUrl}/conversations`, {
         method: "POST",

@@ -115,7 +115,8 @@ export default forwardRef(({setmessageInputHeight},ref) => {
             if(emails.length > 0 && content){
                 handleResetInput()
                 // console.log(textArea.current.value)
-                const errors = await dispatch(sendMessageToConversation(emails,content,user))
+                // const errors = await dispatch(sendMessageToConversation(emails,content,user))
+                const errors = await sendMessageToConversation(emails,content)
                 if(errors){
                     return dispatch(setConversationError(errors[0]))
                 }

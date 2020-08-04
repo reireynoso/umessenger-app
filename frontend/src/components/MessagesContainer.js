@@ -1,8 +1,8 @@
 import React, {useEffect, useState, useLayoutEffect, useRef} from 'react'
-import {useSelector, useDispatch} from 'react-redux'
+import {useSelector} from 'react-redux'
 import moment from 'moment'
 import Message from './Message'
-import { selectedConversation } from '../actions/conversation'
+// import { selectedConversation } from '../actions/conversation'
 
 // import {selectedConversation as selectedConversationAction} from '../actions/conversation'
 // import {removeLoggedInUserFromConversation} from '../selectors/conversation'
