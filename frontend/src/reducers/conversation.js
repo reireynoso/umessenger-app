@@ -20,7 +20,7 @@ const conversation = (state = {
             const removeOld = state.conversations.filter(conversation => conversation._id!==payload._id)
             const updatedConversations = [payload, ...removeOld]
             const previousSelectedConversation = updatedConversations.find(conversation => conversation._id === state.selectedConversation._id) || payload
-        
+            
             if(removeOld.length !== state.conversations){
                 return {
                     ...state,
@@ -41,6 +41,12 @@ const conversation = (state = {
                 ...state,
                 selectedConversation: payload,
                 emails: payload.users.map(user => user.email)
+            }
+        case "NEW_MESSAGE":
+            return {
+                ...state,
+                selectedConversation: payload._id === state.selectedConversation._id ? payload : state.selectedConversation,
+                // emails: payload.users.map(user => user.email)
             }
         case "REMOVE_SELECTED_CONVERSATION":
             // debugger

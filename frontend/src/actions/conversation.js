@@ -1,4 +1,4 @@
-import {removeLoggedInUserFromConversation} from '../selectors/conversation'
+// import {removeLoggedInUserFromConversation} from '../selectors/conversation'
 import apiUrl from '../utils/apiUrl'
 
 export const addEmail = (email) => ({
@@ -10,7 +10,6 @@ export const removeEmail = (email) => ({
     type: "REMOVE_EMAIL",
     payload: email
 })
-
 
 export const setConversations = (conversations) => ({
     type: "SET_CONVERSATIONS",
@@ -26,6 +25,13 @@ export const selectedConversation = (conversation) => {
     // console.log(conversation)
     return {
         type: "SELECTED_CONVERSATION",
+        payload: conversation
+    }
+}
+
+export const newMessage = (conversation) => {
+    return {
+        type: "NEW_MESSAGE",
         payload: conversation
     }
 }
@@ -70,9 +76,9 @@ export const sendMessageToConversation = (emails,content,user) => dispatch => {
             return data.errors
         }
         // console.log(removeLoggedInUserFromConversation(data.conversation,user))
-        const formattedConversation = removeLoggedInUserFromConversation(data.conversation,user)
-        dispatch(addOrUpdateConversation(formattedConversation))
-        dispatch(selectedConversation(formattedConversation))
+        // const formattedConversation = removeLoggedInUserFromConversation(data.conversation,user)
+        // dispatch(addOrUpdateConversation(formattedConversation))
+        // dispatch(selectedConversation(formattedConversation))
     })
 }
 

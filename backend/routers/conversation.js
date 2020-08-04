@@ -72,16 +72,16 @@ router.post("/conversations", auth, async(req,res) => {
                 // console.log(onlineUsers[otherUsers[i]])
                 req.app.io.to(onlineUsers[otherUsers[i]]).emit('newConversation', newConversation)
             }
-            res.send({conversation: newConversation})
+            res.status(201).send({conversation: newConversation})
         }
         else{
             //push message into existing convos message array
             existingConversation.messages.push(newMessage)
             await existingConversation.save()
             // console.log(existingConversation.messages)
-            req.app.io.to(existingConversation._id).emit('newMessage', existingConversation)
+            // req.app.io.to(existingConversation._id).emit('newMessage', existingConversation)
             req.app.io.to(existingConversation._id).emit('existingConversation', existingConversation)
-            res.send({conversation: existingConversation})
+            res.status(201).send({conversation: existingConversation})
         }
         // const convos = await Conversation.find({
         //     //$and [] indicates multiple queries defined inside
@@ -105,7 +105,7 @@ router.post("/conversations", auth, async(req,res) => {
         // res.send({convos})
     }catch(e){
         // res.send({errors: ["An email provided is invalid."]})
-        res.send({errors: [e]})
+        res.status(400).send({errors: [e]})
     }
 })
 

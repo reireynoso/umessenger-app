@@ -4,7 +4,7 @@ import {useSelector, useDispatch} from 'react-redux'
 import {sendReactionRequest} from '../actions/conversation'
 
 export default ({users=[], message: {_id,content, reactions, user, createdAt, nextMessageUser}, blurOutComponent, blurred}) => {
-    const dispatch = useDispatch()
+    // const dispatch = useDispatch()
     const loggedUser = useSelector(state => state.user)
     const selectConversation = useSelector(state => state.conversation.selectedConversation)
     
@@ -26,12 +26,6 @@ export default ({users=[], message: {_id,content, reactions, user, createdAt, ne
         }
     }, [startLongPress])
 
-    // useEffect(() => {
-    //     if(reactions){
-    //         console.log(content, Object.keys(reactions))
-    //     }
-    // }, [blurred])
-
     const giveReaction = (reaction) => {
         //handle fetch to express to create reaction
         //consider creating array property on message object instead of model
@@ -40,10 +34,7 @@ export default ({users=[], message: {_id,content, reactions, user, createdAt, ne
             message_id: _id,
             reaction
         }
-
         sendReactionRequest(reactionObj)
-
-        // dispatch(sendReactionRequest(reactionObj, loggedUser))
     }
 
     const whichReaction = (reaction) => {
@@ -119,16 +110,6 @@ export default ({users=[], message: {_id,content, reactions, user, createdAt, ne
             {
                 sortThroughReactions()
             }
-        
-            {/*
-                <div className={`message-reaction reaction-second ${checkIfMineOrOther()}`}>
-                <i className="fas fa-thumbs-up fa-lg"></i>
-            </div>
-    
-            <div className={`message-reaction reaction-first ${checkIfMineOrOther()}`}>
-                <i className="fas fa-thumbs-up fa-lg"></i>
-            </div>
-            */}
             </React.Fragment>
         }
     }
@@ -140,15 +121,6 @@ export default ({users=[], message: {_id,content, reactions, user, createdAt, ne
                     {
                         determineReactionsToRender()
                     }
-            
-                    {/*<div className={`message-reaction reaction-second ${checkIfMineOrOther()}`}>
-                    <i className="fas fa-thumbs-up fa-lg"></i>
-                </div>
-        
-                <div className={`message-reaction reaction-first ${checkIfMineOrOther()}`}>
-                    <i className="fas fa-thumbs-up fa-lg"></i>
-                </div>*/}
-
                 </div>
             </div> 
         }

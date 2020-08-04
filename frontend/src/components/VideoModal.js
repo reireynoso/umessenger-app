@@ -21,11 +21,8 @@ export default () => {
 
     const userVideo = useRef()
     const partnerVideo = useRef()
-    // let busy;
 
     let currentStream = useRef(null);
-
-    // console.log(busy)
 
     useEffect(() => {
         // let currentStream;

@@ -2,9 +2,10 @@ import React, {useEffect, useState, useLayoutEffect, useRef} from 'react'
 import {useSelector, useDispatch} from 'react-redux'
 import moment from 'moment'
 import Message from './Message'
+import { selectedConversation } from '../actions/conversation'
 
-import {selectedConversation as selectedConversationAction} from '../actions/conversation'
-import {removeLoggedInUserFromConversation} from '../selectors/conversation'
+// import {selectedConversation as selectedConversationAction} from '../actions/conversation'
+// import {removeLoggedInUserFromConversation} from '../selectors/conversation'
 
 
 // const typersInfo = {
@@ -22,9 +23,11 @@ import {removeLoggedInUserFromConversation} from '../selectors/conversation'
 
 export default ({messageInputHeight, recipientHeight}) => {
     const selectConversation = useSelector(state => state.conversation.selectedConversation)
-    const user = useSelector(state => state.user)
+    // const conversations = useSelector(state => state.conversation.conversations)
+
+    // const user = useSelector(state => state.user)
     const socket = useSelector(state => state.socket)
-    const dispatch = useDispatch()
+    // const dispatch = useDispatch()
 
     const [typers, setTypers] = useState([])
     const [screen, setScreen] = useState(0)
@@ -92,21 +95,12 @@ export default ({messageInputHeight, recipientHeight}) => {
     const scrollToRef = () => {
         return bottom.current.scrollIntoView({ behavior: "smooth" })
     }
-
-    // useEffect(() => {
-        //async solution to auto scroll for new message and switching convo.
-        //might cause BUG. Not sure yet.
-        // setTimeout(() => {
-        //     scrollToRef()
-
-        // }, 0)
-    // }, [selectConversation])
   
     useEffect(() => {
         if(selectConversation.messages){
             organizeMessages(selectConversation.messages)
         }
-        //Issues to Fix: Severe refactor. Unknown bug somewhere. At some point, when user switches conversation as another person is typing and goes back to same conversation, person typing doesn't register again.
+       
         setTimeout(() => {
             scrollToRef()
         }, 0)
@@ -127,15 +121,15 @@ export default ({messageInputHeight, recipientHeight}) => {
             // handleTypers()
         // }
         if(socket.io){
-            socket.on('newMessage', (conversation) => {
+            // socket.on('newMessage', (conversation) => {
                 // console.log('newMessage')
                 //if a new message is sent from the server, socket emits the conversation is belongs to. Instead of everyone's viewing conversation being forced to switch to that updated conversation, only the users currently on that conversation is updated to the selectedConversation in state. 
-                if(conversation._id === selectConversation._id){
+                // if(conversation._id === selectConversation._id){
                     //removes the current user from the conversation list before adding to the state
-                    dispatch(selectedConversationAction(removeLoggedInUserFromConversation(conversation,user)))
-                }
+                    // dispatch(selectedConversationAction(removeLoggedInUserFromConversation(conversation,user)))
+                // }
 
-            })
+            // })
             socket.on('messageTyping', ({user,content, selectedConversation}) => {
                 // typers array keeps track of who's typing in conversation
                 // anyone typing is added into the array as long they have something in content

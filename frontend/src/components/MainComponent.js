@@ -3,29 +3,27 @@ import {useDispatch,useSelector} from 'react-redux'
 import io from 'socket.io-client'
 
 import {removeLoggedInUserFromConversation, truncateString} from '../selectors/conversation'
+import {newMessage} from '../actions/conversation'
 import {setSocket} from '../actions/socket'
+import {addOrUpdateConversation, setReaction} from '../actions/conversation'
+import {setCaller ,declineCallAction} from '../actions/video-chat'
+import {openVideoModal} from '../actions/modal'
 import apiUrl from '../utils/apiUrl'
-// import {truncateString} from '../selectors/conversation'
 
 import VideoModal from './VideoModal'
 import ConversationContainer from './ConversationContainer'
 import SideBarConversationsContainer from './SideBarConversationsContainer'
-
-import {setCaller ,declineCallAction} from '../actions/video-chat'
-import {openVideoModal} from '../actions/modal'
-import {addOrUpdateConversation, setReaction} from '../actions/conversation'
-
 
 export default () => {
     
     const dispatch = useDispatch()
     const user = useSelector(state => state.user)
     const socket = useSelector(state => state.socket)
-    const {videoModal, callerInformation} = useSelector(state => state.modal)
+    const {videoModal} = useSelector(state => state.modal)
+    const {receivingCall, caller} = useSelector(state => state.videoChat)
+
     const [audio] = useState(new Audio('/audio/iphone-ding-sound.mp3'))
     const [playing, setPlaying] = useState(false)
-
-    const {receivingCall, caller} = useSelector(state => state.videoChat)
 
     const music = useRef(null)
     // const ENDPOINT = 'localhost:4000'
@@ -34,16 +32,6 @@ export default () => {
     //moved established socket here
     const establishSocket = io(ENDPOINT)
 
-    const notification = (conversation) => {
-        const messages = conversation.messages
-        const lastMessage = messages[messages.length-1]
-        if(lastMessage.user.email !== user.email && !playing){
-            setPlaying(true)
-            setTimeout(() => {
-                setPlaying(false)
-            }, 2)
-        }
-    }
     useEffect(() => {
         if(playing){
             audio.play()
@@ -59,11 +47,14 @@ export default () => {
         })
         establishSocket.on('existingConversation', (existingConversation) => {
             notification(existingConversation)
+            // updates the conversation in the redux array
             dispatch(addOrUpdateConversation(removeLoggedInUserFromConversation(existingConversation,user)))
+            // updates the selected conversation if on it separately
+            dispatch(newMessage(removeLoggedInUserFromConversation(existingConversation,user)))
         })
-
+    
         establishSocket.on('reactionUpdated', (existingConversation) => dispatch(setReaction(removeLoggedInUserFromConversation(existingConversation,user))))
-        
+
         dispatch(setSocket(establishSocket))
 
         return () => {
@@ -99,10 +90,8 @@ export default () => {
             if(socket.on){
                 socket.off('calling')
             }
-            // console.log('left')
         }
     }, [receivingCall,socket])
-
 
     const acceptCall = () => {
         // dispatch(setCallAccepted())
@@ -114,6 +103,17 @@ export default () => {
         // emit an listener to the server for "declineCall"
         establishSocket.emit("declineCall", caller)
         dispatch(declineCallAction())
+    }
+
+    const notification = (conversation) => {
+        const messages = conversation.messages
+        const lastMessage = messages[messages.length-1]
+        if(lastMessage.user.email !== user.email && !playing){
+            setPlaying(true)
+            setTimeout(() => {
+                setPlaying(false)
+            }, 2)
+        }
     }
 
     return (
