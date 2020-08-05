@@ -180,6 +180,17 @@ hr{
     width: 10px;
     background: $dark-white;
     border-radius: 10px;
+    animation: fadeIn 0.3s ease-in-out;
+    // transform-origin: 100% 100% 0;
+}
+
+@keyframes fadeIn {
+    from {
+        transform: scale(0);
+    }
+    to {
+        transform: scale(1);
+    }   
 }
 
 .message-reaction__container.mine:before {
@@ -208,6 +219,7 @@ hr{
     width: 36px;
     height: 36px;
     text-align: center;
+    animation: fadeIn 0.5s ease-in-out;
 }
 
 .message-reaction.reaction-first.mine, .message-reaction.reaction-first.other {

@@ -35,21 +35,19 @@
 }
 
 .blur {
-    display: none;
+    // display: block;
     position: absolute;
     width: 100%;
     height: 100%;
     background: $dark-grey;
     z-index: 200;
+    // opacity: 0;
     opacity: 0.8;
+    animation: reactionContainerFadeIn 0.3s ease-in;
 }
 
-.popup.last.other {
-    border-bottom-left-radius: 0;
-}
 
-.popup {
-    display: none;
+.message__reaction-container {
     position: absolute;
     top: -40px;
     z-index: 300;
@@ -58,40 +56,64 @@
     width: 150px;
     padding: 5px;
     border-radius: 20px !important;
-}
-
-.message__reaction-container {
+    filter: brightness(1.5);
     display: flex;
     justify-content: space-around;
+    animation: reactionContainerFadeIn 0.3s ease-in;
+    transform-origin: 100% 0 100%;
 }
+
 .message__reaction-container > span{
     display: block;
     cursor: pointer;
-    transition: 0.3s;
+    transition: 0.5s;
+    animation: reactionFadeIn 0.6s ease-in;
+}
+
+@keyframes reactionFadeIn {
+    from {
+        transform: scale(0);
+    }
+
+    to {
+        transform: scale(1);
+    }
+}
+
+@keyframes reactionContainerFadeIn {
+    from {
+        transform: scale(0);
+    }
+
+    to {
+        transform: scale(1);
+    }
 }
 
 .message__reaction-container > span:hover{
     color: lighten($color: $grey, $amount: 10%);
+    transform: scale(1.1);
 }
 
-.popup.mine {
+.message__reaction-container.mine {
     right: 0;
     background: $dark-white;
 }
 
-.popup.other{
+.message__reaction-container.other{
     left: 0;
     background: $dark-white;
 }
 
-.show-popup {
-    display: block;
-    filter: brightness(1.5);
-}
+// .show-popup {
+    // display: block;
+    // filter: brightness(1.5);
+// }
 
-.blurred {
-    display: block;
-}
+// .blurred {
+//     display: block;
+//     opacity: 0.8;
+// }
 
 .no-blurred > .message-reaction__container{
     z-index: inherit;

@@ -148,15 +148,17 @@ export default ({users=[], message: {_id,content, reactions, user, createdAt, ne
             <div className={`message ${blurred === _id ? "no-blurred" : ""} ${checkIfMineAndLast()} ${reactions ? "has-reactions" : ""}`}>
                 {
                     generateReactionElement()
-                }    
-                <div className={`popup ${checkIfMineAndLast()} ${ (_id && blurred === _id) ? "show-popup" : ""}`}>
-                    <div className="message__reaction-container">
-                        <span onClick={() => giveReaction("thumbs-up")}><i className="fas fa-thumbs-up fa-lg"></i></span>
-                        <span onClick={() => giveReaction("thumbs-down")}><i className="fas fa-thumbs-down fa-lg"></i></span>
-                        <span onClick={() => giveReaction("exclamation")}><i className="fas fa-exclamation fa-lg"></i></span>
-                        <span onClick={() => giveReaction("question")}><i className="fas fa-question fa-lg"></i></span>
+                } 
+                {
+                    (_id && blurred === _id) ? <div className={`message__reaction-container ${checkIfMineOrOther()}`}>          
+                            <span onClick={() => giveReaction("thumbs-up")}><i className="fas fa-thumbs-up fa-lg"></i></span>
+                            <span onClick={() => giveReaction("thumbs-down")}><i className="fas fa-thumbs-down fa-lg"></i></span>
+                            <span onClick={() => giveReaction("exclamation")}><i className="fas fa-exclamation fa-lg"></i></span>
+                            <span onClick={() => giveReaction("question")}><i className="fas fa-question fa-lg"></i></span>         
                     </div>
-                </div>
+                    :
+                    null
+                }
                 {!user ? <img alt="typing-gif" className="segment__typing" src="/image/typing_dots.gif"/> : content}
                 <div className={`message__tooltip ${checkIfMineOrOther()}`}>{moment(createdAt).format('MMMM Do YYYY, h:mm:ss a')}</div>
             </div>
