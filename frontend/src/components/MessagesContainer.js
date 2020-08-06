@@ -2,6 +2,7 @@ import React, {useEffect, useState, useLayoutEffect, useRef} from 'react'
 import {useSelector} from 'react-redux'
 import moment from 'moment'
 import Message from './Message'
+import AnimationFeature from './AnimationFeature'
 // import { selectedConversation } from '../actions/conversation'
 
 // import {selectedConversation as selectedConversationAction} from '../actions/conversation'
@@ -292,7 +293,10 @@ export default ({messageInputHeight, recipientHeight}) => {
         <div ref={messageRef} className="messages-container">
             <div className="messages-container__inner">
                 {
-                    blurred ? <div onClick={handleUnblur} className={`blur`}></div> : null
+                    // blurred ? <div onClick={handleUnblur} className={`blur`}></div> : null
+                    <AnimationFeature show={blurred}>
+                        <div onClick={handleUnblur} className={`blur`}></div>
+                    </AnimationFeature>
                 }
                 
                 <div className={`messages-container__message`}>  

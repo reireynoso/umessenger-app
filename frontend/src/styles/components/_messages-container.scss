@@ -43,9 +43,8 @@
     z-index: 200;
     // opacity: 0;
     opacity: 0.8;
-    animation: reactionContainerFadeIn 0.3s ease-in;
+    // animation: reactionContainerFadeIn 0.3s ease-in;
 }
-
 
 .message__reaction-container {
     position: absolute;
@@ -67,17 +66,7 @@
     display: block;
     cursor: pointer;
     transition: 0.5s;
-    animation: reactionFadeIn 0.6s ease-in;
-}
-
-@keyframes reactionFadeIn {
-    from {
-        transform: scale(0);
-    }
-
-    to {
-        transform: scale(1);
-    }
+    animation: reactionContainerFadeIn 0.6s ease-in;
 }
 
 @keyframes reactionContainerFadeIn {
@@ -89,6 +78,17 @@
         transform: scale(1);
     }
 }
+
+@keyframes reactionContainerFadeOut {
+    from {
+        transform: scale(1);
+    }
+
+    to {
+        transform: scale(0);
+    }
+}
+
 
 .message__reaction-container > span:hover{
     color: lighten($color: $grey, $amount: 10%);

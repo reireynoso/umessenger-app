@@ -1,7 +1,9 @@
 import React, {useState, useEffect} from 'react'
 import moment from 'moment'
-import {useSelector, useDispatch} from 'react-redux'
+import {useSelector} from 'react-redux'
 import {sendReactionRequest} from '../actions/conversation'
+
+import AnimationFeature from './AnimationFeature'
 
 export default ({users=[], message: {_id,content, reactions, user, createdAt, nextMessageUser}, blurOutComponent, blurred}) => {
     // const dispatch = useDispatch()
@@ -150,14 +152,22 @@ export default ({users=[], message: {_id,content, reactions, user, createdAt, ne
                     generateReactionElement()
                 } 
                 {
-                    (_id && blurred === _id) ? <div className={`message__reaction-container ${checkIfMineOrOther()}`}>          
+                    <AnimationFeature show={(_id && blurred === _id)}>
+                        <div className={`message__reaction-container ${checkIfMineOrOther()}`}>          
                             <span onClick={() => giveReaction("thumbs-up")}><i className="fas fa-thumbs-up fa-lg"></i></span>
                             <span onClick={() => giveReaction("thumbs-down")}><i className="fas fa-thumbs-down fa-lg"></i></span>
                             <span onClick={() => giveReaction("exclamation")}><i className="fas fa-exclamation fa-lg"></i></span>
                             <span onClick={() => giveReaction("question")}><i className="fas fa-question fa-lg"></i></span>         
-                    </div>
-                    :
-                    null
+                        </div>
+                    </AnimationFeature>
+                    // (_id && blurred === _id) ? <div className={`message__reaction-container ${checkIfMineOrOther()}`}>          
+                    //         <span onClick={() => giveReaction("thumbs-up")}><i className="fas fa-thumbs-up fa-lg"></i></span>
+                    //         <span onClick={() => giveReaction("thumbs-down")}><i className="fas fa-thumbs-down fa-lg"></i></span>
+                    //         <span onClick={() => giveReaction("exclamation")}><i className="fas fa-exclamation fa-lg"></i></span>
+                    //         <span onClick={() => giveReaction("question")}><i className="fas fa-question fa-lg"></i></span>         
+                    // </div>
+                    // :
+                    // null
                 }
                 {!user ? <img alt="typing-gif" className="segment__typing" src="/image/typing_dots.gif"/> : content}
                 <div className={`message__tooltip ${checkIfMineOrOther()}`}>{moment(createdAt).format('MMMM Do YYYY, h:mm:ss a')}</div>
