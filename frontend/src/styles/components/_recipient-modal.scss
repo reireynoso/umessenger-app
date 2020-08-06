@@ -76,21 +76,21 @@
     transform-origin: 0 0 0;
 }
 
-@keyframes fadeIn {
-    from {
-        transform: scale(0.1);
-    }
-    to {
-        transform: scale(1);
-    }   
-}
+// @keyframes fadeIn {
+//     from {
+//         transform: scale(0.1);
+//     }
+//     to {
+//         transform: scale(1);
+//     }   
+// }
 
-@keyframes fadeOut {
-    from {
-        transform: scale(1);
-    }
+// @keyframes fadeOut {
+//     from {
+//         transform: scale(1);
+//     }
 
-    to {
-        transform: scale(0.1);
-    }
-}
+//     to {
+//         transform: scale(0.1);
+//     }
+// }

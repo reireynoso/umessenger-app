@@ -11,6 +11,7 @@ export default ({users=[], message: {_id,content, reactions, user, createdAt, ne
     const selectConversation = useSelector(state => state.conversation.selectedConversation)
     
     const [startLongPress, setStartLongPress] = useState(false)
+    const [showTimeBar, setTimeBar] = useState(false)
 
     useEffect(() => {
         let timerId;
@@ -141,6 +142,8 @@ export default ({users=[], message: {_id,content, reactions, user, createdAt, ne
             onMouseDown={() => setStartLongPress(true)}
             onMouseUp={() => setStartLongPress(false)}
             onMouseLeave={() => setStartLongPress(false)}
+            onTouchStart={() => setStartLongPress(true)} 
+            onTouchEnd={() => setStartLongPress(false)} 
             >  
             {
                 users.length > 1 && user.email !== loggedUser.email && <div className="message__nametag">
@@ -169,8 +172,17 @@ export default ({users=[], message: {_id,content, reactions, user, createdAt, ne
                     // :
                     // null
                 }
-                {!user ? <img alt="typing-gif" className="segment__typing" src="/image/typing_dots.gif"/> : content}
-                <div className={`message__tooltip ${checkIfMineOrOther()}`}>{moment(createdAt).format('MMMM Do YYYY, h:mm:ss a')}</div>
+                {!user ? <img alt="typing-gif" className="segment__typing" src="/image/typing_dots.gif"/> : <span 
+                    onMouseEnter={() => setTimeBar(true)} 
+                    onMouseLeave={() => setTimeBar(false)} 
+                    className="message-content"
+                    >
+                        {content}
+                    </span>}
+                <AnimationFeature show={showTimeBar}>
+                    <div className={`message__tooltip ${checkIfMineOrOther()}`}>{moment(createdAt).format('MMMM Do YYYY, h:mm:ss a')}</div>
+                </AnimationFeature>
+                
             </div>
             {
                 lastMessage() && <div className={`message__time ${checkIfMineAndLast()}`}>

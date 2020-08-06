@@ -30,10 +30,6 @@ Refer to the respective stack's README for instructions on setting up.
 * The user on the receiving end can choose to accept or decline the video chat call.
 * A user can react on a message. They can also un-react.
 
-# Features in progress
-
-* Reacting on a specific message. (add styling)
-
 # Known Bugs/Issues
 * When inputting email recipient, if it's too long it will expand the width. 
 * Minor bug involving who's typing. At some point, if the user keeps typing, the user's own name is included in the list of typing (which it shouldn't) and is not removed even after they're not typing anymore. (consider refactoring or restructuring typing feature)

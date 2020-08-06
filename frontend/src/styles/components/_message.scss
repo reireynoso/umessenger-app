@@ -13,13 +13,15 @@
     max-width: 50%;
     word-wrap: break-word;
     position: relative;
+    transition: 0.3s ease-in;
 }
 
 .message__tooltip {
     color: $dark-white;
     position: absolute;
     z-index: 20;
-    visibility: hidden;
+    // display: none;
+    // visibility: hidden;
     border-radius: 10px;
     text-align: center;
     padding: 5px;
@@ -33,17 +35,20 @@
     top: 110%;
     right: 40%;
     background: $grey;
+    transform-origin: 100% 100% 0;
 }
 
 .message__tooltip.other{
     top: 110%;
     left: 40%;
     background: $grey;
+    transform-origin: 0 50% 0;
 }
 
-.message:hover .message__tooltip{
-    visibility: visible;
-}
+// .message:hover .message__tooltip{
+    // visibility: visible;
+//     display: block;
+// }
 
 .message__nametag {
     padding-left: 15px;
@@ -180,18 +185,18 @@ hr{
     width: 10px;
     background: $dark-white;
     border-radius: 10px;
-    animation: fadeIn 0.3s ease-in-out;
+    animation: reactionContainerFadeIn 0.3s ease-in-out;
     // transform-origin: 100% 100% 0;
 }
 
-@keyframes fadeIn {
-    from {
-        transform: scale(0);
-    }
-    to {
-        transform: scale(1);
-    }   
-}
+// @keyframes fadeIn {
+//     from {
+//         transform: scale(0);
+//     }
+//     to {
+//         transform: scale(1);
+//     }   
+// }
 
 .message-reaction__container.mine:before {
     left: 15px;

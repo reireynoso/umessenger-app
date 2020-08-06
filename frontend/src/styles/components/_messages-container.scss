@@ -11,8 +11,6 @@
 .messages-container__inner {
     width: 100%;
     height: 100%;
-    // filter: blur(3px);
-    // padding: 0 1.5rem;
     position: relative;
 }
 
@@ -69,25 +67,25 @@
     animation: reactionContainerFadeIn 0.6s ease-in;
 }
 
-@keyframes reactionContainerFadeIn {
-    from {
-        transform: scale(0);
-    }
+// @keyframes reactionContainerFadeIn {
+//     from {
+//         transform: scale(0);
+//     }
 
-    to {
-        transform: scale(1);
-    }
-}
+//     to {
+//         transform: scale(1);
+//     }
+// }
 
-@keyframes reactionContainerFadeOut {
-    from {
-        transform: scale(1);
-    }
+// @keyframes reactionContainerFadeOut {
+//     from {
+//         transform: scale(1);
+//     }
 
-    to {
-        transform: scale(0);
-    }
-}
+//     to {
+//         transform: scale(0);
+//     }
+// }
 
 
 .message__reaction-container > span:hover{
@@ -105,16 +103,6 @@
     background: $dark-white;
 }
 
-// .show-popup {
-    // display: block;
-    // filter: brightness(1.5);
-// }
-
-// .blurred {
-//     display: block;
-//     opacity: 0.8;
-// }
-
 .no-blurred > .message-reaction__container{
     z-index: inherit;
     filter: brightness(0.35);
@@ -127,5 +115,5 @@
 
 
 .no-blurred::after{
-    filter: brightness(0.65);
+    filter: brightness(0.85);
 }

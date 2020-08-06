@@ -51,14 +51,14 @@
     transform-origin: 100% 100% 0;
 }
 
-@keyframes fadeIn {
-    from {
-        transform: scale(0.1);
-    }
-    to {
-        transform: scale(1);
-    }   
-}
+// @keyframes fadeIn {
+//     from {
+//         transform: scale(0.1);
+//     }
+//     to {
+//         transform: scale(1);
+//     }   
+// }
 
 .fadeOut {
     visibility: hidden;
@@ -67,12 +67,12 @@
     transform-origin: 100% 100% 0;
 }
 
-@keyframes fadeOut {
-    from {
-        transform: scale(1);
-    }
+// @keyframes fadeOut {
+//     from {
+//         transform: scale(1);
+//     }
 
-    to {
-        transform: scale(0.1);
-    }
-}
+//     to {
+//         transform: scale(0.1);
+//     }
+// }
