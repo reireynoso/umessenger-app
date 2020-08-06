@@ -67,12 +67,12 @@ router.post("/conversations", auth, async(req,res) => {
             //iterate through list of online users and emit to their sockets
             //req.app.onlineUsers from index.js
             const onlineUsers = req.app.onlineUsers
-            const otherUsers = req.body.emails
+            const otherUsers = [...req.body.emails, req.user.email]
             for(let i = 0; i<otherUsers.length; i++){
                 // console.log(onlineUsers[otherUsers[i]])
                 req.app.io.to(onlineUsers[otherUsers[i]]).emit('newConversation', newConversation)
             }
-            res.status(201).send({conversation: newConversation})
+            res.status(201).send({conversation: newConversation, newMessage: true})
         }
         else{
             //push message into existing convos message array

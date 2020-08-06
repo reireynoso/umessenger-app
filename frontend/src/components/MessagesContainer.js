@@ -52,6 +52,10 @@ export default ({messageInputHeight, recipientHeight}) => {
         }
     }, [])
 
+    // useEffect(() => {
+    //     console.log(typers)
+    // }, [typers])
+
     // dynamically changes the components height 
     useLayoutEffect(() => {
         // console.log(messageInputHeight + recipientHeight)
@@ -84,7 +88,7 @@ export default ({messageInputHeight, recipientHeight}) => {
         //checks to see if the selectConversation exists in typersInfo. If so, pull out the names of users from the array value and set it to the typers
         if(typersInfo.current[selectConversation._id]){
             const names = typersInfo.current[selectConversation._id].map(obj => obj.user.name)
-    
+            // console.log(names)
             setTypers(names)
         }
         else{
@@ -322,7 +326,9 @@ export default ({messageInputHeight, recipientHeight}) => {
                        ) 
                     }
                     {
-                        typers.length > 0 && <Message key={"typingMessageGif1234454455"} message={{content: "", user: false}}/>
+                        typers.length > 0 && <div className={`message-container`}>  
+                            <div className="message other last"><img alt="typing-gif" className="segment__typing" src="/image/typing_dots.gif"/></div>       
+                        </div>
                     }
                     <div ref={bottom}></div>
                 </div>

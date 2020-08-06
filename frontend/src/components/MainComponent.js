@@ -5,7 +5,7 @@ import io from 'socket.io-client'
 import {removeLoggedInUserFromConversation, truncateString} from '../selectors/conversation'
 import {newMessage} from '../actions/conversation'
 import {setSocket} from '../actions/socket'
-import {addOrUpdateConversation, setReaction} from '../actions/conversation'
+import {addOrUpdateConversation, setReaction, sendMessageToConversation} from '../actions/conversation'
 import {setCaller ,declineCallAction} from '../actions/video-chat'
 import {openVideoModal} from '../actions/modal'
 import apiUrl from '../utils/apiUrl'
@@ -13,7 +13,7 @@ import apiUrl from '../utils/apiUrl'
 import VideoModal from './VideoModal'
 import ConversationContainer from './ConversationContainer'
 import SideBarConversationsContainer from './SideBarConversationsContainer'
-import AnimationFeature from './AnimationFeature'
+// import AnimationFeature from './AnimationFeature'
 
 export default () => {
     
@@ -44,6 +44,7 @@ export default () => {
         establishSocket.emit("online", user)
         establishSocket.on('newConversation', (newConversation) => {
             notification(newConversation)
+            // console.log(newConversation)
             dispatch(addOrUpdateConversation(removeLoggedInUserFromConversation(newConversation,user)))
         })
         establishSocket.on('existingConversation', (existingConversation) => {

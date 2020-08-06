@@ -1,4 +1,4 @@
-// import {removeLoggedInUserFromConversation} from '../selectors/conversation'
+import {removeLoggedInUserFromConversation} from '../selectors/conversation'
 import apiUrl from '../utils/apiUrl'
 
 export const addEmail = (email) => ({
