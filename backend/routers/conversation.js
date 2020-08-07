@@ -72,7 +72,8 @@ router.post("/conversations", auth, async(req,res) => {
                 // console.log(onlineUsers[otherUsers[i]])
                 req.app.io.to(onlineUsers[otherUsers[i]]).emit('newConversation', newConversation)
             }
-            res.status(201).send({conversation: newConversation, newMessage: true})
+            // res.status(201).send({conversation: newConversation})
+            res.status(201).send({newConversation})
         }
         else{
             //push message into existing convos message array

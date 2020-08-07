@@ -88,7 +88,7 @@ export default ({messageInputHeight, recipientHeight}) => {
         //checks to see if the selectConversation exists in typersInfo. If so, pull out the names of users from the array value and set it to the typers
         if(typersInfo.current[selectConversation._id]){
             const names = typersInfo.current[selectConversation._id].map(obj => obj.user.name)
-            // console.log(names)
+            // console.log(typers)
             setTypers(names)
         }
         else{

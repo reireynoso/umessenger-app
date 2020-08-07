@@ -72,10 +72,15 @@ export const sendMessageToConversation = (emails,content)  => {
     })
     .then(res => res.json())
     .then(data => {
-        if(data.errors){
+        return data
+        // if(data.errors){
             // console.log(data.errors)
-            return data.errors
-        }
+            // return data.errors
+        // }
+
+        // if(data.newConversation){
+        //     return data.newConversation
+        // }
         // console.log(removeLoggedInUserFromConversation(data.conversation,user))
         // const formattedConversation = removeLoggedInUserFromConversation(data.conversation,user)
         // dispatch(addOrUpdateConversation(formattedConversation))

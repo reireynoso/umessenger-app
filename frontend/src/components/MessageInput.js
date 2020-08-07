@@ -2,7 +2,8 @@ import React, {useState,useEffect,useRef, forwardRef, useLayoutEffect} from 'rea
 import {useSelector, useDispatch} from 'react-redux'
 import "emoji-mart/css/emoji-mart.css"
 import {Picker} from 'emoji-mart'
-import {sendMessageToConversation} from '../actions/conversation'
+import {sendMessageToConversation, selectedConversation as setSelectedConversation} from '../actions/conversation'
+import {removeLoggedInUserFromConversation} from '../selectors/conversation'
 import {setConversationError, emptyConversationError} from '../actions/errors'
 
 export default forwardRef(({setmessageInputHeight},ref) => {
@@ -116,10 +117,16 @@ export default forwardRef(({setmessageInputHeight},ref) => {
                 handleResetInput()
                 // console.log(textArea.current.value)
                 // const errors = await dispatch(sendMessageToConversation(emails,content,user))
-                const errors = await sendMessageToConversation(emails,content)
-                if(errors){
-                    return dispatch(setConversationError(errors[0]))
+                const result = await sendMessageToConversation(emails,content)
+                if(result.errors){
+                    return dispatch(setConversationError(result.errors[0]))
                 }
+
+                if(result.newConversation){   
+                    // handles switching selected convo to new convo. ONLY if new
+                    dispatch(setSelectedConversation(removeLoggedInUserFromConversation(result.newConversation,user)))
+                }
+
                 audio.current.play()
             }    
         }

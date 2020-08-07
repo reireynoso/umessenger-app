@@ -32,7 +32,7 @@ Refer to the respective stack's README for instructions on setting up.
 
 # Known Bugs/Issues
 * When inputting email recipient, if it's too long it will expand the width. 
-* Minor bug involving who's typing. At some point, if the user keeps typing, the user's own name is included in the list of typing (which it shouldn't) and is not removed even after they're not typing anymore. (consider refactoring or restructuring typing feature. Consider using useRef on the component to change text of who's typing. Instead of storing in state.)
+* Minor bug involving who's typing. At some point, if the user keeps typing, the user's own name is included in the list of typing (which it shouldn't) and is not removed even after they're not typing anymore. (consider refactoring or restructuring typing feature.)
 * Refactor code
 
 # Tech Stack
