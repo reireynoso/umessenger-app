@@ -26,7 +26,7 @@ export default ({messageInputHeight, recipientHeight}) => {
     const selectConversation = useSelector(state => state.conversation.selectedConversation)
     // const conversations = useSelector(state => state.conversation.conversations)
 
-    // const user = useSelector(state => state.user)
+    const user = useSelector(state => state.user)
     const socket = useSelector(state => state.socket)
     // const dispatch = useDispatch()
 
@@ -52,10 +52,6 @@ export default ({messageInputHeight, recipientHeight}) => {
         }
     }, [])
 
-    // useEffect(() => {
-    //     console.log(typers)
-    // }, [typers])
-
     // dynamically changes the components height 
     useLayoutEffect(() => {
         // console.log(messageInputHeight + recipientHeight)
@@ -73,7 +69,16 @@ export default ({messageInputHeight, recipientHeight}) => {
         setScreen(e.target.innerHeight)
     }
 
-    const handleTypers = () => {
+    // handles event when page is refreshed. 
+    window.onbeforeunload = function() {
+        const data = {selectedConversation:selectConversation,user,content:""}
+        if(socket.on && selectConversation){         
+            socket.emit('typing', data)
+            socket.emit('messageTyping', data)
+        }
+    };
+
+    // const handleTypers = () => {
         // setTypers(typers => {
         //     if(!typers.includes(obj[selectConversation._id].user.name) && obj[selectConversation._id].content){
         //         return [...typers, obj[selectConversation._id].user.name]
@@ -86,16 +91,16 @@ export default ({messageInputHeight, recipientHeight}) => {
         // })
         
         //checks to see if the selectConversation exists in typersInfo. If so, pull out the names of users from the array value and set it to the typers
-        if(typersInfo.current[selectConversation._id]){
-            const names = typersInfo.current[selectConversation._id].map(obj => obj.user.name)
-            // console.log(typers)
-            setTypers(names)
-        }
-        else{
-            //If it does not exist, no one is typing. Empty the typers array.
-            setTypers([])
-        }       
-    }
+        // if(typersInfo.current[selectConversation._id]){
+        //     const names = typersInfo.current[selectConversation._id].map(obj => obj.user.name)
+        //     // console.log(typers)
+        //     setTypers(names)
+        // }
+        // else{
+        //     //If it does not exist, no one is typing. Empty the typers array.
+        //     setTypers([])
+        // }       
+    // }
 
     const scrollToRef = () => {
         return bottom.current.scrollIntoView({ behavior: "smooth" })
@@ -111,7 +116,29 @@ export default ({messageInputHeight, recipientHeight}) => {
         }, 0)
         //When the component reloads, check to see if typersInfo object was updated while viewing another conversation and update the typers.
         // console.log(typersInfo)
-        handleTypers()
+        // handleTypers()
+        setTypers([])
+        if(socket.io){
+            socket.on('messageTyping', ({user,content, selectedConversation}) => {         
+                if(selectConversation._id === selectedConversation._id){
+                    // As a user is typing, we store the user email as key into the typersInfo object. 
+                    if(!typersInfo.current[user.email] && content){
+                        //If it doesn't already exist, create it and add it as a key set to the value of the user name 
+                        typersInfo.current[user.email] = user.name
+                        // pull out the values (names) in the typersInfo.current object
+                        const newTypers = Object.values(typersInfo.current)
+                        setTypers(newTypers)
+                    }
+                    if(typersInfo.current[user.email] && !content){
+                        //If content is blank, find the user email in the typersInfo object, Remove the key value pair
+                        //After removing the key/value from the object, set the new value for typers with the user removed.
+                        delete typersInfo.current[user.email]
+                        const newTypers = Object.values(typersInfo.current)
+                        setTypers(newTypers)
+                    }
+                }
+            })
+        }
         // if(obj[selectConversation._id]){
             // setTypers(typers => {
             //     if(!typers.includes(obj[selectConversation._id].user.name) && obj[selectConversation._id].content){
@@ -125,7 +152,7 @@ export default ({messageInputHeight, recipientHeight}) => {
             // })
             // handleTypers()
         // }
-        if(socket.io){
+        // if(socket.io){
             // socket.on('newMessage', (conversation) => {
                 // console.log('newMessage')
                 //if a new message is sent from the server, socket emits the conversation is belongs to. Instead of everyone's viewing conversation being forced to switch to that updated conversation, only the users currently on that conversation is updated to the selectedConversation in state. 
@@ -135,7 +162,8 @@ export default ({messageInputHeight, recipientHeight}) => {
                 // }
 
             // })
-            socket.on('messageTyping', ({user,content, selectedConversation}) => {
+            // socket.on('messageTyping', ({user,content, selectedConversation}) => {
+                
                 // typers array keeps track of who's typing in conversation
                 // anyone typing is added into the array as long they have something in content
                 // if no content, user is removed from list of typers
@@ -156,52 +184,52 @@ export default ({messageInputHeight, recipientHeight}) => {
                 // }
 
                 // As a user is typing, we store the conversation id they're typing from as a key into the typersInfo object. 
-                if(!typersInfo.current[selectedConversation._id] && content){
-                    //If it doesn't already exist, create it and set it into an array container an object with the user and content information
-                    typersInfo.current[selectedConversation._id] = [
-                        {
-                            user,
-                            content
-                        }
-                    ]
-                }
-                else if(typersInfo.current[selectedConversation._id] && !content){
-                    //If content is blank, find the existing conversation and its array value in the typersInfo object, find the index of the object with the matching user. The goal is to remove just that object from the array.  
-                    // debugger
-                    const findIndex = typersInfo.current[selectedConversation._id].findIndex(obj => obj.user.name === user.name)
+                // if(!typersInfo.current[selectedConversation._id] && content){
+                //     //If it doesn't already exist, create it and set it into an array container an object with the user and content information
+                //     typersInfo.current[selectedConversation._id] = [
+                //         {
+                //             user,
+                //             content
+                //         }
+                //     ]
+                // }
+                // else if(typersInfo.current[selectedConversation._id] && !content){
+                //     //If content is blank, find the existing conversation and its array value in the typersInfo object, find the index of the object with the matching user. The goal is to remove just that object from the array.  
+                //     // debugger
+                //     const findIndex = typersInfo.current[selectedConversation._id].findIndex(obj => obj.user.name === user.name)
 
-                    //There should always be a match but conditionally check if it returns something
-                    if(findIndex > -1){
-                        //Using .splice, remove that object from the array
-                        typersInfo.current[selectedConversation._id].splice(findIndex,1)
-                    }
+                //     //There should always be a match but conditionally check if it returns something
+                //     if(findIndex > -1){
+                //         //Using .splice, remove that object from the array
+                //         typersInfo.current[selectedConversation._id].splice(findIndex,1)
+                //     }
 
-                    //After removing the object from the array, check if the array is empty. If it is, delete that conversation from typersInfo object.
-                    if(typersInfo.current[selectedConversation._id].length === 0){
-                        delete typersInfo.current[selectedConversation._id]
-                    }
-                }
-                else if(typersInfo.current[selectedConversation._id] && content){
-                    //Otherwise, the conversation exists in the typersInfo object. Check to see if the typer is also in the array value. If found, replace their existing content value from the socket.
-                    const existingTyper = typersInfo.current[selectedConversation._id].find(obj => obj.user.name === user.name)
-                    if(existingTyper){
-                        existingTyper.content = content
-                    }
-                    else{
-                        //If the user is not in the array yet, add them to that array.
-                        typersInfo.current[selectedConversation._id] = [
-                            ...typersInfo.current[selectedConversation._id],
-                            {
-                                user,
-                                content
-                            }
-                        ]
-                    }
-                }
+                //     //After removing the object from the array, check if the array is empty. If it is, delete that conversation from typersInfo object.
+                //     if(typersInfo.current[selectedConversation._id].length === 0){
+                //         delete typersInfo.current[selectedConversation._id]
+                //     }
+                // }
+                // else if(typersInfo.current[selectedConversation._id] && content){
+                //     //Otherwise, the conversation exists in the typersInfo object. Check to see if the typer is also in the array value. If found, replace their existing content value from the socket.
+                //     const existingTyper = typersInfo.current[selectedConversation._id].find(obj => obj.user.name === user.name)
+                //     if(existingTyper){
+                //         existingTyper.content = content
+                //     }
+                //     else{
+                //         //If the user is not in the array yet, add them to that array.
+                //         typersInfo.current[selectedConversation._id] = [
+                //             ...typersInfo.current[selectedConversation._id],
+                //             {
+                //                 user,
+                //                 content
+                //             }
+                //         ]
+                //     }
+                // }
                 // debugger
                 // console.log('after', typersInfo)
                 //Update the list of typers after the typersInfo changes from the socket event.
-                handleTypers()
+                // handleTypers()
                 
                 //keeps track of typers as they're typing
                 // if(selectedConversation._id === selectConversation._id){
@@ -219,8 +247,8 @@ export default ({messageInputHeight, recipientHeight}) => {
                     //     handleTypers()
                     // }
                 // }
-            })
-        }
+            // })
+        // }
 
         return () => {
             //empties out typers if conversation is switched
