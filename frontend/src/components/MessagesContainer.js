@@ -3,6 +3,7 @@ import {useSelector} from 'react-redux'
 import moment from 'moment'
 import Message from './Message'
 import AnimationFeature from './AnimationFeature'
+import {organizeMessages} from '../selectors/message'
 // import { selectedConversation } from '../actions/conversation'
 
 // import {selectedConversation as selectedConversationAction} from '../actions/conversation'
@@ -267,7 +268,7 @@ export default ({messageInputHeight, recipientHeight}) => {
                     // socket.emit('messageTyping', data)
                 // }
                 socket.off('messageTyping')
-                socket.off('newMessage')
+                // socket.off('newMessage')
             }
         }
     }, [selectConversation])
@@ -285,20 +286,20 @@ export default ({messageInputHeight, recipientHeight}) => {
             }
     }
 
-    const organizeMessages = (messages) => {
-        let previousDate;
-        for(let i = 0; i < messages.length; i++){
-            if(!previousDate){
-                previousDate = moment(messages[i].createdAt).format('L')
-                sortedMessagesByTime.current[previousDate] = [{...messages[i], nextMessageUser: messages[i+1] ? messages[i+1].user : null}]
-            }else if(!moment(previousDate).isSame(messages[i].createdAt, 'day')){
-                previousDate = moment(messages[i].createdAt).format('L')
-                sortedMessagesByTime.current[previousDate] = [{...messages[i], nextMessageUser: messages[i+1] ? messages[i+1].user : null}]
-            }
-            else if(sortedMessagesByTime.current[moment(messages[i].createdAt).format('L')]){
-                sortedMessagesByTime.current[moment(messages[i].createdAt).format('L')] = [...sortedMessagesByTime.current[moment(messages[i].createdAt).format('L')], {...messages[i], nextMessageUser: messages[i+1] ? messages[i+1].user : null}]
-            }
-        }
+    // const organizeMessages = (messages) => {
+    //     let previousDate;
+    //     for(let i = 0; i < messages.length; i++){
+    //         if(!previousDate){
+    //             previousDate = moment(messages[i].createdAt).format('L')
+    //             sortedMessagesByTime.current[previousDate] = [{...messages[i], nextMessageUser: messages[i+1] ? messages[i+1].user : null}]
+    //         }else if(!moment(previousDate).isSame(messages[i].createdAt, 'day')){
+    //             previousDate = moment(messages[i].createdAt).format('L')
+    //             sortedMessagesByTime.current[previousDate] = [{...messages[i], nextMessageUser: messages[i+1] ? messages[i+1].user : null}]
+    //         }
+    //         else if(sortedMessagesByTime.current[moment(messages[i].createdAt).format('L')]){
+    //             sortedMessagesByTime.current[moment(messages[i].createdAt).format('L')] = [...sortedMessagesByTime.current[moment(messages[i].createdAt).format('L')], {...messages[i], nextMessageUser: messages[i+1] ? messages[i+1].user : null}]
+    //         }
+    //     }
         // messages.map(message => {
         //     if(!previousDate){
         //         previousDate = moment(message.createdAt).format('L')
@@ -311,6 +312,45 @@ export default ({messageInputHeight, recipientHeight}) => {
         //         sortedMessagesByTime.current[moment(message.createdAt).format('L')] = [...sortedMessagesByTime.current[moment(message.createdAt).format('L')], message]
         //     }
         // })
+    // }
+
+    const generateMessages = () => {
+        const messageOrganized = organizeMessages(selectConversation.messages)
+        return Object.keys(messageOrganized).map(key => 
+            <div key={key} className="message_and_calendar">
+                <hr/>
+                <div key={key} className="message__calendar">
+                    {moment(key).calendar({
+                        sameDay: '[Today]',
+                        nextDay: '[Tomorrow]',
+                        nextWeek: 'dddd',
+                        lastDay: '[Yesterday], MM/DD/YY',
+                        lastWeek: '[Last] dddd, MM/DD/YY',
+                        sameElse: 'MM/DD/YY'
+                    })}
+                </div>
+                {
+                    messageOrganized[key].map(message => <Message blurred={blurred} blurOutComponent={blurOutComponent} key={message._id} users={selectConversation.users} message={message}/>)
+                }
+            </div>
+        // return Object.keys(sortedMessagesByTime.current).map(key => 
+        //     <div key={key} className="message_and_calendar">
+        //         <hr/>
+        //         <div key={key} className="message__calendar">
+        //             {moment(key).calendar({
+        //                 sameDay: '[Today]',
+        //                 nextDay: '[Tomorrow]',
+        //                 nextWeek: 'dddd',
+        //                 lastDay: '[Yesterday], MM/DD/YY',
+        //                 lastWeek: '[Last] dddd, MM/DD/YY',
+        //                 sameElse: 'MM/DD/YY'
+        //             })}
+        //         </div>
+        //         {
+        //             sortedMessagesByTime.current[key].map(message => <Message blurred={blurred} blurOutComponent={blurOutComponent} key={message._id} users={selectConversation.users} message={message}/>)
+        //         }
+        //     </div>
+           ) 
     }
 
     const blurOutComponent = (id) => {
@@ -334,24 +374,7 @@ export default ({messageInputHeight, recipientHeight}) => {
                 <div className={`messages-container__message`}>  
                     {
                        // selectConversation.messages && selectConversation.messages.map((message,index) => <Message key={message._id} message={message} users={selectConversation.users} prevConversation = {(index - 1) > -1 ? selectConversation.messages[index-1] : null}/>)
-                       selectConversation.messages && Object.keys(sortedMessagesByTime.current).map(key => 
-                        <div key={key} className="message_and_calendar">
-                            <hr/>
-                            <div key={key} className="message__calendar">
-                                {moment(key).calendar({
-                                    sameDay: '[Today]',
-                                    nextDay: '[Tomorrow]',
-                                    nextWeek: 'dddd',
-                                    lastDay: '[Yesterday], MM/DD/YY',
-                                    lastWeek: '[Last] dddd, MM/DD/YY',
-                                    sameElse: 'MM/DD/YY'
-                                })}
-                            </div>
-                            {
-                                sortedMessagesByTime.current[key].map(message => <Message blurred={blurred} blurOutComponent={blurOutComponent} key={message._id} users={selectConversation.users} message={message}/>)
-                            }
-                        </div>
-                       ) 
+                       selectConversation.messages && generateMessages()
                     }
                     {
                         typers.length > 0 && <div className={`message-container`}>  

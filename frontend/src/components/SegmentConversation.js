@@ -37,7 +37,7 @@ export default ({conversations,socket, conversation, conversation: {messages, us
             if(selectConversation){     
                 const data = {selectedConversation:selectConversation,user,content:""}    
                 socket.emit('typing', data)
-                socket.emit('messageTyping', data)
+                // socket.emit('messageTyping', data)
             }
             dispatch(selectConversationAction(conversation))
         }

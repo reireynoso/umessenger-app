@@ -91,6 +91,10 @@ export default () => {
         }
     }, [])
 
+    window.onbeforeunload = function() {
+        socket.emit("callEnd", callerInformation)
+    };
+
     const acceptCall = (stream) => {
         const peer = new Peer({
             initiator: false,

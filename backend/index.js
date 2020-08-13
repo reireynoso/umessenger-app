@@ -97,17 +97,18 @@ io.on('connection', (socket) => {
     // To prevent that, on unmount, we turn the socket listener off but it turns it off for the SegmentConversation component
 
     socket.on('typing', ({selectedConversation,user,content}) => {
-        // console.log(content)
+        const {name, email} = user
         // console.log(selectedConversation._id)
-        socket.broadcast.to(selectedConversation._id).emit('typing', {selectedConversation,user,content})
+        socket.broadcast.to(selectedConversation._id).emit('typing', {selectedConversation,content})
+        socket.broadcast.to(selectedConversation._id).emit('messageTyping', {selectedConversation,user: {name,email},content})
         // io.to(conversation).emit('typing', "someone is typing")
     })
 
-    socket.on('messageTyping', ({selectedConversation,user,content}) => {
+    // socket.on('messageTyping', ({selectedConversation,user,content}) => {
         // console.log(selectedConversation)
-        socket.broadcast.to(selectedConversation._id).emit('messageTyping', {selectedConversation,user,content})
+        // socket.broadcast.to(selectedConversation._id).emit('messageTyping', {selectedConversation,user,content})
         // io.to(conversation).emit('typing', "someone is typing")
-    })
+    // })
 
     socket.on('disconnect', () => {
         console.log('someone had left')

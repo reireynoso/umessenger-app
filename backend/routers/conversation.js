@@ -126,6 +126,10 @@ router.post("/reactions", auth, async(req,res) => {
     // }
 
     try{
+        const validReactions = ["thumbs-up", "thumbs-down", "exclamation", "question"]
+        if(validReactions.indexOf(reaction) === -1){
+            throw "Not a valid reaction"
+        }
         // const associatedConversation = await Conversation.findById(conversation_id).populate('messages.user')
         // const message = associatedConversation.messages.find(message => message_id == message._id)
         // // console.log(message)
