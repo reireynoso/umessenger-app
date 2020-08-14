@@ -1,5 +1,6 @@
 const errors = (state = {
-    conversationError: ""
+    conversationError: "",
+    disconnected: false
 }, {type,payload}) => {
     switch(type){    
         case "SET_CONVERSATION_ERROR":
@@ -11,6 +12,16 @@ const errors = (state = {
             return {
                 ...state,
                 conversationError: ""
+            }
+        case "SET_DISCONNECTED_ERROR":
+            return {
+                ...state,
+                disconnected: true
+            }
+        case "UNSET_DISCONNECTED_ERROR":
+            return {
+                ...state,
+                disconnected: false
             }
         default: return state
     }

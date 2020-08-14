@@ -36,7 +36,7 @@ export default ({messageInputHeight, recipientHeight}) => {
 
     const messageRef = useRef(null)
     const bottom = useRef(null)
-    const sortedMessagesByTime = useRef({})
+    // const sortedMessagesByTime = useRef({})
     // react alternative to creating a mutable object
     // any errors, switch back to typersInfo object and change references below
     const typersInfo = useRef({})
@@ -254,7 +254,7 @@ export default ({messageInputHeight, recipientHeight}) => {
         return () => {
             //empties out typers if conversation is switched
             setBlurred(null)
-            sortedMessagesByTime.current = {}
+            // sortedMessagesByTime.current = {}
             setTypers([])
             if(socket.io){
                 //Everytime, selectConversation is changed, a typing socket listener is created.

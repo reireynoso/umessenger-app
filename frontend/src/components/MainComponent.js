@@ -8,11 +8,13 @@ import {setSocket} from '../actions/socket'
 import {addOrUpdateConversation, setReaction} from '../actions/conversation'
 import {setCaller ,declineCallAction} from '../actions/video-chat'
 import {openVideoModal} from '../actions/modal'
+import {setConversationError, setDisconnectedError} from '../actions/errors'
 import apiUrl from '../utils/apiUrl'
 
 import VideoModal from './VideoModal'
 import ConversationContainer from './ConversationContainer'
 import SideBarConversationsContainer from './SideBarConversationsContainer'
+import Alert from './Alert'
 // import AnimationFeature from './AnimationFeature'
 
 export default () => {
@@ -54,6 +56,7 @@ export default () => {
             // updates the selected conversation if on it separately
             dispatch(newMessage(removeLoggedInUserFromConversation(existingConversation,user)))
         })
+        establishSocket.on('disconnect', () => dispatch(setDisconnectedError()))
     
         establishSocket.on('reactionUpdated', (existingConversation) => dispatch(setReaction(removeLoggedInUserFromConversation(existingConversation,user))))
 
@@ -121,7 +124,7 @@ export default () => {
     return (
         <div className="main-component">
             <audio ref={music} src="/audio/sent_message.mp3" allow="autoplay" style={{display:"none"}}/>
-            
+            <Alert/>
             {
                 videoModal && <VideoModal/>
             } 
