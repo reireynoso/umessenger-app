@@ -8,7 +8,7 @@ import {setSocket} from '../actions/socket'
 import {addOrUpdateConversation, setReaction} from '../actions/conversation'
 import {setCaller ,declineCallAction} from '../actions/video-chat'
 import {openVideoModal} from '../actions/modal'
-import {setConversationError, setDisconnectedError} from '../actions/errors'
+import {setDisconnectedError} from '../actions/errors'
 import apiUrl from '../utils/apiUrl'
 
 import VideoModal from './VideoModal'

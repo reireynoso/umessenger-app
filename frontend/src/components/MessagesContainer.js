@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useLayoutEffect, useRef} from 'react'
+import React, {useEffect, useState, useRef} from 'react'
 import {useSelector} from 'react-redux'
 import moment from 'moment'
 import Message from './Message'
@@ -23,7 +23,7 @@ import {organizeMessages} from '../selectors/message'
     //Why separate object instead of useState? Asynchrony issue. Need a state that directly manipulated instead of waiting for a render trigger. 
 // }
 
-export default ({messageInputHeight, recipientHeight}) => {
+export default () => {
     const selectConversation = useSelector(state => state.conversation.selectedConversation)
     // const conversations = useSelector(state => state.conversation.conversations)
 
@@ -32,7 +32,7 @@ export default ({messageInputHeight, recipientHeight}) => {
     // const dispatch = useDispatch()
 
     const [typers, setTypers] = useState([])
-    const [screen, setScreen] = useState(0)
+    // const [screen, setScreen] = useState(0)
 
     const messageRef = useRef(null)
     const bottom = useRef(null)
@@ -45,30 +45,30 @@ export default ({messageInputHeight, recipientHeight}) => {
 
     //these three methods are responsible for adjusting the height of the component
     //add an event listener on the window anytime it is resized accounting for the toggle device.
-    useEffect(() => {
-        window.addEventListener('resize', setScreenOrientation)
+    // useEffect(() => {
+    //     window.addEventListener('resize', setScreenOrientation)
 
-        return () => {
-            window.removeEventListener('resize', setScreenOrientation)
-        }
-    }, [])
+    //     return () => {
+    //         window.removeEventListener('resize', setScreenOrientation)
+    //     }
+    // }, [])
 
     // dynamically changes the components height 
-    useLayoutEffect(() => {
-        // console.log(messageInputHeight + recipientHeight)
-        if(window.innerWidth === 540){
-            // approximate solution for when the width reaches the limit
-             messageRef.current.style.height = (670 - (messageInputHeight + recipientHeight)) + 'px' 
-             return;
-        }    
-        messageRef.current.style.height = (window.innerHeight - (messageInputHeight + recipientHeight)) + 'px'
+    // useLayoutEffect(() => {
+    //     // console.log(messageInputHeight + recipientHeight)
+    //     if(window.innerWidth === 540){
+    //         // approximate solution for when the width reaches the limit
+    //          messageRef.current.style.height = (670 - (messageInputHeight + recipientHeight)) + 'px' 
+    //          return;
+    //     }    
+    //     messageRef.current.style.height = (window.innerHeight - (messageInputHeight + recipientHeight)) + 'px'
         
-    }, [messageInputHeight, recipientHeight, screen])
+    // }, [messageInputHeight, recipientHeight, screen])
     
-    const setScreenOrientation = (e) => {
+    // const setScreenOrientation = (e) => {
         // console.log(e.target.innerHeight)
-        setScreen(e.target.innerHeight)
-    }
+    //     setScreen(e.target.innerHeight)
+    // }
 
     // handles event when page is refreshed. 
     window.onbeforeunload = function() {

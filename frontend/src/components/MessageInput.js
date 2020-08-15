@@ -1,4 +1,4 @@
-import React, {useState,useEffect,useRef, forwardRef, useLayoutEffect} from 'react'
+import React, {useState,useEffect,useRef, useLayoutEffect} from 'react'
 import {useSelector, useDispatch} from 'react-redux'
 import "emoji-mart/css/emoji-mart.css"
 import {Picker} from 'emoji-mart'
@@ -6,7 +6,7 @@ import {sendMessageToConversation, selectedConversation as setSelectedConversati
 import {removeLoggedInUserFromConversation} from '../selectors/conversation'
 import {setConversationError, emptyConversationError} from '../actions/errors'
 
-export default forwardRef(({setmessageInputHeight},ref) => {
+export default () => {
     const dispatch = useDispatch()
     const user = useSelector(state => state.user)
     const emails = useSelector(state => state.conversation.emails)
@@ -24,13 +24,13 @@ export default forwardRef(({setmessageInputHeight},ref) => {
 
     const [emojiPickerState, setEmojiPicker] = useState(false)
 
-    useLayoutEffect(() => {
-        if(ref.current){
-            ref.current.height = ref.current.offsetHeight
-            setmessageInputHeight(ref.current.height)
-        }
+    // useLayoutEffect(() => {
+    //     if(ref.current){
+    //         ref.current.height = ref.current.offsetHeight
+    //         // setmessageInputHeight(ref.current.height)
+    //     }
 
-    }, [textArea.current ? textArea.current.offsetHeight : null])
+    // }, [textArea.current ? textArea.current.offsetHeight : null])
 
     useEffect(() => {
         if(textArea.current){
@@ -141,18 +141,18 @@ export default forwardRef(({setmessageInputHeight},ref) => {
 
     const pickerStyle = () => ({
         position: "absolute", 
-        bottom: ref.current.offsetHeight, 
+        bottom: textArea.current.offsetHeight + 20, 
         right: 0, 
         zIndex:30,
     })
 
     return(
-        <div ref={ref} className="content">
+        <div className="content">
             {
                <div 
                     ref={pickerRef}
                     className={emojiPickerState? "fadeIn" : "fadeOut"}
-                    style={ref.current ? pickerStyle(): null}
+                    style={textArea.current ? pickerStyle(): null}
                     >
                         <Picker
                         title="Pick your emoji"
@@ -172,4 +172,4 @@ export default forwardRef(({setmessageInputHeight},ref) => {
             </div>
         </div>    
     )
-})
+}

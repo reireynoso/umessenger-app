@@ -1,4 +1,4 @@
-import React, {useState, useRef, useEffect, forwardRef, useLayoutEffect} from 'react'
+import React, {useState, useRef, useEffect} from 'react'
 import {useSelector, useDispatch} from 'react-redux'
 import {addEmail,removeEmail} from '../actions/conversation'
 import {openRecipientModal,closeRecipientModal} from '../actions/modal'
@@ -6,8 +6,8 @@ import {setConversationError, emptyConversationError} from '../actions/errors'
 
 import RecipientModal from './RecipientModal'
 
-export default forwardRef((props,ref) => {
-    const inputRef = useRef(null)
+export default () => {
+
     const dispatch = useDispatch()
     const {recipientModal, userInformation} = useSelector(state => state.modal)
     const selectedConversation = useSelector(state => state.conversation.selectedConversation)
@@ -18,16 +18,17 @@ export default forwardRef((props,ref) => {
     const [recipient, setRecipient] = useState("")
     // const [userInfo, setUserInfo] = useState({})
     // const [modal, setModal] = useState("")
-    const [screen, setScreen] = useState(0)
+    // const [screen, setScreen] = useState(0)
 
     const modalRef = useRef(null)
+    const inputRef = useRef(null)
 
-    useLayoutEffect(() => {
-        if(ref.current){
-            ref.current.height = ref.current.offsetHeight
-            props.setrecipientHeight(ref.current.height)
-        }
-    }, [emails.length, screen])
+    // useLayoutEffect(() => {
+    //     if(ref.current){
+    //         ref.current.height = ref.current.offsetHeight
+    //         props.setrecipientHeight(ref.current.height)
+    //     }
+    // }, [emails.length, screen])
 
     useEffect(() => {
         emptyConversationError()
@@ -38,21 +39,13 @@ export default forwardRef((props,ref) => {
     }, [emails.length])
 
     // useEffect(() => {
-    //     const documentObj = document
-    //     documentObj.addEventListener('click', closeModal)
+    //     const windowObj = window
+    //     windowObj.addEventListener('resize', modalOrientation)
+
     //     return () => {
-    //         documentObj.removeEventListener('click', closeModal)
+    //         windowObj.removeEventListener('resize', modalOrientation)
     //     }
-    // }, [userInfo.email])
-
-    useEffect(() => {
-        const windowObj = window
-        windowObj.addEventListener('resize', modalOrientation)
-
-        return () => {
-            windowObj.removeEventListener('resize', modalOrientation)
-        }
-    }, [])
+    // }, [])
 
     const scrollToRef = () => {
         if(inputRef.current){
@@ -60,7 +53,7 @@ export default forwardRef((props,ref) => {
         }
     }
 
-    const modalOrientation = (e) => {
+    // const modalOrientation = (e) => {
         // console.log(modalRef.current.getBoundingClientRect())
         // if(modalRef.current.getBoundingClientRect().right === window.innerWidth){
         //     console.log('hey')
@@ -69,11 +62,11 @@ export default forwardRef((props,ref) => {
         //     modalRef.current.style.right = null
         //     modalRef.current.style.left = "0px"
         // }
-        setScreen(e.target.innerWidth)
+        // setScreen(e.target.innerWidth)
         // setModal("")
         // setUserInfo({})
-        dispatch(closeRecipientModal())
-    }
+        // dispatch(closeRecipientModal())
+    // }
 
     //check whether a conversation is selected.
     //if not selected, able to remove and add recipients
@@ -159,7 +152,7 @@ export default forwardRef((props,ref) => {
     const findUserInformation = (email) => selectedConversation.users.find(user => user.email === email)
 
     return (
-        <div ref={ref} className="recipient">
+        <div className="recipient">
             <div className="recipient__errors-list">{conversationError}</div>
             <div className="recipient__email-list">
                 <p>To:</p>
@@ -180,10 +173,7 @@ export default forwardRef((props,ref) => {
                     </div>
                     )
                 }
-                <RecipientModal 
-                    ref={modalRef} 
-                    // setUserInfo={}
-                    // userInfo={userInfo}
+                <RecipientModal ref={modalRef} 
                 />
                 {
                     noSelectedConversation() && <input ref={inputRef} type="email" className="recipient__email-input" value={recipient} onKeyPress={handleKeyPress} onChange={handleEmailChange} placeholder={emails.length === 0 ? "No recipients": "Add recipient"}/>
@@ -191,4 +181,4 @@ export default forwardRef((props,ref) => {
             </div>
         </div>
     )
-})
+}
