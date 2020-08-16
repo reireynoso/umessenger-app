@@ -17,19 +17,21 @@ export default ({conversations,socket, conversation, conversation: {messages, us
     useLayoutEffect(() => {
         setTyping("") //resets typing field since the order of conversations changes
         socket.emit('subscribeToConversation', conversation)
-        socket.on('typing', ({selectedConversation,content}) => {
-
-            //pass is an arg from server that includes the user name and conversation obj for comparison
-            if(selectedConversation._id === conversation._id){
-
-                //possible bugs: multiple user typing. One stops but might overwrite the other user still typing
-                setTyping(content)
-            }
-        })
+        socket.on('typing', handleTyping)
         return () => {
-            socket.off('typing')
+            // turns off event for specific callback instead of all events
+            socket.off('typing', handleTyping)
         }
     }, [conversations])
+
+    const handleTyping =  ({selectedConversation,content}) => {
+        //pass is an arg from server that includes the user name and conversation obj for comparison
+        if(selectedConversation._id === conversation._id){
+
+            //possible bugs: multiple user typing. One stops but might overwrite the other user still typing
+            setTyping(content)
+        }
+    }
 
     const handleConversationSelect = () => {
         if(selectConversation._id !== conversation._id){

@@ -20,7 +20,7 @@ import {organizeMessages} from '../selectors/message'
     //     content: ""
     // }]
     // address the closure issue with sockets
-    // let currentConversation;
+    let currentConversation;
 
     //Why separate object instead of useState? Asynchrony issue. Need a state that directly manipulated instead of waiting for a render trigger. 
 // }
@@ -45,67 +45,47 @@ export default () => {
 
     const [blurred, setBlurred] = useState(null) 
 
-    //these three methods are responsible for adjusting the height of the component
-    //add an event listener on the window anytime it is resized accounting for the toggle device.
-    // useEffect(() => {
-    //     window.addEventListener('resize', setScreenOrientation)
-
-    //     return () => {
-    //         window.removeEventListener('resize', setScreenOrientation)
-    //     }
-    // }, [])
-
-    // dynamically changes the components height 
-    // useLayoutEffect(() => {
-    //     // console.log(messageInputHeight + recipientHeight)
-    //     if(window.innerWidth === 540){
-    //         // approximate solution for when the width reaches the limit
-    //          messageRef.current.style.height = (670 - (messageInputHeight + recipientHeight)) + 'px' 
-    //          return;
-    //     }    
-    //     messageRef.current.style.height = (window.innerHeight - (messageInputHeight + recipientHeight)) + 'px'
-        
-    // }, [messageInputHeight, recipientHeight, screen])
-    
-    // const setScreenOrientation = (e) => {
-        // console.log(e.target.innerHeight)
-    //     setScreen(e.target.innerHeight)
-    // }
-
     // handles event when page is refreshed. 
     window.onbeforeunload = function() {
         const data = {selectedConversation:selectConversation,user,content:""}
         if(socket.on && selectConversation){         
             socket.emit('typing', data)
-            socket.emit('messageTyping', data)
+            // socket.emit('messageTyping', data)
         }
     };
 
-    // useEffect(() =>{
-    //     console.log('loaded')
-    //     if(socket.io){
-    //         socket.on('typing', ({user,content, selectedConversation}) => {    
-    //                console.log('match')
-    //             if(currentConversation._id === selectedConversation._id){
-    //                 // As a user is typing, we store the user email as key into the typersInfo object. 
-    //                 if(!typersInfo.current[user.email] && content){
-    //                     //If it doesn't already exist, create it and add it as a key set to the value of the user name 
-    //                     typersInfo.current[user.email] = user.name
-    //                     // pull out the values (names) in the typersInfo.current object
-    //                     const newTypers = Object.values(typersInfo.current)
-    //                     setTypers(newTypers)
-    //                 }
-    //                 if(typersInfo.current[user.email] && !content){
-    //                     //If content is blank, find the user email in the typersInfo object, Remove the key value pair
-    //                     //After removing the key/value from the object, set the new value for typers with the user removed.
-    //                     delete typersInfo.current[user.email]
-    //                     const newTypers = Object.values(typersInfo.current)
-    //                     setTypers(newTypers)
-    //                 }
-    //             }
-    //         })
-    //     }
-    // }, [socket])
+    useEffect(() =>{
+        if(socket.io){
+            socket.on('typing', handleTyping)
+        }
+
+        return () => {
+            if(socket.on){
+                socket.off('typing', handleTyping)
+            }
+        }
+
+    }, [socket])
+
+    const handleTyping = ({user,content, selectedConversation}) => {    
+        if(currentConversation._id === selectedConversation._id){
+            // As a user is typing, we store the user email as key into the typersInfo object. 
+            if(!typersInfo.current[user.email] && content){
+                //If it doesn't already exist, create it and add it as a key set to the value of the user name 
+                typersInfo.current[user.email] = user.name
+                // pull out the values (names) in the typersInfo.current object
+                const newTypers = Object.values(typersInfo.current)
+                setTypers(newTypers)
+            }
+            if(typersInfo.current[user.email] && !content){
+                //If content is blank, find the user email in the typersInfo object, Remove the key value pair
+                //After removing the key/value from the object, set the new value for typers with the user removed.
+                delete typersInfo.current[user.email]
+                const newTypers = Object.values(typersInfo.current)
+                setTypers(newTypers)
+            }
+        }
+    }
 
     // const handleTypers = () => {
         // setTypers(typers => {
@@ -139,7 +119,7 @@ export default () => {
         if(selectConversation.messages){
             organizeMessages(selectConversation.messages)
         }
-        // currentConversation = selectConversation
+        currentConversation = selectConversation
        
         setTimeout(() => {
             scrollToRef()
@@ -148,28 +128,28 @@ export default () => {
         // console.log(typersInfo)
         // handleTypers()
         setTypers([])
-        if(socket.io){
-            socket.on('messageTyping', ({user,content, selectedConversation}) => {    
+        // if(socket.io){
+        //     socket.on('messageTyping', ({user,content, selectedConversation}) => {    
                    
-                if(selectConversation._id === selectedConversation._id){
-                    // As a user is typing, we store the user email as key into the typersInfo object. 
-                    if(!typersInfo.current[user.email] && content){
-                        //If it doesn't already exist, create it and add it as a key set to the value of the user name 
-                        typersInfo.current[user.email] = user.name
-                        // pull out the values (names) in the typersInfo.current object
-                        const newTypers = Object.values(typersInfo.current)
-                        setTypers(newTypers)
-                    }
-                    if(typersInfo.current[user.email] && !content){
-                        //If content is blank, find the user email in the typersInfo object, Remove the key value pair
-                        //After removing the key/value from the object, set the new value for typers with the user removed.
-                        delete typersInfo.current[user.email]
-                        const newTypers = Object.values(typersInfo.current)
-                        setTypers(newTypers)
-                    }
-                }
-            })
-        }
+        //         if(selectConversation._id === selectedConversation._id){
+        //             // As a user is typing, we store the user email as key into the typersInfo object. 
+        //             if(!typersInfo.current[user.email] && content){
+        //                 //If it doesn't already exist, create it and add it as a key set to the value of the user name 
+        //                 typersInfo.current[user.email] = user.name
+        //                 // pull out the values (names) in the typersInfo.current object
+        //                 const newTypers = Object.values(typersInfo.current)
+        //                 setTypers(newTypers)
+        //             }
+        //             if(typersInfo.current[user.email] && !content){
+        //                 //If content is blank, find the user email in the typersInfo object, Remove the key value pair
+        //                 //After removing the key/value from the object, set the new value for typers with the user removed.
+        //                 delete typersInfo.current[user.email]
+        //                 const newTypers = Object.values(typersInfo.current)
+        //                 setTypers(newTypers)
+        //             }
+        //         }
+        //     })
+        // }
         // if(obj[selectConversation._id]){
             // setTypers(typers => {
             //     if(!typers.includes(obj[selectConversation._id].user.name) && obj[selectConversation._id].content){
@@ -286,7 +266,7 @@ export default () => {
             setBlurred(null)
             // sortedMessagesByTime.current = {}
             setTypers([])
-            if(socket.io){
+            // if(socket.io){
                 //Everytime, selectConversation is changed, a typing socket listener is created.
                 //on unmount, remove typing socket listener to prevent more listeners from being added.
 
@@ -297,9 +277,9 @@ export default () => {
                     // socket.emit('typing', data)
                     // socket.emit('messageTyping', data)
                 // }
-                socket.off('messageTyping')
+                // socket.off('messageTyping')
                 // socket.off('newMessage')
-            }
+            // }
         }
     }, [selectConversation])
 
@@ -363,23 +343,6 @@ export default () => {
                     messageOrganized[key].map(message => <Message blurred={blurred} blurOutComponent={blurOutComponent} key={message._id} users={selectConversation.users} message={message}/>)
                 }
             </div>
-        // return Object.keys(sortedMessagesByTime.current).map(key => 
-        //     <div key={key} className="message_and_calendar">
-        //         <hr/>
-        //         <div key={key} className="message__calendar">
-        //             {moment(key).calendar({
-        //                 sameDay: '[Today]',
-        //                 nextDay: '[Tomorrow]',
-        //                 nextWeek: 'dddd',
-        //                 lastDay: '[Yesterday], MM/DD/YY',
-        //                 lastWeek: '[Last] dddd, MM/DD/YY',
-        //                 sameElse: 'MM/DD/YY'
-        //             })}
-        //         </div>
-        //         {
-        //             sortedMessagesByTime.current[key].map(message => <Message blurred={blurred} blurOutComponent={blurOutComponent} key={message._id} users={selectConversation.users} message={message}/>)
-        //         }
-        //     </div>
            ) 
     }
 
@@ -395,9 +358,8 @@ export default () => {
         <div ref={messageRef} className="messages-container">
             <div className="messages-container__inner">
                 {
-                    // blurred ? <div onClick={handleUnblur} className={`blur`}></div> : null
                     <AnimationFeature show={blurred}>
-                        <div onClick={handleUnblur} className={`blur`}></div>
+                        <div onClick={handleUnblur} className="blur"></div>
                     </AnimationFeature>
                 }
                 

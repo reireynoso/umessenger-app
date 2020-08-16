@@ -27,8 +27,8 @@ Refer to the respective stack's README for instructions on setting up.
 * A user is also notified of other users typing in real time through the list of conversations in the side bar as well as the main message view.
 * The list of message of a specific conversation are organized by date for ease of view for the user.
 * Clicking on a specific conversation from the side bar highlights it as well as scrolls to the most recent message.
-* The recipient and message input dynamically increase to an extent while adjusting the components. 
-* A user can video chat another user. (only one user at the moment)
+* The recipient and message input dynamically increase to an extent while adjusting the components size.
+* A user can video chat another user. (only one user at the moment). PeerJS establishes the connection between users.
 * The user on the receiving end can choose to accept or decline the video chat call.
 * A user can react on a message. They can also un-react.
 
@@ -50,11 +50,11 @@ Refer to the respective stack's README for instructions on setting up.
 
 * Moment.js (formatting time instances)
 * Emoji-Mart (emoji library)
-* React-Router
-* JSON Web Token
-* BCrypt
-* Socket.io 
-* PeerJS
+* React-Router (client-side routing)
+* JSON Web Token 
+* BCrypt (password hashing algorithm)
+* Socket.io (live updates of users typing and new messages) 
+* PeerJS (establish connection between users for video chat)
 * Validator (validating instances)
 * CORS
 * Multer (photo upload)

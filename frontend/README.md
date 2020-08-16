@@ -35,8 +35,6 @@ From your terminal,
 * Redux
 * SCSS
 
-In progress...
-
 # Tools
 
 * Moment.js (formatting time instances)
@@ -44,6 +42,7 @@ In progress...
 * React-Router
 * Socket.io 
 * PeerJS
+* Font Awesome (icons)
 
 # Gif Resources
 * Typing dots gif [Link](https://tenor.com/view/ellipse-loading-dots-circle-typing-gif-13427670)

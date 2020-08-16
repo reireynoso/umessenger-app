@@ -39,9 +39,6 @@ export default forwardRef((props, ref) => {
         //     return
         // }
         else if(email && !ref.current.contains(e.target)){
-            // setModal("")
-            // setUserInfo({})
-            
             dispatch(closeRecipientModal())
         }
     }

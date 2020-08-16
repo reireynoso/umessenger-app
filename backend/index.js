@@ -99,8 +99,8 @@ io.on('connection', (socket) => {
     socket.on('typing', ({selectedConversation,user,content}) => {
         const {name, email} = user
         // console.log(selectedConversation._id)
-        socket.broadcast.to(selectedConversation._id).emit('typing', {selectedConversation,content})
-        socket.broadcast.to(selectedConversation._id).emit('messageTyping', {selectedConversation,user: {name,email},content})
+        socket.broadcast.to(selectedConversation._id).emit('typing', {selectedConversation,user: {name,email},content})
+        // socket.broadcast.to(selectedConversation._id).emit('messageTyping', {selectedConversation,user: {name,email},content})
         // io.to(conversation).emit('typing', "someone is typing")
     })
 

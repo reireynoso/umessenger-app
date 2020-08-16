@@ -16,19 +16,9 @@ export default () => {
     const conversationError = useSelector(state => state.errors.conversationError)
     
     const [recipient, setRecipient] = useState("")
-    // const [userInfo, setUserInfo] = useState({})
-    // const [modal, setModal] = useState("")
-    // const [screen, setScreen] = useState(0)
 
     const modalRef = useRef(null)
     const inputRef = useRef(null)
-
-    // useLayoutEffect(() => {
-    //     if(ref.current){
-    //         ref.current.height = ref.current.offsetHeight
-    //         props.setrecipientHeight(ref.current.height)
-    //     }
-    // }, [emails.length, screen])
 
     useEffect(() => {
         emptyConversationError()
@@ -38,7 +28,13 @@ export default () => {
             scrollToRef()
     }, [emails.length])
 
-    // useEffect(() => {
+    const scrollToRef = () => {
+        if(inputRef.current){
+            return inputRef.current.scrollIntoView({ behavior: "smooth", block: 'end' })
+        }
+    }
+
+       // useEffect(() => {
     //     const windowObj = window
     //     windowObj.addEventListener('resize', modalOrientation)
 
@@ -46,12 +42,6 @@ export default () => {
     //         windowObj.removeEventListener('resize', modalOrientation)
     //     }
     // }, [])
-
-    const scrollToRef = () => {
-        if(inputRef.current){
-            return inputRef.current.scrollIntoView({ behavior: "smooth", block: 'end' })
-        }
-    }
 
     // const modalOrientation = (e) => {
         // console.log(modalRef.current.getBoundingClientRect())

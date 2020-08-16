@@ -24,14 +24,6 @@ export default () => {
 
     const [emojiPickerState, setEmojiPicker] = useState(false)
 
-    // useLayoutEffect(() => {
-    //     if(ref.current){
-    //         ref.current.height = ref.current.offsetHeight
-    //         // setmessageInputHeight(ref.current.height)
-    //     }
-
-    // }, [textArea.current ? textArea.current.offsetHeight : null])
-
     useEffect(() => {
         if(textArea.current){
             textArea.current.focus()
@@ -44,7 +36,6 @@ export default () => {
     useLayoutEffect(() => {
         const documentObj = document
         documentObj.addEventListener('click', closeEmoji)
-        // debugger
         return () => {
             documentObj.removeEventListener('click', closeEmoji)
         }
