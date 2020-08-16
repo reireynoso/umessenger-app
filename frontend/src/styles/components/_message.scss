@@ -1,9 +1,7 @@
 .message-container {
     display: flex;
     flex-direction: column;
-    // padding: 1rem $m-size;
     padding: 0 $m-size;
-    // position: relative;
 }
 
 .message {
@@ -188,15 +186,6 @@ hr{
     animation: reactionContainerFadeIn 0.3s ease-in-out;
     // transform-origin: 100% 100% 0;
 }
-
-// @keyframes fadeIn {
-//     from {
-//         transform: scale(0);
-//     }
-//     to {
-//         transform: scale(1);
-//     }   
-// }
 
 .message-reaction__container.mine:before {
     left: 15px;

@@ -19,6 +19,8 @@ import {organizeMessages} from '../selectors/message'
     //     user: {},
     //     content: ""
     // }]
+    // address the closure issue with sockets
+    // let currentConversation;
 
     //Why separate object instead of useState? Asynchrony issue. Need a state that directly manipulated instead of waiting for a render trigger. 
 // }
@@ -79,6 +81,32 @@ export default () => {
         }
     };
 
+    // useEffect(() =>{
+    //     console.log('loaded')
+    //     if(socket.io){
+    //         socket.on('typing', ({user,content, selectedConversation}) => {    
+    //                console.log('match')
+    //             if(currentConversation._id === selectedConversation._id){
+    //                 // As a user is typing, we store the user email as key into the typersInfo object. 
+    //                 if(!typersInfo.current[user.email] && content){
+    //                     //If it doesn't already exist, create it and add it as a key set to the value of the user name 
+    //                     typersInfo.current[user.email] = user.name
+    //                     // pull out the values (names) in the typersInfo.current object
+    //                     const newTypers = Object.values(typersInfo.current)
+    //                     setTypers(newTypers)
+    //                 }
+    //                 if(typersInfo.current[user.email] && !content){
+    //                     //If content is blank, find the user email in the typersInfo object, Remove the key value pair
+    //                     //After removing the key/value from the object, set the new value for typers with the user removed.
+    //                     delete typersInfo.current[user.email]
+    //                     const newTypers = Object.values(typersInfo.current)
+    //                     setTypers(newTypers)
+    //                 }
+    //             }
+    //         })
+    //     }
+    // }, [socket])
+
     // const handleTypers = () => {
         // setTypers(typers => {
         //     if(!typers.includes(obj[selectConversation._id].user.name) && obj[selectConversation._id].content){
@@ -111,6 +139,7 @@ export default () => {
         if(selectConversation.messages){
             organizeMessages(selectConversation.messages)
         }
+        // currentConversation = selectConversation
        
         setTimeout(() => {
             scrollToRef()
@@ -120,7 +149,8 @@ export default () => {
         // handleTypers()
         setTypers([])
         if(socket.io){
-            socket.on('messageTyping', ({user,content, selectedConversation}) => {         
+            socket.on('messageTyping', ({user,content, selectedConversation}) => {    
+                   
                 if(selectConversation._id === selectedConversation._id){
                     // As a user is typing, we store the user email as key into the typersInfo object. 
                     if(!typersInfo.current[user.email] && content){

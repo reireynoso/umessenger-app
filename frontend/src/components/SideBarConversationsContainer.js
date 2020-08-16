@@ -24,12 +24,17 @@ export default () => {
         dispatch(logOutUser())
         dispatch(resetConversations())
     }
+
+    const userImage = () => {
+        return user.image_url ? user.image_url : '/image/no-image.gif'
+    }
+
     return (
         <div className="side-bar">
             <div className="side-bar__header">
                 
                 <button className="button button__log-out" onClick={handleLogOut}>Log Out</button>
-                <div className="side-bar__info">Hello, {truncateString(user.name, 15)}</div>
+                
                 
                 <div className="side-bar__action">
                     <input className="text_input" placeholder="Search for names..." type="text" onChange={(e) => dispatch(setSearchConversation(e.target.value))}/>
@@ -46,6 +51,10 @@ export default () => {
                             conversation={conversation}
                         />)
                 }
+            </div>
+            <div className="side-bar__info">
+                <img alt={user.name} src={userImage()}/>
+                Hello, {truncateString(user.name, 22)}
             </div>
         </div>
     )

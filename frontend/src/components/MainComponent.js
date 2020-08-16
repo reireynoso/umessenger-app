@@ -120,7 +120,7 @@ export default () => {
             }, 2)
         }
     }
-    // console.log('video', videoModal)
+
     return (
         <div className="main-component">
             <audio ref={music} src="/audio/sent_message.mp3" allow="autoplay" style={{display:"none"}}/>

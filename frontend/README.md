@@ -45,5 +45,9 @@ In progress...
 * Socket.io 
 * PeerJS
 
+# Gif Resources
+* Typing dots gif [Link](https://tenor.com/view/ellipse-loading-dots-circle-typing-gif-13427670)
+* Loading screen gif [Link](https://imgur.com/ZXgqwUF)
+
 # Authors
 Reinald Reynoso

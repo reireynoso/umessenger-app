@@ -2,6 +2,8 @@
 
 uMessage is a full-stack chat application that allows you to send messages to other users by email address as well as video chat. Previous conversations that can be filtered out by name. The design of the application is inspired by iMessage and Slack. 
 
+*NOTE: This was styled with Google Chrome in mind. Style may not be consistent with other browsers. Advised to be used on screens larger than 540px. Style for smaller screens including mobile not fully supported.*
+
 * [Deployed Version](https://umessenger-frontend.herokuapp.com/)
 
 ## Message Interface Sample
@@ -31,7 +33,6 @@ Refer to the respective stack's README for instructions on setting up.
 * A user can react on a message. They can also un-react.
 
 # Known Bugs/Issues
-* When inputting email recipient, if it's too long it will expand the width. 
 * Minor bug involving who's typing. At some point, if the user keeps typing, the user's own name is included in the list of typing (which it shouldn't) and is not removed even after they're not typing anymore. (consider refactoring or restructuring typing feature.)
 * Refactor code
 

@@ -138,17 +138,6 @@ export default () => {
         }
     }
 
-    // const closeModal = (e) => {
-    //     if(e.target.className === "fas fa-chevron-down" || e.target.className === "recipient__dropdown-icon"){
-    //         return 
-    //     }
-    //     else if(userInfo.email && !modalRef.current.contains(e.target)){
-    //         // setModal("")
-    //         // setUserInfo({})
-    //         closeRecipientModal()
-    //     }
-    // }
-
     const findUserInformation = (email) => selectedConversation.users.find(user => user.email === email)
 
     return (

@@ -18,8 +18,12 @@
 }
 
 .messages-container__message {
-    // overflow-y: auto;
-    height: calc(100% - 20px);
+    height: calc(100% - 30px);
+    // height: -webkit-calc(100% - 20px);
+    // margin: 5px 0;
+    margin-top: 10px;
+    overflow-y: auto;
+    // word-wrap: break-all;
 }
 
 .messages-typing__container {
@@ -69,27 +73,6 @@
     transition: 0.5s;
     animation: reactionContainerFadeIn 0.6s ease-in;
 }
-
-// @keyframes reactionContainerFadeIn {
-//     from {
-//         transform: scale(0);
-//     }
-
-//     to {
-//         transform: scale(1);
-//     }
-// }
-
-// @keyframes reactionContainerFadeOut {
-//     from {
-//         transform: scale(1);
-//     }
-
-//     to {
-//         transform: scale(0);
-//     }
-// }
-
 
 .message__reaction-container > span:hover{
     color: lighten($color: $grey, $amount: 10%);

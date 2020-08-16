@@ -1,6 +1,7 @@
 .conversation {
     // rough estimation to enable max-width for .message to be percentage and responsive
     width: calc(100% - 270px);
+    // flex-grow: auto;
     color: $dark-white;
     display: flex;
     flex-flow: column;

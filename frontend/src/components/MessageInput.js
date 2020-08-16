@@ -46,7 +46,6 @@ export default () => {
         documentObj.addEventListener('click', closeEmoji)
         // debugger
         return () => {
-            // windowObject.removeEventListener('click', closeEmoji)
             documentObj.removeEventListener('click', closeEmoji)
         }
     }, [emojiPickerState])
