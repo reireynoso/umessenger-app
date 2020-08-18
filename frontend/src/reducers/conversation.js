@@ -4,7 +4,9 @@ const conversation = (state = {
     emails: [],
     searchConversation: ""
 }, {type,payload}) => {
-    // const onlyEmails = selectedConversation.users.map(user => user.email)
+
+    const checkIfSameConversation = () => state.selectedConversation._id === payload._id
+    
     switch(type){    
         case "SET_CONVERSATIONS":
             let initialPayload = (payload[0] ? payload[0].users : false) || []
@@ -19,22 +21,25 @@ const conversation = (state = {
             //add updated/new conversation to the beginning of the array
             const removeOld = state.conversations.filter(conversation => conversation._id!==payload._id)
             const updatedConversations = [payload, ...removeOld]
-            const previousSelectedConversation = updatedConversations.find(conversation => conversation._id === state.selectedConversation._id) || payload
-            
-            if(removeOld.length !== state.conversations){
+            // const previousSelectedConversation = updatedConversations.find(conversation => conversation._id === state.selectedConversation._id) //|| payload
+            // if it's not the same length, that means a new conversation was added.
+            if(updatedConversations.length !== state.conversations.length){
+                // debugger
                 return {
                     ...state,
-                    //if selectedConversation is empty, automatically redirect to the new
-                    // selectedConversation: (Object.keys(state.selectedConversation).length === 0 ? payload : state.selectedConversation),
                     conversations: updatedConversations,
-                    emails: previousSelectedConversation.users.map(user => user.email)
+                    // emails: previousSelectedConversation.users.map(user => user.email)
+                    emails: checkIfSameConversation() ? payload.users.map(user => user.email) : state.emails
                 }
             }
+            // console.log(state.selectedConversation._id, payload._id)
             return {
                 ...state,
-                // selectedConversation: (Object.keys(state.selectedConversation).length === 0 ? payload : state.selectedConversation),
+                // if the payload (updatedConversation) is the same as the selectedConversation, update with the payload, otherwise, leave it the same
+                selectedConversation: checkIfSameConversation() ? payload : state.selectedConversation,
                 conversations: updatedConversations,
-                emails: previousSelectedConversation.users.map(user => user.email)
+                // emails: previousSelectedConversation.users.map(user => user.email)
+                emails: checkIfSameConversation() ? payload.users.map(user => user.email) : state.emails,
             }
         case "SELECTED_CONVERSATION":
             return {
@@ -45,7 +50,7 @@ const conversation = (state = {
         case "NEW_MESSAGE":
             return {
                 ...state,
-                selectedConversation: payload._id === state.selectedConversation._id ? payload : state.selectedConversation,
+                selectedConversation: checkIfSameConversation() ? payload : state.selectedConversation,
                 // emails: payload.users.map(user => user.email)
             }
         case "REMOVE_SELECTED_CONVERSATION":

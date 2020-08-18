@@ -117,6 +117,11 @@ export default () => {
                     dispatch(setSelectedConversation(removeLoggedInUserFromConversation(result.newConversation,user)))
                 }
 
+                if(result.conversation){   
+                    // handles switching selected convo to existing convo
+                    dispatch(setSelectedConversation(removeLoggedInUserFromConversation(result.conversation,user)))
+                }
+
                 audio.current.play()
             }    
         }

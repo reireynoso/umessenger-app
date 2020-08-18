@@ -54,7 +54,7 @@ export default () => {
             // updates the conversation in the redux array
             dispatch(addOrUpdateConversation(removeLoggedInUserFromConversation(existingConversation,user)))
             // updates the selected conversation if on it separately
-            dispatch(newMessage(removeLoggedInUserFromConversation(existingConversation,user)))
+            // dispatch(newMessage(removeLoggedInUserFromConversation(existingConversation,user)))
         })
         establishSocket.on('disconnect', () => dispatch(setDisconnectedError()))
     
