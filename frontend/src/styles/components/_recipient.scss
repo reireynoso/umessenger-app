@@ -17,6 +17,8 @@
     height: 4rem;
     color: $cool-red;
     line-height: 4rem;
+    word-break: break-all;
+    overflow-y: scroll;
 }
 
 .recipient__email-list {

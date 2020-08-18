@@ -3,6 +3,9 @@ import {useSelector,useDispatch} from 'react-redux'
 import {Redirect} from 'react-router-dom'
 import {fetchUser} from '../actions/user'
 
+let date = new Date();
+let currentYear = date.getFullYear()
+
 const UserForm = ({location, history}) => {
     const dispatch = useDispatch()
     const user = useSelector(state => state.user)
@@ -84,17 +87,15 @@ const UserForm = ({location, history}) => {
             // console.log(res.errors)
             setErrors(res.errors)
         }
-        // else{
-        //     setEmail("")
-        //     setName("")
-        //     setPassword("")
-        //     setPhone("")
-        //     setErrors([])
-        // }
     }
 
     const optionClick = (urlRoute) => {
         setErrors([])
+        setEmail("")
+        setName("")
+        setPassword("")
+        setPhone("")
+        setImage({})
         history.push(urlRoute);
     }
 
@@ -104,7 +105,7 @@ const UserForm = ({location, history}) => {
             const fileName = image.name.slice(0, 16) + "..." 
             return fileName
         }
-        return "No file name"
+        return image.name
     }
 
     const checkRoute = () => route === "signup"
@@ -152,6 +153,9 @@ const UserForm = ({location, history}) => {
                 <ul className="form__errors">
                     {errors.length > 0 && errors.map((error,index) => <li className="form__error" key={index+error}><i className="fas fa-exclamation-circle"></i> {error}</li>)}
                 </ul>
+
+                <span id="credit">
+                    Proudly created by <a href="https://www.linkedin.com/in/reinald-reynoso622/">Reinald Reynoso</a> {currentYear} <a href="https://github.com/reireynoso/umessenger-app"><i className="fab fa-github"></i></a></span>
             </div>
         </div>
     )

@@ -71,21 +71,7 @@ export const sendMessageToConversation = (emails,content)  => {
         })
     })
     .then(res => res.json())
-    .then(data => {
-        return data
-        // if(data.errors){
-            // console.log(data.errors)
-            // return data.errors
-        // }
-
-        // if(data.newConversation){
-        //     return data.newConversation
-        // }
-        // console.log(removeLoggedInUserFromConversation(data.conversation,user))
-        // const formattedConversation = removeLoggedInUserFromConversation(data.conversation,user)
-        // dispatch(addOrUpdateConversation(formattedConversation))
-        // dispatch(selectedConversation(formattedConversation))
-    })
+    .then(data => data)
 }
 
 export const sendReactionRequest = (reactionObj) => {
@@ -106,11 +92,4 @@ export const sendReactionRequest = (reactionObj) => {
         }
         // return res.json()
     })
-    // .then(data => {
-        // if(data){
-            // console.log(data.conversation)
-            // const formattedConversation = removeLoggedInUserFromConversation(data.conversation,user)
-            // dispatch(setReaction(formattedConversation)) 
-        // }
-    // })
 }

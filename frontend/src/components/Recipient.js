@@ -34,30 +34,6 @@ export default () => {
         }
     }
 
-       // useEffect(() => {
-    //     const windowObj = window
-    //     windowObj.addEventListener('resize', modalOrientation)
-
-    //     return () => {
-    //         windowObj.removeEventListener('resize', modalOrientation)
-    //     }
-    // }, [])
-
-    // const modalOrientation = (e) => {
-        // console.log(modalRef.current.getBoundingClientRect())
-        // if(modalRef.current.getBoundingClientRect().right === window.innerWidth){
-        //     console.log('hey')
-            // modalRef.current.style.right = 200 + "px"
-            // modalRef.current.style.right = 0 + "px"
-        //     modalRef.current.style.right = null
-        //     modalRef.current.style.left = "0px"
-        // }
-        // setScreen(e.target.innerWidth)
-        // setModal("")
-        // setUserInfo({})
-        // dispatch(closeRecipientModal())
-    // }
-
     //check whether a conversation is selected.
     //if not selected, able to remove and add recipients
     const noSelectedConversation = () => !selectedConversation.users
@@ -76,7 +52,7 @@ export default () => {
             }
             else{
                 if(!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(recipient)){  
-                    dispatch(setConversationError("Email must be in right format (Ex. something@sample.com)"))
+                    dispatch(setConversationError("Email format: (Ex. something@sample.com)"))
                 }
           
                 if(emails.includes(recipient)){    

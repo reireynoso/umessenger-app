@@ -3,7 +3,6 @@ import {useDispatch,useSelector} from 'react-redux'
 import io from 'socket.io-client'
 
 import {removeLoggedInUserFromConversation, truncateString} from '../selectors/conversation'
-import {newMessage} from '../actions/conversation'
 import {setSocket} from '../actions/socket'
 import {addOrUpdateConversation, setReaction} from '../actions/conversation'
 import {setCaller ,declineCallAction} from '../actions/video-chat'

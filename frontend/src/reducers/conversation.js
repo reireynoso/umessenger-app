@@ -47,12 +47,6 @@ const conversation = (state = {
                 selectedConversation: payload,
                 emails: payload.users.map(user => user.email)
             }
-        case "NEW_MESSAGE":
-            return {
-                ...state,
-                selectedConversation: checkIfSameConversation() ? payload : state.selectedConversation,
-                // emails: payload.users.map(user => user.email)
-            }
         case "REMOVE_SELECTED_CONVERSATION":
             // debugger
             return {
