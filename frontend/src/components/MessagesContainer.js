@@ -44,6 +44,7 @@ export default () => {
     const typersInfo = useRef({})
 
     const [blurred, setBlurred] = useState(null) 
+    // const [newMessages, setNewMessages] = useState(null)
 
     // handles event when page is refreshed. 
     window.onbeforeunload = function() {
@@ -111,16 +112,25 @@ export default () => {
         // }       
     // }
 
+    // useEffect(() => {
+    //     console.log('new messages')
+    // }, [selectConversation.messages])
+
     const scrollToRef = () => {
         return bottom.current.scrollIntoView({ behavior: "smooth" })
     }
+
+    // useEffect(() => {
+    //     setTimeout(() => {
+    //         scrollToRef()
+    //     }, 0)
+    // }, [])
   
     useEffect(() => {
         if(selectConversation.messages){
             organizeMessages(selectConversation.messages)
         }
         currentConversation = selectConversation
-       
         setTimeout(() => {
             scrollToRef()
         }, 0)
@@ -346,6 +356,8 @@ export default () => {
            ) 
     }
 
+    // console.log(newMessages)
+
     const blurOutComponent = (id) => {
         setBlurred(id)
     }
@@ -353,6 +365,15 @@ export default () => {
     const handleUnblur = () => {
         setBlurred(null)
     }
+
+    // const handleOnScroll = (e) => {
+    //     e.persist();
+    //     const bottomOfMessagesContainer = e.target.scrollHeight - e.target.scrollTop === e.target.clientHeight;
+    //     if(bottomOfMessagesContainer){
+    //         console.log(newMessages)
+    //         setNewMessages(0)
+    //     }
+    // }
 
     return (
         <div ref={messageRef} className="messages-container">
@@ -363,7 +384,7 @@ export default () => {
                     </AnimationFeature>
                 }
                 
-                <div className={`messages-container__message`}>  
+                <div /*onScroll={handleOnScroll}*/ className={`messages-container__message`}>  
                     {
                        // selectConversation.messages && selectConversation.messages.map((message,index) => <Message key={message._id} message={message} users={selectConversation.users} prevConversation = {(index - 1) > -1 ? selectConversation.messages[index-1] : null}/>)
                        selectConversation.messages && generateMessages()

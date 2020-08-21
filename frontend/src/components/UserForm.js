@@ -154,8 +154,7 @@ const UserForm = ({location, history}) => {
                     {errors.length > 0 && errors.map((error,index) => <li className="form__error" key={index+error}><i className="fas fa-exclamation-circle"></i> {error}</li>)}
                 </ul>
 
-                <span id="credit">
-                    Proudly created by <a href="https://www.linkedin.com/in/reinald-reynoso622/">Reinald Reynoso</a> {currentYear} <a href="https://github.com/reireynoso/umessenger-app"><i className="fab fa-github"></i></a></span>
+                <span id="credit">Proudly created by <a target="_blank" href="https://www.linkedin.com/in/reinald-reynoso622/">Reinald Reynoso</a> {currentYear} <a target="_blank" href="https://github.com/reireynoso/umessenger-app"><i className="fab fa-github"></i></a></span>
             </div>
         </div>
     )
