@@ -44,7 +44,7 @@ export default () => {
     const typersInfo = useRef({})
 
     const [blurred, setBlurred] = useState(null) 
-    // const [newMessages, setNewMessages] = useState(null)
+    const [newMessages, setNewMessages] = useState(0)
 
     // handles event when page is refreshed. 
     window.onbeforeunload = function() {
@@ -66,9 +66,9 @@ export default () => {
             }
         }
 
-    }, [socket])
+    }, [selectConversation._id])
 
-    const handleTyping = ({user,content, selectedConversation}) => {    
+    const handleTyping = ({user,content, selectedConversation}) => {   
         if(currentConversation._id === selectedConversation._id){
             // As a user is typing, we store the user email as key into the typersInfo object. 
             if(!typersInfo.current[user.email] && content){
@@ -112,20 +112,24 @@ export default () => {
         // }       
     // }
 
-    // useEffect(() => {
-    //     console.log('new messages')
-    // }, [selectConversation.messages])
+    useEffect(() => {
+        // console.log(selectConversation.messages)
+        // const lastMessage = selectConversation.messages[selectConversation.messages.length - 1]
+        // console.log('new')
+        if(currentConversation && currentConversation._id === selectConversation._id){
+            const lastMessage = selectConversation.messages[selectConversation.messages.length - 1]
+            // console.log(lastMessage)
+            if(lastMessage.user.email !== user.email){
+                return setNewMessages(newMessages + 1)
+            }
+            scrollToRef()
+        }
+    }, [selectConversation.messages])
 
     const scrollToRef = () => {
         return bottom.current.scrollIntoView({ behavior: "smooth" })
     }
 
-    // useEffect(() => {
-    //     setTimeout(() => {
-    //         scrollToRef()
-    //     }, 0)
-    // }, [])
-  
     useEffect(() => {
         if(selectConversation.messages){
             organizeMessages(selectConversation.messages)
@@ -138,6 +142,9 @@ export default () => {
         // console.log(typersInfo)
         // handleTypers()
         setTypers([])
+        if(typersInfo.current){
+            typersInfo.current = {}
+        }
         // if(socket.io){
         //     socket.on('messageTyping', ({user,content, selectedConversation}) => {    
                    
@@ -291,7 +298,7 @@ export default () => {
                 // socket.off('newMessage')
             // }
         }
-    }, [selectConversation])
+    }, [selectConversation._id])
 
     const checkWhich = (index) => {
             //index passed in accounts for the 0. 1 is added already
@@ -356,8 +363,6 @@ export default () => {
            ) 
     }
 
-    // console.log(newMessages)
-
     const blurOutComponent = (id) => {
         setBlurred(id)
     }
@@ -366,14 +371,14 @@ export default () => {
         setBlurred(null)
     }
 
-    // const handleOnScroll = (e) => {
-    //     e.persist();
-    //     const bottomOfMessagesContainer = e.target.scrollHeight - e.target.scrollTop === e.target.clientHeight;
-    //     if(bottomOfMessagesContainer){
-    //         console.log(newMessages)
-    //         setNewMessages(0)
-    //     }
-    // }
+    const handleOnScroll = (e) => {
+        e.persist();
+        const bottomOfMessagesContainer = e.target.scrollHeight - e.target.scrollTop === e.target.clientHeight;
+        if(bottomOfMessagesContainer){
+            setNewMessages(0)
+            // currentConversation = selectConversation
+        }
+    }
 
     return (
         <div ref={messageRef} className="messages-container">
@@ -384,7 +389,7 @@ export default () => {
                     </AnimationFeature>
                 }
                 
-                <div /*onScroll={handleOnScroll}*/ className={`messages-container__message`}>  
+                <div onScroll={handleOnScroll} className={`messages-container__message`}>  
                     {
                        // selectConversation.messages && selectConversation.messages.map((message,index) => <Message key={message._id} message={message} users={selectConversation.users} prevConversation = {(index - 1) > -1 ? selectConversation.messages[index-1] : null}/>)
                        selectConversation.messages && generateMessages()
@@ -392,6 +397,18 @@ export default () => {
                     {
                         typers.length > 0 && <div className={`message-container`}>  
                             <div className="message other last"><img alt="typing-gif" className="segment__typing" src="/image/typing_dots.gif"/></div>       
+                        </div>
+                    }
+                    {
+                        newMessages > 0 && <div id="new-message-alert">
+                            <div onClick={scrollToRef}>
+                                <i className="fas fa-arrow-down"></i>
+                                &nbsp;
+                                <span>{newMessages} new message{`${newMessages > 1 ? "s" : ""}`}</span>
+                            </div> 
+                           <div onClick={() => setNewMessages(0)}>
+                                <i className="fas fa-times"></i>
+                           </div>
                         </div>
                     }
                     <div ref={bottom}></div>

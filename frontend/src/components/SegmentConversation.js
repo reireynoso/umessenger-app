@@ -15,7 +15,8 @@ export default ({conversations,socket, conversation, conversation: {messages, us
     // applies to all conversaton instances
     // why useLayoutEffect()? -> So React is attaching the socket event for the updated DOM before updated the screen. React will have to wait for this function to finish.
     useLayoutEffect(() => {
-        setTyping("") //resets typing field since the order of conversations changes
+        // setTyping("") //resets typing field since the order of conversations changes
+        // console.log('new something')
         socket.emit('subscribeToConversation', conversation)
         socket.on('typing', handleTyping)
         return () => {
@@ -90,7 +91,7 @@ export default ({conversations,socket, conversation, conversation: {messages, us
                 }
                 <div className="segment__details">
                     <div className="segment__details-top">
-                        <h3>{truncateString(users.map(user => user.name).join(', '),14)}</h3>
+                        <h3>{truncateString(users.map(user => user.name).join(', '),13)}</h3>
                         <p>{checkTime()}</p>
                     </div>
                     {
