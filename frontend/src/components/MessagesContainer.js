@@ -66,7 +66,7 @@ export default () => {
             }
         }
 
-    }, [selectConversation._id, socket])
+    }, [selectConversation._id])
 
     useEffect(() => {
         // console.log(selectConversation.messages)

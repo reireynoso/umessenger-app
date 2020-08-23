@@ -5,7 +5,6 @@ import {closeVideoModal} from '../actions/modal'
 import {declineCallAction} from '../actions/video-chat'
 import {truncateString} from '../selectors/conversation'
 
-
 import Peer from 'simple-peer'
 
 export default () => {
@@ -23,6 +22,7 @@ export default () => {
     const partnerVideo = useRef()
 
     let currentStream = useRef(null);
+    // let currentStream;
 
     useEffect(() => {
         // let currentStream;
@@ -32,6 +32,9 @@ export default () => {
             partnerVideo.current.srcObject = null
             // setWaitUser(`${callerInformation.name} ended the call`)
             determine('callEnded')
+            setTimeout(() => {
+                dispatch(closeVideoModal())
+            }, 2000)
         })
 
         socket.on('recepientBusy', () => {
@@ -167,6 +170,9 @@ export default () => {
             // console.log('call declined')
             determine("declined")
             // dispatch(closeVideoModal())
+            setTimeout(() => {
+                dispatch(closeVideoModal())
+            }, 2000)
             // setWaitUser(`${callerInformation.name} declined...`)
         })
     }
@@ -182,9 +188,9 @@ export default () => {
             })
 
             // turn off window after hang up
-            setTimeout(() => {
-                dispatch(closeVideoModal())
-            }, 2500)
+            // setTimeout(() => {
+            //     dispatch(closeVideoModal())
+            // }, 2500)
         }
     }
 

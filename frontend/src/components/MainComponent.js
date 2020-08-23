@@ -32,7 +32,7 @@ export default () => {
     // console.log(process.env.NODE_ENV)
     const ENDPOINT = apiUrl
     //moved established socket here
-    const establishSocket = io(ENDPOINT)
+    // const establishSocket = io(ENDPOINT)
 
     useEffect(() => {
         if(playing){
@@ -41,7 +41,7 @@ export default () => {
     }, [playing])
 
     useEffect(() => {
-        // const establishSocket = io(ENDPOINT)
+        const establishSocket = io(ENDPOINT)
         establishSocket.emit("online", user)
         establishSocket.on('newConversation', (newConversation) => {
             notification(newConversation)
@@ -105,7 +105,7 @@ export default () => {
 
     const declineCall = () => {
         // emit an listener to the server for "declineCall"
-        establishSocket.emit("declineCall", caller)
+        socket.emit("declineCall", caller)
         dispatch(declineCallAction())
     }
 

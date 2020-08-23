@@ -24,7 +24,7 @@ export default ({placement,socket, conversation, conversation: {messages, users,
             console.log('changed')
             socket.off('typing', handleTyping)
         }
-    }, [placement, socket])
+    }, [placement])
 
     const handleTyping =  ({selectedConversation,content}) => {
         //pass is an arg from server that includes the user name and conversation obj for comparison

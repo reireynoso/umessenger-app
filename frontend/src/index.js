@@ -8,7 +8,11 @@ import rootReducer from './reducers'
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 
-const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+// adds trace capability to redux devtools
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({
+  trace: true,
+  traceLimit: 25
+}) : compose;
 
 const store = createStore(
   rootReducer,

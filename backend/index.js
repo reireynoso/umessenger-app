@@ -117,7 +117,7 @@ io.on('connection', (socket) => {
         //removes user from object list by socket id
         for(let key in onlineUsers){
             if(onlineUsers[key] === socket.id){
-                console.log(onlineUsers[key])
+                // console.log(onlineUsers[key])
                 delete onlineUsers[key]
             }
         }
