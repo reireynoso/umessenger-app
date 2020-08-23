@@ -5,7 +5,7 @@ import {sendReactionRequest} from '../actions/conversation'
 
 import AnimationFeature from './AnimationFeature'
 
-export default ({users=[], message: {_id,content, reactions, user, createdAt, nextMessageUser}, blurOutComponent, blurred}) => {
+export default ({users=[], handleUnblur, message: {_id,content, reactions, user, createdAt, nextMessageUser}, blurOutComponent, blurred}) => {
     // const dispatch = useDispatch()
     const loggedUser = useSelector(state => state.user)
     const selectConversation = useSelector(state => state.conversation.selectedConversation)
@@ -37,6 +37,7 @@ export default ({users=[], message: {_id,content, reactions, user, createdAt, ne
             reaction
         }
         sendReactionRequest(reactionObj)
+        handleUnblur()
     }
 
     const whichReaction = (reaction) => {

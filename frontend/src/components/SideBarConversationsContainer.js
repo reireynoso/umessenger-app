@@ -43,10 +43,11 @@ export default () => {
             </div>
             <div className="segment-conversation__container">
                 {
-                    matchConversations(conversations,searchTerm).map(conversation => 
+                    matchConversations(conversations,searchTerm).map((conversation,index) => 
                         <SegmentConversation 
                             key={conversation._id}
-                            conversations={conversations} 
+                            placement={index}
+                            // conversations={conversations} 
                             socket={socket} 
                             conversation={conversation}
                         />)

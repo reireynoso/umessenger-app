@@ -68,67 +68,25 @@ export default () => {
 
     }, [selectConversation._id])
 
-    const handleTyping = ({user,content, selectedConversation}) => {   
-        if(currentConversation._id === selectedConversation._id){
-            // As a user is typing, we store the user email as key into the typersInfo object. 
-            if(!typersInfo.current[user.email] && content){
-                //If it doesn't already exist, create it and add it as a key set to the value of the user name 
-                typersInfo.current[user.email] = user.name
-                // pull out the values (names) in the typersInfo.current object
-                const newTypers = Object.values(typersInfo.current)
-                setTypers(newTypers)
-            }
-            if(typersInfo.current[user.email] && !content){
-                //If content is blank, find the user email in the typersInfo object, Remove the key value pair
-                //After removing the key/value from the object, set the new value for typers with the user removed.
-                delete typersInfo.current[user.email]
-                const newTypers = Object.values(typersInfo.current)
-                setTypers(newTypers)
-            }
-        }
-    }
-
-    // const handleTypers = () => {
-        // setTypers(typers => {
-        //     if(!typers.includes(obj[selectConversation._id].user.name) && obj[selectConversation._id].content){
-        //         return [...typers, obj[selectConversation._id].user.name]
-        //     }
-        //     else if(!obj[selectConversation._id].content){
-        //         const remove = typers.filter(typer => typer !==obj[selectConversation._id].user.name)
-        //         return remove
-        //     }
-        //     return typers
-        // })
-        
-        //checks to see if the selectConversation exists in typersInfo. If so, pull out the names of users from the array value and set it to the typers
-        // if(typersInfo.current[selectConversation._id]){
-        //     const names = typersInfo.current[selectConversation._id].map(obj => obj.user.name)
-        //     // console.log(typers)
-        //     setTypers(names)
-        // }
-        // else{
-        //     //If it does not exist, no one is typing. Empty the typers array.
-        //     setTypers([])
-        // }       
-    // }
-
     useEffect(() => {
         // console.log(selectConversation.messages)
         // const lastMessage = selectConversation.messages[selectConversation.messages.length - 1]
-        // console.log('new')
-        if(currentConversation && currentConversation._id === selectConversation._id){
+        // whenever the selected message changes in any way, we implement checks to ensure that the currentConversation is similar to the selectedConversation to avoid executing when we're switching conversations
+        // Ultimately, we check if the length of the conversation's messages has changed
+        // We check the length to avoid notifying for a reaction.
+        if(currentConversation && currentConversation._id === selectConversation._id && currentConversation.messages.length !== selectConversation.messages.length){
+            // if changed, check the last message
             const lastMessage = selectConversation.messages[selectConversation.messages.length - 1]
-            // console.log(lastMessage)
+            // set the currentConversation to the updated one
+            currentConversation = selectConversation
+            // if the last message's user email isn't the current user, user does not need notification
             if(lastMessage.user.email !== user.email){
                 return setNewMessages(newMessages + 1)
             }
-            scrollToRef()
+            // otherwise if it is current user's message, just scroll down automatically
+            return scrollToRef()
         }
     }, [selectConversation.messages])
-
-    const scrollToRef = () => {
-        return bottom.current.scrollIntoView({ behavior: "smooth" })
-    }
 
     useEffect(() => {
         if(selectConversation.messages){
@@ -280,7 +238,7 @@ export default () => {
 
         return () => {
             //empties out typers if conversation is switched
-            setBlurred(null)
+            // setBlurred(null)
             // sortedMessagesByTime.current = {}
             setTypers([])
             // if(socket.io){
@@ -299,6 +257,30 @@ export default () => {
             // }
         }
     }, [selectConversation._id])
+
+    const handleTyping = ({user,content, selectedConversation}) => {   
+        if(currentConversation._id === selectedConversation._id){
+            // As a user is typing, we store the user email as key into the typersInfo object. 
+            if(!typersInfo.current[user.email] && content){
+                //If it doesn't already exist, create it and add it as a key set to the value of the user name 
+                typersInfo.current[user.email] = user.name
+                // pull out the values (names) in the typersInfo.current object
+                const newTypers = Object.values(typersInfo.current)
+                setTypers(newTypers)
+            }
+            if(typersInfo.current[user.email] && !content){
+                //If content is blank, find the user email in the typersInfo object, Remove the key value pair
+                //After removing the key/value from the object, set the new value for typers with the user removed.
+                delete typersInfo.current[user.email]
+                const newTypers = Object.values(typersInfo.current)
+                setTypers(newTypers)
+            }
+        }
+    }
+
+    const scrollToRef = () => {
+        return bottom.current.scrollIntoView({ behavior: "smooth" })
+    }
 
     const checkWhich = (index) => {
             //index passed in accounts for the 0. 1 is added already
@@ -357,7 +339,7 @@ export default () => {
                     })}
                 </div>
                 {
-                    messageOrganized[key].map(message => <Message blurred={blurred} blurOutComponent={blurOutComponent} key={message._id} users={selectConversation.users} message={message}/>)
+                    messageOrganized[key].map(message => <Message handleUnblur={handleUnblur} blurred={blurred} blurOutComponent={blurOutComponent} key={message._id} users={selectConversation.users} message={message}/>)
                 }
             </div>
            ) 

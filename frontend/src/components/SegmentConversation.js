@@ -6,7 +6,7 @@ import moment from 'moment'
 import {selectedConversation as selectConversationAction} from '../actions/conversation'
 import {truncateString} from '../selectors/conversation'
 
-export default ({conversations,socket, conversation, conversation: {messages, users, updatedAt}}) => {
+export default ({placement,socket, conversation, conversation: {messages, users, updatedAt}}) => {
     const dispatch = useDispatch()
     const [typing, setTyping] = useState("")
     const user = useSelector(state => state.user)
@@ -23,7 +23,7 @@ export default ({conversations,socket, conversation, conversation: {messages, us
             // turns off event for specific callback instead of all events
             socket.off('typing', handleTyping)
         }
-    }, [conversations])
+    }, [placement])
 
     const handleTyping =  ({selectedConversation,content}) => {
         //pass is an arg from server that includes the user name and conversation obj for comparison

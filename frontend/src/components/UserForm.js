@@ -124,14 +124,14 @@ const UserForm = ({location, history}) => {
                         <form className={`form__input-group ${checkRoute() ? "signup-group" : "login-group"}`} onSubmit={handleSubmit}>
                             {
                                 checkRoute() ? <React.Fragment>
-                                    <input className="form__input-field" type="text" placeholder="Name" onChange={(e) => setName(e.target.value)}/>
+                                    <input className="form__input-field" type="text" placeholder="Name" value={name} onChange={(e) => setName(e.target.value)}/>
                                     <input className="form__input-field" type="text" value={format()} placeholder="Phone" onChange={handleSetPhone}/>
                                 </React.Fragment>
                                 :
                                 null 
                             }
-                            <input className="form__input-field" type="text" placeholder="Email" onChange={(e) => setEmail(e.target.value)}/>
-                            <input className="form__input-field" type="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)}/>
+                            <input className="form__input-field" type="text" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value.toLowerCase())}/>
+                            <input className="form__input-field" type="password" value={password} placeholder="Password" onChange={(e) => setPassword(e.target.value)}/>
                             {
                                 checkRoute() &&  <div>
                                     <input id="form__input-file" type="file" name="image" onChange={(e) => setImage(e.target.files[0] === undefined ? {} : e.target.files[0])}/>

@@ -92,4 +92,5 @@ export const sendReactionRequest = (reactionObj) => {
         }
         // return res.json()
     })
+    // .then(data => console.log(data))
 }

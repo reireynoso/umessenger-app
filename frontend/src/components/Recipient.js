@@ -70,7 +70,7 @@ export default () => {
         if(!e.target.value){
             dispatch(emptyConversationError())
         }
-        setRecipient(e.target.value)
+        setRecipient(e.target.value.toLowerCase())
     }
 
     const handleModal = (email, e) => {
