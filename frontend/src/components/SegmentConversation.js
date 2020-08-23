@@ -1,4 +1,4 @@
-import React, {useState, useLayoutEffect} from 'react'
+import React, {useState, useEffect} from 'react'
 import {useDispatch, useSelector} from 'react-redux'
 
 import moment from 'moment'
@@ -14,16 +14,17 @@ export default ({placement,socket, conversation, conversation: {messages, users,
     // console.log(moment(Date.now()).format('LT'))
     // applies to all conversaton instances
     // why useLayoutEffect()? -> So React is attaching the socket event for the updated DOM before updated the screen. React will have to wait for this function to finish.
-    useLayoutEffect(() => {
+    useEffect(() => {
         // setTyping("") //resets typing field since the order of conversations changes
         // console.log('new something')
         socket.emit('subscribeToConversation', conversation)
         socket.on('typing', handleTyping)
         return () => {
             // turns off event for specific callback instead of all events
+            console.log('changed')
             socket.off('typing', handleTyping)
         }
-    }, [placement])
+    }, [placement, socket])
 
     const handleTyping =  ({selectedConversation,content}) => {
         //pass is an arg from server that includes the user name and conversation obj for comparison

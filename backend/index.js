@@ -86,7 +86,8 @@ io.on('connection', (socket) => {
     socket.on('subscribeToConversation', (conversation) => {
         // io.sockets.emit('typing', input)
         socket.join(conversation._id)
-        // console.log(socket.rooms) // check sockets joined rooms
+
+        // console.log(conversation._id) // check sockets joined rooms
     })
 
     socket.on('leaveConversation', (conversation) => {
@@ -112,9 +113,11 @@ io.on('connection', (socket) => {
 
     socket.on('disconnect', () => {
         console.log('someone had left')
+        // console.log(socket.rooms)
         //removes user from object list by socket id
         for(let key in onlineUsers){
             if(onlineUsers[key] === socket.id){
+                console.log(onlineUsers[key])
                 delete onlineUsers[key]
             }
         }
