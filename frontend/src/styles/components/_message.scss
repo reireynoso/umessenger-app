@@ -155,6 +155,10 @@ hr{
     width: 100%;
 }
 
+.message__reaction-container {
+    font-weight: 900;
+}
+
 .message-reaction__container.other, .message-reaction__container.mine {
     background: none;
     position: absolute;

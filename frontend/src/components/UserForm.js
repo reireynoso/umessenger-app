@@ -15,6 +15,7 @@ const UserForm = ({location, history}) => {
     const [password, setPassword] = useState("")
     const [email, setEmail] = useState("")
     const [phone, setPhone] = useState("")
+    const [loading, setLoading] = useState(false)
     const [image, setImage] = useState({})
 
     const [errors,setErrors] = useState([])
@@ -82,11 +83,13 @@ const UserForm = ({location, history}) => {
 
     const handleSubmit = async(e) => {
         e.preventDefault()
+        setLoading(true)
         const res = await dispatch(fetchUser(route, whichDataToSend()))
         if(res && res.errors){
             // console.log(res.errors)
             setErrors(res.errors)
-        }
+            setLoading(false)
+        }    
     }
 
     const optionClick = (urlRoute) => {
@@ -145,7 +148,7 @@ const UserForm = ({location, history}) => {
                                     </span>
                                 </div>
                             }
-                            <input className="form__submit-btn toggle-selected" type="submit"/>
+                            <input disabled={loading} className="form__submit-btn toggle-selected" value={loading ? "Loading..." : "Submit"} type="submit"/>
                         </form>
                     :
                     <Redirect to="/dashboard"/>

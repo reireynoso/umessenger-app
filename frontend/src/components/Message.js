@@ -12,6 +12,7 @@ export default ({users=[], handleUnblur, message: {_id,content, reactions, user,
     
     const [startLongPress, setStartLongPress] = useState(false)
     const [showTimeBar, setTimeBar] = useState(false)
+    const [loading, setLoading] = useState(false)
 
     useEffect(() => {
         let timerId;
@@ -29,15 +30,21 @@ export default ({users=[], handleUnblur, message: {_id,content, reactions, user,
         }
     }, [startLongPress])
 
-    const giveReaction = (reaction) => {
+    const giveReaction = async(reaction) => {
         //handle fetch to express to create reaction
         const reactionObj = {
             conversation_id: selectConversation._id,
             message_id: _id,
             reaction
         }
-        sendReactionRequest(reactionObj)
-        handleUnblur()
+
+        setLoading(true)
+
+        const request = await sendReactionRequest(reactionObj);
+        if(request === 201){
+            handleUnblur()
+            setLoading(false)
+        }
     }
 
     const whichReaction = (reaction) => {
@@ -156,11 +163,17 @@ export default ({users=[], handleUnblur, message: {_id,content, reactions, user,
                 } 
                 {
                     <AnimationFeature show={(_id && blurred === _id)}>
-                        <div className={`message__reaction-container ${checkIfMineOrOther()}`}>          
-                            <span onClick={() => giveReaction("thumbs-up")}><i className="fas fa-thumbs-up fa-lg"></i></span>
-                            <span onClick={() => giveReaction("thumbs-down")}><i className="fas fa-thumbs-down fa-lg"></i></span>
-                            <span onClick={() => giveReaction("exclamation")}><i className="fas fa-exclamation fa-lg"></i></span>
-                            <span onClick={() => giveReaction("question")}><i className="fas fa-question fa-lg"></i></span>         
+                        <div className={`message__reaction-container ${checkIfMineOrOther()}`}>
+                            {      
+                                loading ? "Loading..."
+                                :
+                                <React.Fragment>
+                                    <span onClick={() => giveReaction("thumbs-up")}><i className="fas fa-thumbs-up fa-lg"></i></span>
+                                    <span onClick={() => giveReaction("thumbs-down")}><i className="fas fa-thumbs-down fa-lg"></i></span>
+                                    <span onClick={() => giveReaction("exclamation")}><i className="fas fa-exclamation fa-lg"></i></span>
+                                    <span onClick={() => giveReaction("question")}><i className="fas fa-question fa-lg"></i></span>     
+                                </React.Fragment>    
+                            }    
                         </div>
                     </AnimationFeature>
                 }

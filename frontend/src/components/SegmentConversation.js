@@ -21,7 +21,6 @@ export default ({placement,socket, conversation, conversation: {messages, users,
         socket.on('typing', handleTyping)
         return () => {
             // turns off event for specific callback instead of all events
-            console.log('changed')
             socket.off('typing', handleTyping)
         }
     }, [placement])

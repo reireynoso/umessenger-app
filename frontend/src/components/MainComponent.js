@@ -7,7 +7,7 @@ import {setSocket} from '../actions/socket'
 import {addOrUpdateConversation, setReaction} from '../actions/conversation'
 import {setCaller ,declineCallAction} from '../actions/video-chat'
 import {openVideoModal} from '../actions/modal'
-import {setDisconnectedError} from '../actions/errors'
+import {setDisconnectedError, unsetDisconnectedError} from '../actions/errors'
 import apiUrl from '../utils/apiUrl'
 
 import VideoModal from './VideoModal'
@@ -42,6 +42,9 @@ export default () => {
 
     useEffect(() => {
         const establishSocket = io(ENDPOINT)
+        if(establishSocket){
+            dispatch(unsetDisconnectedError())
+        }
         establishSocket.emit("online", user)
         establishSocket.on('newConversation', (newConversation) => {
             notification(newConversation)
