@@ -36,7 +36,6 @@ Refer to the respective stack's README for instructions on setting up.
 * Minor bug involving who's typing. At some point, if the user keeps typing, the user's own name is included in the list of typing (which it shouldn't) and is not removed even after they're not typing anymore. (consider refactoring or restructuring typing feature.)
 * Refactor code
 * ~~When user starts a "new" conversation with an existing conversation and sends, it does not redirect to that existing conversation.~~ (implemented solution. Could test a few more times.)
-* Implement a loading screen for react once request is sent
 
 # Tech Stack
 

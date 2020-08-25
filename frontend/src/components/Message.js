@@ -38,9 +38,15 @@ export default ({users=[], handleUnblur, message: {_id,content, reactions, user,
             reaction
         }
 
-        setLoading(true)
+        setLoading("Loading...")
 
         const request = await sendReactionRequest(reactionObj);
+        if(request === 400){
+            setLoading("Try again...")
+            setTimeout(() => {
+                setLoading(false)
+            }, 1000)
+        }
         if(request === 201){
             handleUnblur()
             setLoading(false)
@@ -165,7 +171,7 @@ export default ({users=[], handleUnblur, message: {_id,content, reactions, user,
                     <AnimationFeature show={(_id && blurred === _id)}>
                         <div className={`message__reaction-container ${checkIfMineOrOther()}`}>
                             {      
-                                loading ? "Loading..."
+                                loading ? loading
                                 :
                                 <React.Fragment>
                                     <span onClick={() => giveReaction("thumbs-up")}><i className="fas fa-thumbs-up fa-lg"></i></span>
@@ -184,10 +190,11 @@ export default ({users=[], handleUnblur, message: {_id,content, reactions, user,
                     >
                         {content}
                 </span>
+                {
                 <AnimationFeature show={showTimeBar}>
                     <div className={`message__tooltip ${checkIfMineOrOther()}`}>{moment(createdAt).format('MMMM Do YYYY, h:mm:ss a')}</div>
                 </AnimationFeature>
-                
+                }
             </div>
             {
                 lastMessage() && <div className={`message__time ${checkIfMineAndLast()}`}>

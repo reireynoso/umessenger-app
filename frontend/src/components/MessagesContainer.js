@@ -37,6 +37,7 @@ export default () => {
     // const [screen, setScreen] = useState(0)
 
     const messageRef = useRef(null)
+    const messagesContainer = useRef(null)
     const bottom = useRef(null)
     // const sortedMessagesByTime = useRef({})
     // react alternative to creating a mutable object
@@ -81,7 +82,9 @@ export default () => {
             currentConversation = selectConversation
             // if the last message's user email isn't the current user, user does not need notification
             if(lastMessage.user.email !== user.email){
-                return setNewMessages(newMessages + 1)
+                if(messagesContainer.current && messagesContainer.current.scrollHeight !== messagesContainer.current.offsetHeight){
+                    return setNewMessages(newMessages + 1)
+                }
             }
             // otherwise if it is current user's message, just scroll down automatically
             return scrollToRef()
@@ -371,7 +374,7 @@ export default () => {
                     </AnimationFeature>
                 }
                 
-                <div onScroll={handleOnScroll} className={`messages-container__message`}>  
+                <div onScroll={handleOnScroll} ref={messagesContainer} className={`messages-container__message`}>  
                     {
                        // selectConversation.messages && selectConversation.messages.map((message,index) => <Message key={message._id} message={message} users={selectConversation.users} prevConversation = {(index - 1) > -1 ? selectConversation.messages[index-1] : null}/>)
                        selectConversation.messages && generateMessages()

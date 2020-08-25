@@ -87,9 +87,9 @@ export const sendReactionRequest = (reactionObj) => {
         body: JSON.stringify(reactionObj)
     })
     .then(res => {
-        if(res.status === 400){
-            return console.log("Error with reaction request")
-        }
+        // if(res.status === 400){
+        //     return console.log("Error with reaction request")
+        // }
         return res.status
     })
     // .then(data => {

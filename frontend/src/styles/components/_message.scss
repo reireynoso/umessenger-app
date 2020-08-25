@@ -30,14 +30,14 @@
 }
 
 .message__tooltip.mine{
-    top: 110%;
+    bottom: 110%;
     right: 40%;
     background: $grey;
     transform-origin: 100% 100% 0;
 }
 
 .message__tooltip.other{
-    top: 110%;
+    bottom: 110%;
     left: 40%;
     background: $grey;
     transform-origin: 0 50% 0;
