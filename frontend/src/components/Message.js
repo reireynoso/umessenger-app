@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react'
+import Linkify from 'linkifyjs/react'
 import moment from 'moment'
 import {useSelector} from 'react-redux'
 import {sendReactionRequest} from '../actions/conversation'
@@ -188,7 +189,7 @@ export default ({users=[], handleUnblur, message: {_id,content, reactions, user,
                     onMouseLeave={() => setTimeBar(false)} 
                     className="message-content"
                     >
-                        {content}
+                    <Linkify>{content}</Linkify>
                 </span>
                 {
                 <AnimationFeature show={showTimeBar}>

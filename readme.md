@@ -61,6 +61,7 @@ Refer to the respective stack's README for instructions on setting up.
 * Multer (photo upload)
 * Sharp (photo resizing)
 * Font Awesome (icons)
+* [Linkify](https://soapbox.github.io/linkifyjs/docs/linkify-react.html) (converts text into links if text includes hyperlinks)
 
 # Authors
 Reinald Reynoso
