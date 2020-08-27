@@ -5,6 +5,8 @@ const auth = require('../middleware/auth')
 const User = require('../models/user')
 const Conversation = require('../models/conversation')
 
+const badWords = require('../resources/bad-words')
+
 router.post("/conversations", auth, async(req,res) => {
     try{
         // const user = await User.findOne({name: "Test"})
@@ -16,6 +18,17 @@ router.post("/conversations", auth, async(req,res) => {
         if(!content){
             throw "Message cannot be empty!"
         }
+
+        const splitContent = content.split(" ")
+
+        // method checks for messages profanity. It accounts for no skips between. i.e b a d w o r d with spaces will not be accounted for
+        for(let i = 0; i < splitContent.length; i++){
+            const word = splitContent[i].toLowerCase()
+            if(badWords[word]){
+                throw "Message contains profanity."
+            }
+        }
+        
         //query for users in database whose names are included in list
         //$in email is included in the given list
         const users = await User.checkIfEmailsAreValid(recipients) 

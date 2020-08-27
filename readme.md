@@ -31,6 +31,8 @@ Refer to the respective stack's README for instructions on setting up.
 * A user can video chat another user. (only one user at the moment). PeerJS establishes the connection between users.
 * The user on the receiving end can choose to accept or decline the video chat call.
 * A user can react on a message. They can also un-react.
+* Links provided in messages are converted into hyperlinks.
+* Messages are checked for profanity (keeping a clean interface)
 
 # Known Bugs/Issues
 * Minor bug involving who's typing. At some point, if the user keeps typing, the user's own name is included in the list of typing (which it shouldn't) and is not removed even after they're not typing anymore. (consider refactoring or restructuring typing feature.)
@@ -62,6 +64,7 @@ Refer to the respective stack's README for instructions on setting up.
 * Sharp (photo resizing)
 * Font Awesome (icons)
 * [Linkify](https://soapbox.github.io/linkifyjs/docs/linkify-react.html) (converts text into links if text includes hyperlinks)
+* [Badwords](https://github.com/MauriceButler/badwords) (credit to Maurice Butler for the list of profanities)
 
 # Authors
 Reinald Reynoso
