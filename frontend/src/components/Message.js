@@ -152,19 +152,19 @@ export default ({users=[], handleUnblur, message: {_id,content, reactions, user,
     const checkIfMineAndLast = () => `${checkIfMineOrOther()} ${checkIfLastMessage()}`
 
     return (
-        <div className={`message-container`}
-            onMouseDown={() => setStartLongPress(true)}
-            onMouseUp={() => setStartLongPress(false)}
-            onMouseLeave={() => setStartLongPress(false)}
-            onTouchStart={() => setStartLongPress(true)} 
-            onTouchEnd={() => setStartLongPress(false)} 
-            >  
+        <div className={`message-container`}>  
             {
                 users.length > 1 && user.email !== loggedUser.email && <div className="message__nametag">
                     {user.name}
                 </div>  
             }
-            <div className={`message ${blurred === _id ? "no-blurred" : ""} ${checkIfMineAndLast()} ${reactions ? "has-reactions" : ""}`}>
+            <div className={`message ${blurred === _id ? "no-blurred" : ""} ${checkIfMineAndLast()} ${reactions ? "has-reactions" : ""}`}
+                onMouseDown={() => setStartLongPress(true)}
+                onMouseUp={() => setStartLongPress(false)}
+                onMouseLeave={() => setStartLongPress(false)}
+                onTouchStart={() => setStartLongPress(true)} 
+                onTouchEnd={() => setStartLongPress(false)} 
+            >
                 {
                     generateReactionElement()
                 } 

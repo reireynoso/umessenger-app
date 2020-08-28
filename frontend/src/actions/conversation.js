@@ -1,4 +1,3 @@
-// import {removeLoggedInUserFromConversation} from '../selectors/conversation'
 import apiUrl from '../utils/apiUrl'
 
 export const addEmail = (email) => ({
@@ -86,14 +85,5 @@ export const sendReactionRequest = (reactionObj) => {
         },
         body: JSON.stringify(reactionObj)
     })
-    .then(res => {
-        // if(res.status === 400){
-        //     return console.log("Error with reaction request")
-        // }
-        return res.status
-    })
-    // .then(data => {
-    //     console.log(data)
-    //     return data
-    // })
+    .then(res => res.status)
 }
